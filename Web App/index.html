@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<link="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+</head>
+<body>
+
+	 <nav>
+	 	
+	 </nav>
+
+	 <section id = "logo">
+	 	<h1>WELCOME</h1>
+	 </section>
+
+	 <section id = "Items">
+	 	<table id ="table">
+	 		<tr>
+	 			<th>Item</th>
+	 			<th>Quantity</th>
+			</tr>
+	 	</table>
+	 </section>
+
+
+<script type="text/javascript">
+var chairQuant = 100;
+var tableQuant = 69;
+var longTableQuant = 57;
+
+var chair = {'Name': "chair", 'Quantity': chairQuant};
+var table = {'Name': "table", 'Quantity': tableQuant};
+var longTable = {'Name': "long Table", 'Quantity': longTableQuant};
+
+localStorage.setItem("chairDetails", JSON.stringify(chair));
+localStorage.setItem("tableDetails", JSON.stringify(table));
+localStorage.setItem("longTableDetails", JSON.stringify(longTable));
+
+//chair
+var getNameChair = localStorage.getItem('chairDetails');
+var tempNameC = JSON.parse(getNameChair).Name;
+var tempQuantC = JSON.parse(getNameChair).Quantity;
+
+//table
+var getNameTable = localStorage.getItem('tableDetails');
+var tempNameT = JSON.parse(getNameTable).Name;
+var tempQuantT = JSON.parse(getNameTable).Quantity;
+
+//long table
+var getNameLTable = localStorage.getItem('longTableDetails');
+var tempNameLong = JSON.parse(getNameLTable).Name;
+var tempQuantLong = JSON.parse(getNameLTable).Quantity;
+
+
+var table = document.querySelector("#table");
+var trC = document.createElement("tr");
+var trT = document.createElement("tr");
+var trL = document.createElement("tr");
+
+//chair
+var tdNameC = document.createElement("td");
+var tdQuantC = document.createElement("td");
+//table
+var tdNameT = document.createElement("td");
+var tdQuantT = document.createElement("td");
+//longtable
+var tdNameL = document.createElement("td");
+var tdQuantL = document.createElement("td");
+
+
+tdNameC.innerHTML = tempNameC;
+tdQuantC.innerHTML = tempQuantC;
+
+tdNameT.innerHTML = tempNameT;
+tdQuantT.innerHTML = tempQuantT;
+
+tdNameL.innerHTML = tempNameLong;
+tdQuantL.innerHTML = tempQuantLong;
+
+trC.appendChild(tdNameC);
+trC.appendChild(tdQuantC);
+
+trT.appendChild(tdNameT);
+trT.appendChild(tdQuantT);
+
+trL.appendChild(tdNameL);
+trL.appendChild(tdQuantL);
+
+table.appendChild(trC);
+table.appendChild(trT);
+table.appendChild(trL);
+
+</script>
+
+</body>
+</html>
