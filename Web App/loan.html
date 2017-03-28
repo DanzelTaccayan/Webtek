@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan</title>
+</head>
+<body>
+   	Id Number:
+	<input type="text" id= "user_id" >
+	Name:  
+	<input type="text" id= "user_name" >
+    Due Date:
+    <input type="date" id ="date_return">
+   	
+    Item:    
+    <input type="text" id= "item_description" >
+    Item Quantity:  
+	<input type="text" id= "input_quantity" > 
+
+	<input type="submit" id = "add" value="add" onclick = "addBorrower()">
+    
+    <script>
+
+        var borrowersArray = [];
+
+        function addBorrower(){
+            var id = document.getElementById("user_id").value;
+            var name = document.getElementById("user_name").value;
+            var quantity = document.getElementById("input_quantity").value;
+            var item = document.getElementById("item_description").value;
+            var date = document.getElementById("date_return").value;
+            var dateBorrowed = new Date();
+
+            var borrowersObj = {'Idnum': id, 'Name': name, 'Item': item, 'Quantity': quantity, 'Date borrowed':dateBorrowed,'Duedate': date };
+
+            borrowersArray.push(borrowersObj);
+
+            localStorage.loanRecord =JSON.stringify(borrowersArray);
+
+        }
+
+    </script>
+</body>
+</html>

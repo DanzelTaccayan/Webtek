@@ -34,17 +34,21 @@
 		}
 
 		function addItem() {
-			var description = document.getElementById("input_description").value;
-			var quantity = document.getElementById("input_quantity").value;
-			var itemsObject = {'Description': description, 'Quantity': quantity};
-
-			generateTable(description,quantity);
-
-			
-			itemsArray.push(itemsObject);	
-			
-			localStorage.itemsRecord = JSON.stringify(itemsArray);
-
+            var description = document.getElementById("input_description").value;
+            var quantity = document.getElementById("input_quantity").value;               
+            var itemsObject = {'Description': description, 'Quantity': quantity}; 
+            
+            if(description === "" || isNaN(quantity) || quantity === ""){
+                alert("Please input a number");
+            }else if(validate()){
+                alert("not allowed");
+            }else{
+                var quant = parseInt(quantity);
+                var itemsObject = {'Description': description, 'Quantity': quant};
+                generateTable(description,quant);
+                itemsArray.push(itemsObject);	
+                localStorage.itemsRecord = JSON.stringify(itemsArray);
+            }
 		}
 
 		function generateTable(desc, quantity) {
@@ -65,6 +69,21 @@
 			document.getElementById("input_description").value = "";
 			document.getElementById("input_quantity").value = "";
 		}
+		
+        function validate(){
+            var validate = false;
+            var description = document.getElementById("input_description").value;
+                for (var i = 0; i < itemsArray.length; i++){
+                    if (description === itemsArray[i].Description){
+                        validate = true;
+                    }
+
+                }
+            return validate;
+            
+        }
+        
+       
 		
 
 	</script>
