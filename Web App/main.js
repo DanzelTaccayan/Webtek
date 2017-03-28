@@ -1,12 +1,15 @@
 var itemsArray = [];
+var borrowersArray = [];
 
+
+/** ADDING ITEMS **/
 //when the body of the html loads do this function
 document.body.onload = function() {
 	console.log("body loaded");
 	if(localStorage.itemsRecord){
 		itemsArray = JSON.parse(localStorage.itemsRecord);
 		for (var i = 0; i < itemsArray.length; i++) {
-			generateTable(itemsArray[i].Description,itemsArray[i].Quantity);
+			generateTableItems(itemsArray[i].Description,itemsArray[i].Quantity);
 		}
 	}
 }
@@ -23,13 +26,13 @@ function addItem() {
     }else{
         var quant = parseInt(quantity);
         var itemsObject = {'Description': description, 'Quantity': quant};
-        generateTable(description,quant);
+        generateTableItems(description,quant);
         itemsArray.push(itemsObject);	
         localStorage.itemsRecord = JSON.stringify(itemsArray);
     }
 }
 
-function generateTable(desc, quantity) {
+function generateTableItems(desc, quantity) {
 	//Query table
 	var table = document.querySelector("table[name=mytable]");
 	//Insert a row into the table
@@ -61,8 +64,7 @@ function validate(){
     
 }
 
-var borrowersArray = [];
-
+/** ADDING BORROWERS **/
 function addBorrower(){
     var id = document.getElementById("user_id").value;
     var name = document.getElementById("user_name").value;
@@ -74,11 +76,7 @@ function addBorrower(){
     if (id === "" || name === "" || quantity === "" || isNaN(quantity) || date === "" || isNaN(id)) { 
         alert("Complete the information needed");
     } else {
-        for (var i = 0; i < itemsArray.length; i++){
-            if (name === itemsArray[i].Description && quantity > itemsArray[i].Quantity){
-                alert("Item not found!");
-            }
-        }
+        
 
         var borrowersObj = {'Idnum': id, 'Name': name, 'Item': item, 'Quantity': quantity, 'Date borrowed':dateBorrowed,'Duedate': date };
 
