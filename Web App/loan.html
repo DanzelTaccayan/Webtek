@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Loan</title>
 </head>
-<body onload="initBorrow()">
+<body onload="initBorrow(), prepareItems()">
    	Id Number:
 	<input type="text" id= "user_id" >
 	Name:  
@@ -13,7 +13,8 @@
     <input type="date" id ="date_return">
    	
     Item:    
-    <input type="text" id= "item_description" >
+    <select id="item_choice" id ="item_description">
+    </select>
     Item Quantity:  
 	<input type="text" id= "input_quantityBorrow" > 
 

@@ -142,3 +142,15 @@ function generateTableBorrower(id, name, item, quantityBorrow, date, dateBorrowe
 	document.getElementById("item_description").value = "";
 	document.getElementById("input_quantityBorrow").value = "";
 }
+
+function prepareItems(){
+	var items = JSON.parse(localStorage.itemsRecord);
+	var itemChoice = document.getElementById("item_choice");
+
+	for(var i = 0; i < items.length; i++){
+		var optionEl = document.createElement("option");
+		optionEl.setAttribute("value",items[i].Description);
+		itemChoice.appendChild(optionEl);
+		optionEl.textContent = items[i].Description;
+	}
+}
