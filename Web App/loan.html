@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Loan</title>
 </head>
-<body>
+<body onload="initBorrow()">
    	Id Number:
 	<input type="text" id= "user_id" >
 	Name:  
@@ -15,14 +15,24 @@
     Item:    
     <input type="text" id= "item_description" >
     Item Quantity:  
-	<input type="text" id= "input_quantity" > 
+	<input type="text" id= "input_quantityBorrow" > 
 
 	<input type="submit" id = "add" value="add" onclick = "addBorrower()">
     
+    <table name ="borrowerTable">
+    <tr>
+        <th>Student ID</th>
+        <th>Name</th>
+        <th>Item </th>
+        <th>Quantity</th>
+        <th>Date Borrowed</th>
+        <th>Date return</th>
+        <th>Action</th>
+    </tr>
+    </table>
+
     <script src= "main.js">
     </script>
        
-
-
 </body>
 </html>
