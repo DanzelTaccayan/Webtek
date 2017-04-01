@@ -53,15 +53,21 @@ function generateDiv(desc, quant) {
     var container = document.createElement("container");
     var pItem = document.createElement("p");
     var pQuant = document.createElement("p");
+    var pAction = document.createElement("p");
+    var spanDelete = document.createElement("span");
     var spanItem = document.createElement("span");
     var spanQuant = document.createElement("span");
     container.setAttribute("class", "container");
     spanItem.innerHTML = desc;
     spanQuant.innerHTML = quant;
+    spanDelete.innerHTML = "<button>Delete</button> <button>Edit</button>"
     pItem.appendChild(spanItem);
     pQuant.appendChild(spanQuant);
+    pAction.appendChild(spanDelete);
+
     container.appendChild(pItem);
     container.appendChild(pQuant);
+    container.appendChild(pAction);
     outerContainer.appendChild(container);
 
 }
