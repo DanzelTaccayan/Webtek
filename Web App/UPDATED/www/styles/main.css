@@ -85,5 +85,9 @@
         margin-top: 25px;
         width: 35%;
     }
+
+    .editInput {
+        height: 60px !important;
+    }
     
 }

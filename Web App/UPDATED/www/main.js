@@ -99,6 +99,75 @@ function removeItem(i) {
 }
 
 
+function editItem(i){
+
+
+    //Hide the edit button and show the save button
+    document.getElementById("edit_button"+i).style.display="none";
+    document.getElementById("save_button"+i).style.display="inline";
+
+    //Query the row who called the EditItem
+    var item = document.getElementById("desc:"+i);
+    var quant = document.getElementById("quant:"+i);
+
+    //Store the old values of the items in a variable
+    var item_data = item.innerHTML;
+    var quant_data = quant.innerHTML;
+
+    //Add <input> in the <span> element
+    item.innerHTML ='<input class="editInput" type="text" id="new_item:'+i+'" value="'+item_data+'">';
+    quant.innerHTML ='<input class="editInput" type="text" id="new_quant:'+i+'" value="'+quant_data+'">';
+
+}
+
+function saveItem(i){
+
+    //Get the entered values in the newly created <input> element
+    var newItem = document.getElementById("new_item:"+i).value;
+    var newQuant = document.getElementById("new_quant:"+i).value;
+
+    //Validate
+     if(newItem === "" || isNaN(newQuant) || newQuant === ""){
+        alert("Please input a number");
+    }else if(validateSaveItem(i)){
+        alert("not allowed");
+    }else{
+        //Change the values in the <span> element
+        document.getElementById("desc:"+i).innerHTML = newItem;
+        document.getElementById("quant:"+i).innerHTML = newQuant;
+
+        //Hide the Save button and show the edit button
+        document.getElementById("edit_button"+i).style.display="block";
+        document.getElementById("save_button"+i).style.display="none";
+
+        //change the values of the item in the array and then put it in the local storage
+        itemsArray[i].Description = newItem;
+        itemsArray[i].Quantity = newQuant;
+        localStorage.itemsRecord = JSON.stringify(itemsArray);
+        //Refresh the Page
+        initItem();
+    }
+
+}
+
+
+function validateSaveItem(itemNo) {
+    var validate = false;
+    var description = document.getElementById("new_item:"+itemNo).value;
+    for (var i = 0; i < itemsArray.length; i++) {
+        if(i == itemNo ){
+            continue
+        }
+        else if (description === itemsArray[i].Description) {
+            validate = true;
+        }
+
+    }
+    return validate;
+
+}
+
+
 
 function validate() {
     var validate = false;
