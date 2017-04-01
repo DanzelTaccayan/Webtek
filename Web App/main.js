@@ -36,9 +36,10 @@ function addItem() {
     }else{
         var quant = parseInt(quantity);
         var itemsObject = {'Description': description, 'Quantity': quant};
-        generateTableItems(description,quant);
         itemsArray.push(itemsObject);	
         localStorage.itemsRecord = JSON.stringify(itemsArray);
+        initItem();
+
     }
 }
 
@@ -71,7 +72,7 @@ function removeTableRow(i) {
 	//Query table
 	var table = document.getElementById("tableBody");
 	table.deleteRow(i);
-	studentsArray.splice(i,1);
+	itemsArray.splice(i,1);
 	localStorage.itemsRecord = JSON.stringify(itemsArray);
 	initItem();
 }
