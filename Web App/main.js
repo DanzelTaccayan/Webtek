@@ -9,7 +9,7 @@ function initItem() {
 	if(localStorage.itemsRecord){
 		itemsArray = JSON.parse(localStorage.itemsRecord);
 		for (var i = 0; i < itemsArray.length; i++) {
-			generateTableItems(itemsArray[i].Description,itemsArray[i].Quantity);
+			generateTableItems(i,itemsArray[i].Description,itemsArray[i].Quantity);
 		}
 	} 
 }
@@ -42,24 +42,83 @@ function addItem() {
     }
 }
 
-function generateTableItems(desc, quantity) {
+function generateTableItems(i,desc, quantity) {
 	//Query table
-	var table = document.querySelector("table[name=mytable]");
+	var table = document.getElementById("tableBody");
 	//Insert a row into the table
 	var tabRow = table.insertRow();
 
 	//Insert into the first and second column of the tabRow var
 	var colItemDesc = tabRow.insertCell(0);
 	var colItemQuant = tabRow.insertCell(1);
+	var colAction = tabRow.insertCell(2);
+
+	colItemDesc.setAttribute("id","desc:"+i);
+	colItemQuant.setAttribute("id","quant:"+i);
 
 	//put some values
 	colItemDesc.textContent = desc;
 	colItemQuant.textContent = quantity;
+	colAction.innerHTML = '<button id = "edit_button'+i+'" onclick = "editItem('+i+')">Edit</button><button style="display:none" id="save_button'+i+'" onclick = "saveItem('+i+')">Save</button><br><button onclick="removeTableRow('+i+')">Delete</button>'
 
 	//Clear the values of the input
 	document.getElementById("input_description").value = "";
 	document.getElementById("input_quantity").value = "";
 }
+
+function removeTableRow(i) {
+
+	//Query table
+	var table = document.getElementById("tableBody");
+	table.deleteRow(i);
+	studentsArray.splice(i,1);
+	localStorage.itemsRecord = JSON.stringify(itemsArray);
+	initItem();
+}
+
+function editItem(i){
+	document.getElementById("edit_button"+i)
+	var itemObj = itemsArray[i];
+
+	document.getElementById("edit_button"+i).style.display="none";
+	document.getElementById("save_button"+i).style.display="block";
+
+	var item = document.getElementById("desc:"+i);
+	var quant = document.getElementById("quant:"+i);
+
+	var item_data = item.innerHTML;
+	var quant_data = quant.innerHTML;
+
+	item.innerHTML ='<input type="text" id="new_item:'+i+'" value="'+item_data+'">';
+	quant.innerHTML ='<input type="text" id="new_quant:'+i+'" value="'+quant_data+'">';
+
+}
+
+function saveItem(i){
+
+	var newItem = document.getElementById("new_item:"+i).value;
+	var newQuant = document.getElementById("new_quant:"+i).value;
+
+	 if(newItem === "" || isNaN(newQuant) || newQuant === ""){
+        alert("Please input a number");
+    }else if(validate()){
+        alert("not allowed");
+    }else{
+
+		document.getElementById("desc:"+i).innerHTML = newItem;
+		document.getElementById("quant:"+i).innerHTML = newQuant;
+
+
+		document.getElementById("edit_button"+i).style.display="block";
+		document.getElementById("save_button"+i).style.display="none";
+		itemsArray[i].Description = newItem;
+		itemsArray[i].Quantity = newQuant;
+		localStorage.itemsRecord = JSON.stringify(itemsArray);
+		initItem();
+	}
+
+}
+
 
 function validate(){
     var validate = false;
