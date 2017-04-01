@@ -79,7 +79,8 @@ function addBorrower(){
     var id = document.getElementById("user_id").value;
     var name = document.getElementById("user_name").value;
     var quantityBorrow = document.getElementById("input_quantityBorrow").value;
-    var item = document.getElementById("item_description").value;
+    var selectedItem = document.getElementById("item_description").selectedIndex;
+    var item = document.getElementsByTagName("option")[selectedItem].value;
     var date = document.getElementById("date_return").value;
     var dateBorrowed = new Date();
     var tempArray = [];
@@ -145,7 +146,7 @@ function generateTableBorrower(id, name, item, quantityBorrow, date, dateBorrowe
 
 function prepareItems(){
 	var items = JSON.parse(localStorage.itemsRecord);
-	var itemChoice = document.getElementById("item_choice");
+	var itemChoice = document.querySelector("select[name=item_choice]");
 
 	for(var i = 0; i < items.length; i++){
 		var optionEl = document.createElement("option");
