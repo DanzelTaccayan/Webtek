@@ -1,10 +1,10 @@
 var itemsArray = [];
 var borrowersArray = [];
 
-
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
 function initItem() {
+	document.getElementById("tableBody").innerHTML = "";
 	console.log("body loaded");
 	if(localStorage.itemsRecord){
 		itemsArray = JSON.parse(localStorage.itemsRecord);
@@ -39,7 +39,6 @@ function addItem() {
         itemsArray.push(itemsObject);	
         localStorage.itemsRecord = JSON.stringify(itemsArray);
         initItem();
-
     }
 }
 
@@ -120,7 +119,6 @@ function saveItem(i){
 
 }
 
-
 function validate(){
     var validate = false;
     var description = document.getElementById("input_description").value;
@@ -134,13 +132,13 @@ function validate(){
     
 }
 
+
 /** ADDING BORROWERS **/
 function addBorrower(){
     var id = document.getElementById("user_id").value;
     var name = document.getElementById("user_name").value;
     var quantityBorrow = document.getElementById("input_quantityBorrow").value;
-    var selectedItem = document.getElementById("item_description").selectedIndex;
-    var item = document.getElementsByTagName("option")[selectedItem].value;
+    var item = document.getElementById("item_description").value;
     var date = document.getElementById("date_return").value;
     var dateBorrowed = new Date();
     var tempArray = [];
@@ -187,6 +185,9 @@ function generateTableBorrower(id, name, item, quantityBorrow, date, dateBorrowe
 	var colDateReturn = tabRow.insertCell(5);
 	var colAction = tabRow.insertCell(6);
 
+
+
+
 	//put some values
 	colStudentId.textContent = id;
 	colStudentName.textContent = name;
@@ -200,13 +201,12 @@ function generateTableBorrower(id, name, item, quantityBorrow, date, dateBorrowe
 	document.getElementById("user_id").value = "";
 	document.getElementById("user_name").value = "";
 	document.getElementById("date_return").value = "";
-	document.getElementById("item_description").value = "";
 	document.getElementById("input_quantityBorrow").value = "";
 }
 
 function prepareItems(){
 	var items = JSON.parse(localStorage.itemsRecord);
-	var itemChoice = document.querySelector("select[name=item_choice]");
+	var itemChoice = document.getElementById("item_choice");
 
 	for(var i = 0; i < items.length; i++){
 		var optionEl = document.createElement("option");
