@@ -6,10 +6,12 @@ var borrowersArray = [];
 //when the body of the html loads do this function
 function initItem() {
     console.log("body loaded");
+    var bottom = document.querySelector(".bottom");
+    bottom.innerHTML = "";
     if (localStorage.itemsRecord) {
         itemsArray = JSON.parse(localStorage.itemsRecord);
         for (var i = 0; i < itemsArray.length; i++) {
-            generateDiv(itemsArray[i].Description, itemsArray[i].Quantity);
+            generateDiv(i,itemsArray[i].Description, itemsArray[i].Quantity);
         }
     }
 }
@@ -42,13 +44,14 @@ function addItem() {
             'Description': description,
             'Quantity': quant
         };
-        generateDiv(description, quant);
         itemsArray.push(itemsObject);
         localStorage.itemsRecord = JSON.stringify(itemsArray);
+        initItem();
     }
 }
 
-function generateDiv(desc, quant) {
+function generateDiv(i,desc, quant) {
+    //Create the necessary
     var outerContainer = document.querySelector(".bottom");
     var container = document.createElement("container");
     var pItem = document.createElement("p");
@@ -57,10 +60,18 @@ function generateDiv(desc, quant) {
     var spanDelete = document.createElement("span");
     var spanItem = document.createElement("span");
     var spanQuant = document.createElement("span");
+
+    //Set their Attributes
     container.setAttribute("class", "container");
+    spanItem.setAttribute("id","desc:"+i);
+    spanQuant.setAttribute("id","quant:"+i);
+
+    //Put the values
     spanItem.innerHTML = desc;
     spanQuant.innerHTML = quant;
-    spanDelete.innerHTML = "<button>Delete</button> <button>Edit</button>"
+    spanDelete.innerHTML = '<button onclick="removeItem('+i+')" >Delete</button><button style="display:none" id="save_button'+i+'" onclick = "saveItem('+i+')">Save</button><button id = "edit_button'+i+'" onclick = "editItem('+i+')">Edit</button>';
+
+    //Show them in the Webpage
     pItem.appendChild(spanItem);
     pQuant.appendChild(spanQuant);
     pAction.appendChild(spanDelete);
@@ -71,6 +82,22 @@ function generateDiv(desc, quant) {
     outerContainer.appendChild(container);
 
 }
+
+function removeItem(i) {
+    //Query the div
+    var bottom = document.querySelector(".bottom");
+
+    //Empty to delete all the items in the webpage but not in the local storage
+    bottom.innerHTML = "";
+
+    //Remove the specified item in the localStorage
+    itemsArray.splice(i,1);
+
+    //Put them in the Local storage and reinitialize the Webpage
+    localStorage.itemsRecord = JSON.stringify(itemsArray);
+    initItem();
+}
+
 
 
 function validate() {
