@@ -20,7 +20,7 @@ function initBorrow() {
     if (localStorage.loanRecord) {
         borrowersArray = JSON.parse(localStorage.loanRecord);
         for (var i = 0; i < borrowersArray.length; i++) {
-            generateTableBorrower(borrowersArray[i].Idnum, borrowersArray[i].Name, borrowersArray[i].Item,
+            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name, borrowersArray[i].Item,
                 borrowersArray[i].Quantity, borrowersArray[i].Duedate, borrowersArray[i].DateBorrowed);
         }
     }
@@ -249,7 +249,7 @@ function generateTableBorrower(i, id, name, item, quantityBorrow, date, dateBorr
     colItemQuant.textContent = quantityBorrow;
     colDateBorrow.textContent = dateBorrowed;
     colDateReturn.textContent = date;
-    colAction.innerHTML = '<button onclick = "redirect()"> view details </button>'
+    colAction.innerHTML = '<button id = "view'+i+'" onclick = "redirect()"> view details </button>'
 
     //Clear the values of the input
     document.getElementById("user_id").value = "";
@@ -293,13 +293,17 @@ function search() {
     }
 }
 
+function clickView(){
+    return i;
+}
+
 function redirect() {
     window.location="view_details.html";
 }
 
-function initView() {
-    var loanDetails = [];
-    loanDetails = JSON.parse(localStorage.loanRecord);
+function initView(i) {
+    var loanView = borrowersArray[i];
 
+    console.log(loanView.Name);
     
 }
