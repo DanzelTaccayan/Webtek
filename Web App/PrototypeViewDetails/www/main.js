@@ -1,5 +1,6 @@
 var itemsArray = [];
 var borrowersArray = [];
+var itemIndex = 1;
 
 
 /** ADDING ITEMS **/
@@ -183,11 +184,56 @@ function validate() {
 
 }
 
+function addInput() {
+	itemIndex++;
+	var createBreak = document.createElement('br');
+	var addBtn = document.getElementById('addInput');
+
+	var item_date = document.createElement("input");
+	var item_date_label = document.createElement("label");
+
+	var item_desc = document.createElement("select");
+	var item_desc_label = document.createElement("label");
+
+	var item_quant = document.createElement("input");
+	var item_quant_label = document.createElement("label");
+
+	item_date.setAttribute('type','input');
+	item_date.setAttribute('id','date_return_'+itemIndex);
+	item_date_label.setAttribute('for','date_return_'+itemIndex);
+	item_date_label.textContent = 'Due Date: ';
+
+	item_desc.setAttribute('type','select');
+	item_desc.setAttribute('id','item_description_'+itemIndex);
+	item_desc.setAttribute('class','item_choice');
+	item_desc_label.setAttribute('for','item_description_'+itemIndex);
+	item_desc_label.textContent = ' Item: ';
+
+	item_quant.setAttribute('type','input');
+	item_quant.setAttribute('id','item_quantity_'+itemIndex);
+	item_quant_label.setAttribute('for','item_quantity_'+itemIndex);
+	item_quant_label.textContent = ' Item Quantity: ';
+
+	document.getElementById("items").insertBefore(item_date, addBtn);
+	document.getElementById("items").insertBefore(item_date_label, item_date);
+
+	document.getElementById("items").insertBefore(item_desc, addBtn);
+	document.getElementById("items").insertBefore(item_desc_label, item_desc);
+	
+
+	document.getElementById("items").insertBefore(item_quant, addBtn);
+	document.getElementById("items").insertBefore(item_quant_label, item_quant);
+
+	document.getElementById("items").insertBefore(createBreak, item_date_label);
+	prepareItems();
+
+}
+
 /** ADDING BORROWERS **/
 function addBorrower() {
     var id = document.getElementById("user_id").value.trim();
     var name = document.getElementById("user_name").value.trim();
-    var quantityBorrow = document.getElementById("input_quantityBorrow").value.trim();
+    var quantityBorrow = document.getElementById("item_quantityBorrow").value.trim();
     var selectedItem = document.getElementById("item_description").selectedIndex;
     var item = document.getElementsByTagName("option")[selectedItem].value;
     var date = document.getElementById("date_return").value;
@@ -328,14 +374,22 @@ function viewDetails(){
 
 function prepareItems() {
     var items = JSON.parse(localStorage.itemsRecord);
-    var itemChoice = document.querySelector("select[name=item_choice]");
+    var itemChoice = document.getElementsByClassName("item_choice");
 
-    for (var i = 0; i < items.length; i++) {
-        var optionEl = document.createElement("option");
-        optionEl.setAttribute("value", items[i].Description);
-        itemChoice.appendChild(optionEl);
-        optionEl.textContent = items[i].Description;
-    }
+    //console.log(itemChoice);
+    //console.log(itemChoice.length);
+
+
+	var tempItem = itemChoice[itemIndex-1];
+	console.log(tempItem);
+	    for (var i = 0; i < items.length; i++) {
+	        var optionEl = document.createElement("option");
+	        optionEl.setAttribute("value", items[i].Description);
+	        tempItem.appendChild(optionEl);
+	        optionEl.textContent = items[i].Description;
+	    }
+
+
 }
 
 function search() {
