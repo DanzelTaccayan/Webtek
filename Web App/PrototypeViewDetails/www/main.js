@@ -198,7 +198,7 @@ function addInput() {
 	var item_quant = document.createElement("input");
 	var item_quant_label = document.createElement("label");
 
-	item_date.setAttribute('type','input');
+	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
 	item_date_label.setAttribute('for','date_return_'+itemIndex);
 	item_date_label.textContent = 'Due Date: ';
