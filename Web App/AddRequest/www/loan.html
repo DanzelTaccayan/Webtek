@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Loan</title>
+
+</head>
+
+<body onload="prepareItems()">
+<div id = "requestForm">
+    Id Number:<input type="text" id="user_id"> 
+    Name:<input type="text" id="user_name">
+    <br>
+    <span id = 'items'>
+        <container id ="container_0">
+            Due Date: <input type="date" id="date_return_0"> 
+            Item: <select class="item_choice" id="item_description_0"></select>
+            Item Quantity: <input type="text" id="item_quantityBorrow_0">
+        </container>
+        
+    </span>
+    <button id = "addInput" onclick="addInput()">+</button>
+</div>
+    <input type="submit" id="add" value="add" onclick="addBorrowerChecker()">
+
+    <p>
+        Search:
+        <input type="text" id="search_box"  onKeyUp="search()">
+    </p>
+    <table name="borrowerTable" >
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Item </th>
+            <th>Quantity</th>
+            <th>Date Borrowed</th>
+            <th>Date return</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="mabody">
+    </tbody>
+    </table>
+<footer class="footer">
+   <a href=""><img src="img/bank-building.png" alt="Home logo"></a>
+  <a href="index.html"><img src="img/list.png" alt="logo"></a>
+
+  <a href="loan.html"><img src="img/handshake.png" alt=""></a>
+</footer>
+    <script src="main.js">
+    </script>
+
+</body>
+
+</html>
