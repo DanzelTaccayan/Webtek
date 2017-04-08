@@ -276,12 +276,9 @@ function viewDetails(){
 		//store the index of who pressed the viewDetails
 		viewQueueArray = JSON.parse(localStorage.viewQueue);
 		index = viewQueueArray[0];
-		console.log(index);
 
 		if(index != undefined){
 			
-			
-
 			//Now Remove it in order for the others to access their details
 			viewQueueArray.splice(0,1);
 			localStorage.viewQueue = JSON.stringify(viewQueueArray);
@@ -306,7 +303,7 @@ function viewDetails(){
 			document.getElementById("datereturnLabel").style.display = "";
 			document.getElementById("datereturn").style.display = "";
 
-
+            document.getElementById("return_qty").style.display = "";
 			document.getElementById("return_button").style.display = "";
 
 			//Get Elements and the local storage
@@ -319,9 +316,6 @@ function viewDetails(){
 			document.getElementById("quantity").textContent  = borrowersArray[index].Quantity;
 			document.getElementById("duedate").textContent  = borrowersArray[index].DateBorrowed;
 			document.getElementById("datereturn").textContent  = borrowersArray[index].Duedate;
-
-
-
 		}
 	}
 }
@@ -359,3 +353,42 @@ function search() {
         }
     }
 }
+
+function returnItem() {
+    if (document.getElementById('idnum').textContent) {
+        var id = document.getElementById('idnum').textContent;
+        var item = document.getElementById('item').textContent;
+        var quantity = document.getElementById("return_qty").value.trim();
+        var temp;
+        var borrowersArray = [];
+        var itemsArray = [];
+        itemsArray = JSON.parse(localStorage.itemsRecord);
+        borrowersArray = JSON.parse(localStorage.loanRecord);
+
+         for (var i = 0; i < borrowersArray.length; i++) {
+            if (item === borrowersArray[i].Item) {             
+                if (quantity <= 0 || isNaN(quantity) || borrowersArray[i].Quantity < quantity) {
+                    alert('Invalid input!');
+                } else {
+                    borrowersArray[i].Quantity -= parseInt(quantity);
+                    localStorage.loanRecord = JSON.stringify(borrowersArray);
+                    break;
+                }
+            } 
+        }
+
+        for (var i = 0; i < itemsArray.length; i++) {
+            if (item === itemsArray[i].Description) {             
+                if (quantity <= 0 || isNaN(quantity)) {
+                    alert('Invalid input!');
+                } else {
+                    itemsArray[i].Quantity += parseInt(quantity);
+                    localStorage.itemsRecord = JSON.stringify(itemsArray);
+                    break;
+                }
+            }
+        }
+
+    }
+}                
+
