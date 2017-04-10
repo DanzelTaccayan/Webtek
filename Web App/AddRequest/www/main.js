@@ -237,6 +237,10 @@ function addInput() {
 	container.insertBefore(createBreak, item_date_label);
 	document.getElementById("items").appendChild(container);
 	itemIndex++;
+	if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
+		document.getElementById('requestForm').removeChild(addBtn);
+	}
+
 	prepareItems();
 
 }
@@ -293,10 +297,11 @@ function repopulateItems(index) {
     		container.appendChild(item_quant);
     		
     		if(i != 0){
-    		container.appendChild(removeBtn);
+    			container.appendChild(removeBtn);
+    			container.insertBefore(createBreak, item_date_label);
     		}
 
-    		container.insertBefore(createBreak, item_date_label);
+    		
     		document.getElementById("items").appendChild(container);
             itemIndex++;
     		prepareItems();
@@ -555,14 +560,22 @@ function viewDetails(){
 function prepareItems() {
     var items = JSON.parse(localStorage.itemsRecord);
     var itemChoice = document.getElementsByClassName("item_choice");
+    var add_btn = document.createElement('button');
 
-    //console.log(itemChoice);
-    //console.log(itemChoice.length);
+    add_btn.setAttribute('id','addInput');
+    add_btn.setAttribute('onclick','addInput()');
+    add_btn.textContent = "+";
+
+    if(!document.getElementById("addInput")){
+	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
+	    	document.getElementById("requestForm").appendChild(add_btn);
+	    }
+	}
 
 
 	var tempItem = itemChoice[itemIndex-1];
-	console.log(tempItem);
-	    for (var i = 0; i < items.length; i++) {
+
+	    for(i =0 ;i < items.length; i++) {
 	        var optionEl = document.createElement("option");
 	        optionEl.setAttribute("value", items[i].Description);
 	        tempItem.appendChild(optionEl);
