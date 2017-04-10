@@ -575,7 +575,7 @@ function prepareItems() {
 
 	var tempItem = itemChoice[itemIndex-1];
 
-	    for(i =0 ;i < items.length; i++) {
+	    for(var i =0 ;i < items.length; i++) {
 	        var optionEl = document.createElement("option");
 	        optionEl.setAttribute("value", items[i].Description);
 	        tempItem.appendChild(optionEl);
