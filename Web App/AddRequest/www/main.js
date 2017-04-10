@@ -201,6 +201,8 @@ function addInput() {
 
 	var removeBtn = document.createElement("button");
 
+	var previousItems = "";
+
 	removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
 	removeBtn.textContent = "x"
 
@@ -240,72 +242,149 @@ function addInput() {
 	if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
 		document.getElementById('requestForm').removeChild(addBtn);
 	}
+	var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
+	item_choice.setAttribute('disabled', 'disabled');
 
-	prepareItems();
+	for(var i = 0; i < document.getElementsByClassName("item_choice").length - 1; i++){
+		var tempChoice = document.getElementsByClassName("item_choice")[i];
+
+		previousItems += tempChoice[tempChoice.selectedIndex].value+" ";
+		
+	}
+
+	prepareNewlyAddedItems(previousItems);
 
 }
+
+
+function prepareNewlyAddedItems(prev_item) {
+    var items = JSON.parse(localStorage.itemsRecord);
+    var itemChoice = document.getElementsByClassName("item_choice");
+    var add_btn = document.createElement('button');
+
+    add_btn.setAttribute('id','addInput');
+    add_btn.setAttribute('onclick','addInput()');
+    add_btn.textContent = "+";
+
+    if(!document.getElementById("addInput")){
+	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
+	    	document.getElementById("requestForm").appendChild(add_btn);
+	    }
+	}
+
+	var tempItem = itemChoice[itemIndex-1];
+
+
+	    for(var i =0 ;i < items.length; i++) {
+	    	if(prev_item.indexOf(items[i].Description) >= 0){
+	    		continue;
+	    	}
+	    	else{
+		        var optionEl = document.createElement("option");
+		        optionEl.setAttribute("value", items[i].Description);
+		        tempItem.appendChild(optionEl);
+		        optionEl.textContent = items[i].Description;
+	        }
+	    }
+
+
+}
+
+
 
 function repopulateItems(index) {
 
     for(var i = 0; i < index; i++){
-    		var container = document.createElement("container");
-    		var createBreak = document.createElement('br');
-    		var addBtn = document.getElementById('addInput');
 
-    		var item_date = document.createElement("input");
-    		var item_date_label = document.createElement("label");
+		var container = document.createElement("container");
+		var createBreak = document.createElement('br');
+		var addBtn = document.getElementById('addInput');
 
-    		var item_desc = document.createElement("select");
-    		var item_desc_label = document.createElement("label");
+		var item_date = document.createElement("input");
+		var item_date_label = document.createElement("label");
 
-    		var item_quant = document.createElement("input");
-    		var item_quant_label = document.createElement("label");
+		var item_desc = document.createElement("select");
+		var item_desc_label = document.createElement("label");
 
-    		var removeBtn = document.createElement("button");
+		var item_quant = document.createElement("input");
+		var item_quant_label = document.createElement("label");
 
-    		removeBtn.setAttribute('onclick','removeInput('+i+')');
-    		removeBtn.textContent = "x"
+		var removeBtn = document.createElement("button");
 
-    		container.setAttribute('id','container_'+i);
+		var previousItems = "";
 
-    		item_date.setAttribute('type','date');
-    		item_date.setAttribute('id','date_return_'+i);
-            item_date.setAttribute('value',RepopItemsArray[i].DueDate);
-    		item_date_label.setAttribute('for','date_return_'+i);
-    		item_date_label.textContent = 'Due Date: ';
+		removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
+		removeBtn.textContent = "x"
 
-    		item_desc.setAttribute('type','select');
-    		item_desc.setAttribute('id','item_description_'+i);
-    		item_desc.setAttribute('class','item_choice');
-    		item_desc_label.setAttribute('for','item_description_'+i);
-    		item_desc_label.textContent = ' Item: ';
+		container.setAttribute('id','container_'+itemIndex);
 
-    		item_quant.setAttribute('type','input');
-    		item_quant.setAttribute('id','item_quantityBorrow_'+i);
-            item_quant.setAttribute('value', RepopItemsArray[i].itemQuant);
-    		item_quant_label.setAttribute('for','item_quantityBorrow_'+i);
-    		item_quant_label.textContent = ' Item Quantity: ';
+		item_date.setAttribute('type','date');
+		item_date.setAttribute('id','date_return_'+itemIndex);
+		item_date.setAttribute('value',RepopItemsArray[i].DueDate);
+		item_date_label.setAttribute('for','date_return_'+itemIndex);
+		item_date_label.textContent = 'Due Date: ';
 
-    		container.appendChild(item_date_label);
-    		container.appendChild(item_date);
+		item_desc.setAttribute('type','select');
+		item_desc.setAttribute('id','item_description_'+itemIndex);
+		item_desc.setAttribute('class','item_choice');
+		item_desc_label.setAttribute('for','item_description_'+itemIndex);
+		item_desc_label.textContent = ' Item: ';
 
-    		
-    		container.appendChild(item_desc_label);
-    		container.appendChild(item_desc);
-    		
-    		container.appendChild(item_quant_label);
-    		container.appendChild(item_quant);
-    		
-    		if(i != 0){
-    			container.appendChild(removeBtn);
-    			container.insertBefore(createBreak, item_date_label);
-    		}
+		item_quant.setAttribute('type','input');
+		item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
+		item_quant.setAttribute('value', RepopItemsArray[i].itemQuant);
+		item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
+		item_quant_label.textContent = ' Item Quantity: ';
 
-    		
-    		document.getElementById("items").appendChild(container);
-            itemIndex++;
-    		prepareItems();
-            document.getElementById('item_description_'+i).childNodes[RepopItemsArray[i].ItemSelected].selected = true;
+		container.appendChild(item_date_label);
+		container.appendChild(item_date);
+
+		
+		container.appendChild(item_desc_label);
+		container.appendChild(item_desc);
+		
+		container.appendChild(item_quant_label);
+		container.appendChild(item_quant);
+		
+
+		document.getElementById("items").appendChild(container);
+
+		if(i != 0){
+			container.appendChild(removeBtn);
+			container.insertBefore(createBreak, item_date_label);
+		}
+
+		itemIndex++;
+
+		if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
+			document.getElementById('requestForm').removeChild(addBtn);
+		}
+		if(itemIndex > 1){
+			var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
+			item_choice.setAttribute('disabled', 'disabled');
+
+			for(var c = 0; c < document.getElementsByClassName("item_choice").length - 1; c++){
+				var tempChoice = document.getElementsByClassName("item_choice")[c];
+
+				previousItems += tempChoice[tempChoice.selectedIndex].value+" ";
+				
+			}
+
+			console.log(previousItems);
+
+			prepareNewlyAddedItems(previousItems);
+		}else{
+			prepareItems();
+		}
+
+		for(var b = 0; b < document.getElementById('item_description_'+i).childNodes.length; b++) {
+			var tempChildren = document.getElementById('item_description_'+i).childNodes;
+
+			if(tempChildren[b].value == RepopItemsArray[i].ItemSelected){
+				document.getElementById('item_description_'+i).childNodes[b].selected = true;
+			}
+		}
+
     }
         RepopItemsArray = [];
 
@@ -320,7 +399,8 @@ function removeInput(index) {
 	
     for(var c = 0; c < tempCont.children.length; c++){
         var dueDate =  document.getElementById("date_return_"+c).value;
-        var itemDescSelectedIndex = document.getElementById("item_description_"+c).selectedIndex;
+        var itemDescSelected = document.getElementById("item_description_"+c);
+
         var itemQuant = document.getElementById("item_quantityBorrow_"+c).value;
 
         if(c == index){
@@ -329,7 +409,7 @@ function removeInput(index) {
         else {
             var tempItemsObj = {
                 'DueDate': dueDate,
-                'ItemSelected': itemDescSelectedIndex,
+                'ItemSelected': itemDescSelected[itemDescSelected.selectedIndex].value,
                 'itemQuant': itemQuant
             };
             RepopItemsArray.push(tempItemsObj);
