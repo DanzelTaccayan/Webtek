@@ -201,6 +201,8 @@ function addInput() {
 
 	var removeBtn = document.createElement("button");
 
+	var itemLeft = document.createElement("span");
+
 	var previousItems = "";
 
 	removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
@@ -208,21 +210,34 @@ function addInput() {
 
 	container.setAttribute('id','container_'+itemIndex);
 
+	//Date
 	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
 	item_date_label.setAttribute('for','date_return_'+itemIndex);
 	item_date_label.textContent = 'Due Date: ';
 
+	//Item Description
 	item_desc.setAttribute('type','select');
 	item_desc.setAttribute('id','item_description_'+itemIndex);
 	item_desc.setAttribute('class','item_choice');
+	item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
+	item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 	item_desc_label.setAttribute('for','item_description_'+itemIndex);
 	item_desc_label.textContent = ' Item: ';
 
+
+	//The Item Left for a certain Item
+	itemLeft.setAttribute('id', 'item_left_'+itemIndex);
+
+
+	//The Quantity you would like to get
 	item_quant.setAttribute('type','input');
 	item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
 	item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
 	item_quant_label.textContent = ' Item Quantity: ';
+
+	
+
 
 	container.appendChild(item_date_label);
 	container.appendChild(item_date);
@@ -230,6 +245,8 @@ function addInput() {
 	
 	container.appendChild(item_desc_label);
 	container.appendChild(item_desc);
+
+	container.appendChild(itemLeft);
 	
 	container.appendChild(item_quant_label);
 	container.appendChild(item_quant);
@@ -253,6 +270,8 @@ function addInput() {
 	}
 
 	prepareNewlyAddedItems(previousItems);
+	itemQtyLeft(itemIndex-1);
+
 
 }
 
@@ -290,6 +309,25 @@ function prepareNewlyAddedItems(prev_item) {
 
 }
 
+function itemQtyLeft(index){
+	var showQty = document.getElementById("item_left_"+index);
+	var selectElem = document.getElementById("item_description_"+index);
+	var itemList = [];
+	var qty;
+
+	itemList = JSON.parse(localStorage.itemsRecord)
+
+	for(var i = 0; i < itemList.length; i++){
+		if(selectElem[selectElem.selectedIndex].value == itemList[i].Description){
+			qty = itemList[i].Quantity;
+			break;
+		}
+
+	}
+	showQty.textContent = "Item Left: "+qty;
+
+
+}
 
 
 function repopulateItems(index) {
@@ -311,6 +349,8 @@ function repopulateItems(index) {
 
 		var removeBtn = document.createElement("button");
 
+		var itemLeft = document.createElement("span");
+
 		var previousItems = "";
 
 		removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
@@ -318,18 +358,27 @@ function repopulateItems(index) {
 
 		container.setAttribute('id','container_'+itemIndex);
 
+
+		//The Due Date of the Item
 		item_date.setAttribute('type','date');
 		item_date.setAttribute('id','date_return_'+itemIndex);
 		item_date.setAttribute('value',RepopItemsArray[i].DueDate);
 		item_date_label.setAttribute('for','date_return_'+itemIndex);
 		item_date_label.textContent = 'Due Date: ';
 
+		//The Description of the Item
 		item_desc.setAttribute('type','select');
 		item_desc.setAttribute('id','item_description_'+itemIndex);
 		item_desc.setAttribute('class','item_choice');
+		item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
+		item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 		item_desc_label.setAttribute('for','item_description_'+itemIndex);
 		item_desc_label.textContent = ' Item: ';
 
+		//The Item Left for a certain Item
+		itemLeft.setAttribute('id', 'item_left_'+itemIndex);
+
+		//The Quantity you would like to get
 		item_quant.setAttribute('type','input');
 		item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
 		item_quant.setAttribute('value', RepopItemsArray[i].itemQuant);
@@ -342,6 +391,8 @@ function repopulateItems(index) {
 		
 		container.appendChild(item_desc_label);
 		container.appendChild(item_desc);
+
+		container.appendChild(itemLeft);
 		
 		container.appendChild(item_quant_label);
 		container.appendChild(item_quant);
@@ -373,8 +424,11 @@ function repopulateItems(index) {
 			console.log(previousItems);
 
 			prepareNewlyAddedItems(previousItems);
+
+			
 		}else{
 			prepareItems();
+
 		}
 
 		for(var b = 0; b < document.getElementById('item_description_'+i).childNodes.length; b++) {
@@ -382,6 +436,7 @@ function repopulateItems(index) {
 
 			if(tempChildren[b].value == RepopItemsArray[i].ItemSelected){
 				document.getElementById('item_description_'+i).childNodes[b].selected = true;
+				itemQtyLeft(itemIndex-1);
 			}
 		}
 
@@ -661,7 +716,7 @@ function prepareItems() {
 	        tempItem.appendChild(optionEl);
 	        optionEl.textContent = items[i].Description;
 	    }
-
+	itemQtyLeft(0);
 
 }
 
