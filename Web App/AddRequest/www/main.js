@@ -575,7 +575,7 @@ function addBorrowerChecker() {
 	                if (item === tempArray[i].Description) {
 	                    if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0 ) {
 	                    	errors++;
-	                        alert("The Quantity not valid");
+	                        alert("The Quantity that you have entered on the item: "+tempArray[i].Description+" which is "+quantityBorrow+" is greater than the current item inventory");
 	                        c = itemIndex+1;
 	                        break;
 	                    }
