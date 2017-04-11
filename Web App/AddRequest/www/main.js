@@ -152,7 +152,6 @@ function saveItem(i){
         //Refresh the Page
         initItem();
     }
-
 }
 
 
@@ -656,18 +655,8 @@ function viewDetails(){
 			document.getElementById("nameLabel").style.display = "";
 			document.getElementById("name").style.display = "";
 
-			document.getElementById("itemLabel").style.display = "";
-			document.getElementById("item").style.display = "";
-
-			document.getElementById("quantityLabel").style.display = "";
-			document.getElementById("quantity").style.display = "";
-
 			document.getElementById("duedateLabel").style.display = "";
 			document.getElementById("duedate").style.display = "";
-
-			document.getElementById("datereturnLabel").style.display = "";
-			document.getElementById("datereturn").style.display = "";
-
 
 			document.getElementById("return_button").style.display = "";
 
@@ -677,13 +666,29 @@ function viewDetails(){
 
 			document.getElementById("idnum").textContent = borrowersArray[index].Idnum;
 			document.getElementById("name").textContent  = borrowersArray[index].Name;
-			document.getElementById("item").textContent = borrowersArray[index].Item;
-			document.getElementById("quantity").textContent  = borrowersArray[index].Quantity;
-			document.getElementById("duedate").textContent  = borrowersArray[index].DateBorrowed;
-			document.getElementById("datereturn").textContent  = borrowersArray[index].Duedate;
+            document.getElementById("duedate").textContent  = borrowersArray[index].DateBorrowed;
 
+            var outerContainer = document.querySelector(".itemdetails");
+            var temp = borrowersArray[index].Items;
+               
+            for (var c = 0; c < temp.length; c++) {
+                var pItem = document.createElement("p");
+                var pQuant = document.createElement("p");
+                var pReturn = document.createElement("p");
 
+                pItem.setAttribute("id","desc"+c);
+                pQuant.setAttribute("id","quant"+c);
+                pReturn.setAttribute("id","rdate"+c);
 
+                pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
+                pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
+                pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
+
+                outerContainer.appendChild(pItem);
+                outerContainer.appendChild(pQuant);
+                outerContainer.appendChild(pReturn);
+                
+			}	
 		}
 	}
 }
