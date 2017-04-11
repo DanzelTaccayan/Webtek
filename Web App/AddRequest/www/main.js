@@ -12,7 +12,7 @@ function initItem() {
     bottom.innerHTML = "";
     if (localStorage.itemsRecord) {
         itemsArray = JSON.parse(localStorage.itemsRecord);
-        for (var i = 0; i < itemsArray.length; i++) {
+        for (var i = 0; i < itemsArray.length; i++) {   
             generateDiv(i,itemsArray[i].Description, itemsArray[i].Quantity);
         }
     }
@@ -23,8 +23,7 @@ function initBorrow() {
     	document.querySelector("#mabody").innerHTML = "";
         borrowersArray = JSON.parse(localStorage.loanRecord);
         for (var i = 0; i < borrowersArray.length; i++) {
-            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name, borrowersArray[i].Item,
-                borrowersArray[i].Quantity, borrowersArray[i].Duedate, borrowersArray[i].DateBorrowed);
+            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name,  borrowersArray[i].DateBorrowed);
         }
     }
 }
@@ -50,6 +49,10 @@ function addItem() {
         itemsArray.push(itemsObject);
         localStorage.itemsRecord = JSON.stringify(itemsArray);
         initItem();
+
+        document.getElementById("input_description").value = "";
+        document.getElementById("input_quantity").value = "";
+
     }
 }
 
@@ -103,7 +106,6 @@ function removeItem(i) {
 
 
 function editItem(i){
-
 
     //Hide the edit button and show the save button
     document.getElementById("edit_button"+i).style.display="none";
@@ -440,6 +442,7 @@ function addBorrower() {
     borrowersObj = {
                     'Idnum': id,
                     'Name': name,
+                    'DateBorrowed':dateBorrowed,
                     'Items': []
                 };
 
@@ -460,7 +463,6 @@ function addBorrower() {
                     var itemObj = {
                         'ItemName':item,
                         'Quantity':quantityBorrow,
-                        'DateBorrowed':dateBorrowed,
                         'Duedate':date
                     };
 
@@ -469,10 +471,10 @@ function addBorrower() {
 
                     borrowersArray.push(borrowersObj);
                     localStorage.loanRecord = JSON.stringify(borrowersArray);
-                    break;
-                
+                    break;            
             }
     	}
+
     }
     alert("Request Successfully Added");
     location.reload();
@@ -539,7 +541,7 @@ function addBorrowerChecker() {
 }
 
 
-function generateTableBorrower(i,id, name, item, quantityBorrow, date, dateBorrowed) {
+function generateTableBorrower(i,id, name, dateBorrowed) {
     //Query table
     var table = document.querySelector("#mabody");
     //Insert a row into the table
@@ -548,27 +550,19 @@ function generateTableBorrower(i,id, name, item, quantityBorrow, date, dateBorro
     //Insert into the first and second column of the tabRow var
     var colStudentId = tabRow.insertCell(0);
     var colStudentName = tabRow.insertCell(1);
-    var colItemName = tabRow.insertCell(2);
-    var colItemQuant = tabRow.insertCell(3);
-    var colDateBorrow = tabRow.insertCell(4);
-    var colDateReturn = tabRow.insertCell(5);
-    var colAction = tabRow.insertCell(6);
+    var colDateBorrow = tabRow.insertCell(2);
+    var colAction = tabRow.insertCell(3);
 
     //put some values
     colStudentId.textContent = id;
     colStudentName.textContent = name;
-    colItemName.textContent = item;
-    colItemQuant.textContent = quantityBorrow;
     colDateBorrow.textContent = dateBorrowed;
-    colDateReturn.textContent = date;
     colAction.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueue('+i+')"> view details </button></a>'
 
     //Clear the values of the input
     document.getElementById("user_id").value = "";
     document.getElementById("user_name").value = "";
-    document.getElementById("date_return").value = "";
-    document.getElementById("item_description").value = "";
-    document.getElementById("input_quantityBorrow").value = "";
+    
 }
 
 function viewQueue(i){

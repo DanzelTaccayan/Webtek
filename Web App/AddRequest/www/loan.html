@@ -7,7 +7,7 @@
 
 </head>
 
-<body onload="prepareItems()">
+<body onload="prepareItems(); initBorrow();">
 <div id = "requestForm">
     Id Number:<input type="text" id="user_id"> 
     Name:<input type="text" id="user_name">
@@ -31,10 +31,7 @@
         <tr>
             <th>Student ID</th>
             <th>Name</th>
-            <th>Item </th>
-            <th>Quantity</th>
             <th>Date Borrowed</th>
-            <th>Date return</th>
             <th>Action</th>
         </tr>
     </thead>
