@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Loan</title>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/item.css">
+    <link rel="stylesheet" href="styles/navigation.css">
+</head>
+
+<body onload="prepareItems()">
+<!--===============================================Request Form=====================================-->
+<div class="top">
+        Search:
+        <input type="text" id="search_box"  onKeyUp="search()">
+<button id="myBtn"></button>
+</div>
+<div id="myModal" class="modal">
+    
+  <div id = "requestForm">
+  <span class="close">&times;</span>
+  <h3>Borrower Information</h3>
+  
+   <input type="text" id="user_id" class="loanForm" placeholder="Id Number"> 
+    <input type="text" id="user_name" class="loanForm" placeholder="Name">
+    <br><br>
+    <span id = 'items'>
+        <container id ="container_0" class="id_container">
+            Due Date: <input type="date" id="date_return_0" class=" dueItems"  > 
+            Item: <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice dueItems" id="item_description_0"></select>
+            <span id ="item_left_0"></span>
+            Item Quantity: <input type="text" id="item_quantityBorrow_0">
+        </container>
+    </span>
+</div>
+    </div>
+
+
+
+    <table name="borrowerTable" >
+    <thead>
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Item </th>
+            <th>Quantity</th>
+            <th>Date Borrowed</th>
+            <th>Date return</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="mabody">
+    </tbody>
+    </table>
+<!--===============================================Footer/Navigation=====================================-->
+<footer class="footer">
+    <div class="item">
+        <a href="index.html">Items</a>
+        <a href="loan.html">Loan</a>
+        <a href="">view</a>
+    </div>
+  <a href=""><img src="img/bank-building.png" alt="Home logo"></a>
+  <a href="index.html"><img src="img/list.png" alt="logo"></a>
+  <a href="loan.html"><img src="img/handshake.png" alt=""></a>
+</footer>
+    <script src="main.js">
+    </script>
+
+</body>
+
+</html>
