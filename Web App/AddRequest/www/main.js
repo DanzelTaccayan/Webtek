@@ -522,15 +522,17 @@ function addBorrower() {
                     };
 
                     tempItemArray.push(itemObj);
-                    borrowersObj.Items = tempItemArray;
+                    
 
-                    borrowersArray.push(borrowersObj);
-                    localStorage.loanRecord = JSON.stringify(borrowersArray);
+                   
                     break;            
             }
     	}
 
     }
+    borrowersObj.Items = tempItemArray;
+    borrowersArray.push(borrowersObj);
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
     alert("Request Successfully Added");
     location.reload();
     itemIndex = 1;
