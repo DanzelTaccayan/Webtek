@@ -12,7 +12,7 @@ function initItem() {
     bottom.innerHTML = "";
     if (localStorage.itemsRecord) {
         itemsArray = JSON.parse(localStorage.itemsRecord);
-        for (var i = 0; i < itemsArray.length; i++) {   
+        for (var i = 0; i < itemsArray.length; i++) {
             generateDiv(i,itemsArray[i].Description, itemsArray[i].Quantity);
         }
     }
@@ -23,7 +23,8 @@ function initBorrow() {
     	document.querySelector("#mabody").innerHTML = "";
         borrowersArray = JSON.parse(localStorage.loanRecord);
         for (var i = 0; i < borrowersArray.length; i++) {
-            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name,  borrowersArray[i].DateBorrowed);
+            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name, borrowersArray[i].Item,
+                borrowersArray[i].Quantity, borrowersArray[i].Duedate, borrowersArray[i].DateBorrowed);
         }
     }
 }
@@ -49,10 +50,6 @@ function addItem() {
         itemsArray.push(itemsObject);
         localStorage.itemsRecord = JSON.stringify(itemsArray);
         initItem();
-
-        document.getElementById("input_description").value = "";
-        document.getElementById("input_quantity").value = "";
-
     }
 }
 
@@ -106,6 +103,7 @@ function removeItem(i) {
 
 
 function editItem(i){
+
 
     //Hide the edit button and show the save button
     document.getElementById("edit_button"+i).style.display="none";
@@ -211,7 +209,7 @@ function addInput() {
 	removeBtn.textContent = "x"
 
 	container.setAttribute('id','container_'+itemIndex);
-
+    container.setAttribute("class","id_container");
 	//Date
 	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
@@ -497,7 +495,6 @@ function addBorrower() {
     borrowersObj = {
                     'Idnum': id,
                     'Name': name,
-                    'DateBorrowed':dateBorrowed,
                     'Items': []
                 };
 
@@ -518,6 +515,7 @@ function addBorrower() {
                     var itemObj = {
                         'ItemName':item,
                         'Quantity':quantityBorrow,
+                        'DateBorrowed':dateBorrowed,
                         'Duedate':date
                     };
 
@@ -526,10 +524,10 @@ function addBorrower() {
 
                     borrowersArray.push(borrowersObj);
                     localStorage.loanRecord = JSON.stringify(borrowersArray);
-                    break;            
+                    break;
+                
             }
     	}
-
     }
     alert("Request Successfully Added");
     location.reload();
@@ -596,7 +594,7 @@ function addBorrowerChecker() {
 }
 
 
-function generateTableBorrower(i,id, name, dateBorrowed) {
+function generateTableBorrower(i,id, name, item, quantityBorrow, date, dateBorrowed) {
     //Query table
     var table = document.querySelector("#mabody");
     //Insert a row into the table
@@ -605,19 +603,27 @@ function generateTableBorrower(i,id, name, dateBorrowed) {
     //Insert into the first and second column of the tabRow var
     var colStudentId = tabRow.insertCell(0);
     var colStudentName = tabRow.insertCell(1);
-    var colDateBorrow = tabRow.insertCell(2);
-    var colAction = tabRow.insertCell(3);
+    var colItemName = tabRow.insertCell(2);
+    var colItemQuant = tabRow.insertCell(3);
+    var colDateBorrow = tabRow.insertCell(4);
+    var colDateReturn = tabRow.insertCell(5);
+    var colAction = tabRow.insertCell(6);
 
     //put some values
     colStudentId.textContent = id;
     colStudentName.textContent = name;
+    colItemName.textContent = item;
+    colItemQuant.textContent = quantityBorrow;
     colDateBorrow.textContent = dateBorrowed;
+    colDateReturn.textContent = date;
     colAction.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueue('+i+')"> view details </button></a>'
 
     //Clear the values of the input
     document.getElementById("user_id").value = "";
     document.getElementById("user_name").value = "";
-    
+    document.getElementById("date_return").value = "";
+    document.getElementById("item_description").value = "";
+    document.getElementById("input_quantityBorrow").value = "";
 }
 
 function viewQueue(i){
@@ -735,3 +741,30 @@ function search() {
         }
     }
 }
+
+/*===================================MODAL==================================*/
+var modal = document.getElementById('myModal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+/*===================================END OF MODAL==================================*/

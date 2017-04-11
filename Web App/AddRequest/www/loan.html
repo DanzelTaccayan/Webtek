@@ -15,7 +15,8 @@
     <span id = 'items'>
         <container id ="container_0">
             Due Date: <input type="date" id="date_return_0"> 
-            Item: <select class="item_choice" id="item_description_0"></select>
+            Item: <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice" id="item_description_0"></select>
+            <span id ="item_left_0"></span>
             Item Quantity: <input type="text" id="item_quantityBorrow_0">
         </container>
     </span>
