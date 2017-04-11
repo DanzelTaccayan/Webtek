@@ -731,10 +731,9 @@ function search() {
     for (i = 0; i < tr.length; i++) {
         tdId = tr[i].getElementsByTagName("td")[0];
         tdName = tr[i].getElementsByTagName("td")[1];
-        tdItem = tr[i].getElementsByTagName("td")[2];
-        tdDate = tr[i].getElementsByTagName("td")[5];
+        tdDate = tr[i].getElementsByTagName("td")[2];
         if (tdId || tdName) {
-            if (tdId.innerHTML.toUpperCase().indexOf(filter) > -1 || tdName.innerHTML.toUpperCase().indexOf(filter) > -1 || tdItem.innerHTML.toUpperCase().indexOf(filter) > -1 || tdDate.innerHTML.toUpperCase().indexOf(filter) > -1){
+            if (tdId.innerHTML.toUpperCase().indexOf(filter) > -1 || tdName.innerHTML.toUpperCase().indexOf(filter) > -1 ||  tdDate.innerHTML.toUpperCase().indexOf(filter) > -1){
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
