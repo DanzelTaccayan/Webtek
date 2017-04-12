@@ -765,7 +765,12 @@ function returnAll() {
         }  
     }
 
+    alert("Successfully return all the Items borrowed!");
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);        
 
+}
+
+function returnItem() {
+    
 }                
