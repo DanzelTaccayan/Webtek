@@ -756,6 +756,8 @@ function returnAll() {
                     for (var x = 0; x < itemsArray.length; x++) {
                         if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
+                            borrowersArray[c].Items[i].Quantity = 0;
+                            i++;
                         }
                     }
                 }   
