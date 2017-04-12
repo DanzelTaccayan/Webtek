@@ -675,18 +675,22 @@ function viewDetails(){
                 var pItem = document.createElement("p");
                 var pQuant = document.createElement("p");
                 var pReturn = document.createElement("p");
+                var pAction = document.createElement("p");
 
                 pItem.setAttribute("id","desc"+c);
                 pQuant.setAttribute("id","quant"+c);
                 pReturn.setAttribute("id","rdate"+c);
+                pAction.setAttribute("id", "action"+c);
 
                 pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
                 pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
                 pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
+                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return"> ';
 
                 outerContainer.appendChild(pItem);
                 outerContainer.appendChild(pQuant);
                 outerContainer.appendChild(pReturn);
+                outerContainer.appendChild(pAction);
                 
 			}	
 		}
