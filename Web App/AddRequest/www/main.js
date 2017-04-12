@@ -741,3 +741,29 @@ function search() {
         }
     }
 }
+
+function returnAll() {  
+    var borrowersArray = [];
+    borrowersArray= JSON.parse(localStorage.loanRecord);
+    var itemsArray = [];
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    for (var c = 0; c < borrowersArray.length; c++) {
+        if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
+           
+            for (var i = 0; i < borrowersArray.length; i++) {
+                if (borrowersArray[c].Items[i] != 0) {
+
+                    for (var x = 0; x < itemsArray.length; x++) {
+                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
+                            itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
+                        }
+                    }
+                }   
+            } 
+        }  
+    }
+
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
+    localStorage.itemsRecord = JSON.stringify(itemsArray);        
+
+}                
