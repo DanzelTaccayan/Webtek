@@ -762,6 +762,10 @@ function returnAll() {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
+
+                            if (borrowersArray[c].Items.length == (i+1)) {
+                                break;
+                            }
                         }
                     }
                 }   
