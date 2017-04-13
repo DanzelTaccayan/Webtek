@@ -641,8 +641,6 @@ function viewDetails(){
 		console.log(index);
 
 		if(index != undefined){
-			
-			
 
 			//Now Remove it in order for the others to access their details
 			viewQueueArray.splice(0,1);
@@ -686,7 +684,7 @@ function viewDetails(){
                 pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
                 pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
                 pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
-                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return"> ';
+                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return" onclick = "returnItem()"> ';
 
                 outerContainer.appendChild(pItem);
                 outerContainer.appendChild(pQuant);
@@ -782,5 +780,45 @@ function returnAll() {
 }
 
 function returnItem() {
-    
+    var borrowersArray = [];
+    var itemsArray = [];     
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+
+    for (var a = 0; a < 10000; a++) {
+        var value = document.getElementById('rText'+a).value;
+        var item = document.getElementById('desc'+a).textContent;
+        
+        if (value != "") {
+            for (var i = 0; i < borrowersArray.length; i++) { 
+                if (borrowersArray[i].Idnum == document.getElementById('idnum').textContent) {
+
+                    for (var c = 0; c < borrowersArray[i].Items.length; c++) {
+                        if (item == borrowersArray[i].Items[c].ItemName) {
+                            borrowersArray[i].Items[c].Quantity -= parseInt(value);
+                            break;
+                        }
+                        continue;
+                    }
+
+                    for (var x = 0; x < borrowersArray[i].Items.length; x++) {
+                        if (item == itemsArray[x].Description) {
+                            itemsArray[x].Quantity += parseInt(value);
+                            break;
+                        }
+                        continue;
+                    }
+                }
+                
+            }     
+        }
+
+        if (value != "") {
+            break;
+        }      
+    }
+
+    alert("Successfully returned the partial Quantity Items borrowed!");
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
+    localStorage.itemsRecord = JSON.stringify(itemsArray); 
 }                
