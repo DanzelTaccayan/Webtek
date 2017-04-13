@@ -795,19 +795,25 @@ function returnItem() {
 
                     for (var c = 0; c < borrowersArray[i].Items.length; c++) {
                         if (item == borrowersArray[i].Items[c].ItemName) {
-                            borrowersArray[i].Items[c].Quantity -= parseInt(value);
-                            break;
+                            if (value <= 0 || isNaN(value) || parseInt(borrowersArray[i].Items[c].Quantity) < value) {
+                                alert('Invalid input!');
+                                break;
+                            } else {
+                                borrowersArray[i].Items[c].Quantity -= parseInt(value);
+                                for (var x = 0; x < borrowersArray[i].Items.length; x++) {
+                                    if (item == itemsArray[x].Description) {
+                                        itemsArray[x].Quantity += parseInt(value);
+                                        alert("Successfully returned the partial Quantity Items borrowed!");
+                                        break;            
+                                    
+                                    }
+                                    continue;
+                                }
+                            }    
                         }
                         continue;
                     }
 
-                    for (var x = 0; x < borrowersArray[i].Items.length; x++) {
-                        if (item == itemsArray[x].Description) {
-                            itemsArray[x].Quantity += parseInt(value);
-                            break;
-                        }
-                        continue;
-                    }
                 }
                 
             }     
@@ -818,7 +824,6 @@ function returnItem() {
         }      
     }
 
-    alert("Successfully returned the partial Quantity Items borrowed!");
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray); 
 }                
