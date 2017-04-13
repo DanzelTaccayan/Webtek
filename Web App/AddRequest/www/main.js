@@ -294,9 +294,10 @@ function prepareNewlyAddedItems(prev_item) {
 
 	var tempItem = itemChoice[itemIndex-1];
 
-
+	var prev_item_array = prev_item.split(" ");
+	
 	    for(var i =0 ;i < items.length; i++) {
-	    	if(prev_item.indexOf(items[i].Description) >= 0){
+	    	if(prev_item_array.indexOf(items[i].Description) >= 0){
 	    		continue;
 	    	}
 	    	else{
@@ -309,6 +310,7 @@ function prepareNewlyAddedItems(prev_item) {
 
 
 }
+
 
 function itemQtyLeft(index){
 	var showQty = document.getElementById("item_left_"+index);
