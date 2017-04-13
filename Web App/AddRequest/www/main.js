@@ -763,7 +763,7 @@ function returnAll() {
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
 
-                            if (borrowersArray[c].Items.length == (i+1)) {
+                            if (borrowersArray[c].Items.length == (i)) {
                                 break;
                             }
                         }
