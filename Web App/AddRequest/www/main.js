@@ -764,6 +764,8 @@ function returnAll() {
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
+                                localStorage.returnLog = JSON.stringify(borrowersArray);
+                                borrowersArray.splice(c);
                                 break;
                             }
                         }
@@ -774,8 +776,9 @@ function returnAll() {
     }
 
     alert("Successfully return all the Items borrowed!");
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
-    localStorage.returnLog = JSON.stringify(borrowersArray);    
+       
 
 }
 
