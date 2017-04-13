@@ -207,8 +207,8 @@ function addInput() {
 	var previousItems = "";
 
 	removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
-	removeBtn.textContent = "x"
-
+	removeBtn.textContent = "Delete Item"
+removeBtn.setAttribute('class','deleteItem');
 	container.setAttribute('id','container_'+itemIndex);
 
 	//Date
@@ -287,7 +287,7 @@ function prepareNewlyAddedItems(prev_item) {
 
     add_btn.setAttribute('id','addInput');
     add_btn.setAttribute('onclick','addInput()');
-    add_btn.textContent = "+";
+    add_btn.textContent = "New Item";
 
     if(!document.getElementById("addInput")){
 	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
@@ -366,6 +366,7 @@ function repopulateItems(index) {
 		//The Due Date of the Item
 		item_date.setAttribute('type','date');
 		item_date.setAttribute('id','date_return_'+itemIndex);
+        item_date.setAttribute('class','modal_form');
 		item_date.setAttribute('value',RepopItemsArray[i].DueDate);
 		item_date_label.setAttribute('for','date_return_'+itemIndex);
 		item_date_label.textContent = 'Due Date: ';
@@ -373,7 +374,7 @@ function repopulateItems(index) {
 		//The Description of the Item
 		item_desc.setAttribute('type','select');
 		item_desc.setAttribute('id','item_description_'+itemIndex);
-		item_desc.setAttribute('class','item_choice');
+		item_desc.setAttribute('class','item_choice select-style');
 		item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 		item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 		item_desc_label.setAttribute('for','item_description_'+itemIndex);
@@ -383,7 +384,8 @@ function repopulateItems(index) {
 		itemLeft.setAttribute('id', 'item_left_'+itemIndex);
 
 		//The Quantity you would like to get
-		item_quant.setAttribute('type','input');
+		
+        item_quant.setAttribute('type','text');
 		item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
 		item_quant.setAttribute('value', RepopItemsArray[i].itemQuant);
 		item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
@@ -707,7 +709,7 @@ function prepareItems() {
 
     add_btn.setAttribute('id','addInput');
     add_btn.setAttribute('onclick','addInput()');
-    add_btn.textContent = "+";
+    add_btn.textContent = "New Item";
 
     if(!document.getElementById("addInput")){
 	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
