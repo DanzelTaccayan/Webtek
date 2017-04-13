@@ -12,7 +12,7 @@ function initItem() {
     bottom.innerHTML = "";
     if (localStorage.itemsRecord) {
         itemsArray = JSON.parse(localStorage.itemsRecord);
-        for (var i = 0; i < itemsArray.length; i++) {
+        for (var i = 0; i < itemsArray.length; i++) {   
             generateDiv(i,itemsArray[i].Description, itemsArray[i].Quantity);
         }
     }
@@ -23,8 +23,7 @@ function initBorrow() {
     	document.querySelector("#mabody").innerHTML = "";
         borrowersArray = JSON.parse(localStorage.loanRecord);
         for (var i = 0; i < borrowersArray.length; i++) {
-            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name, borrowersArray[i].Item,
-                borrowersArray[i].Quantity, borrowersArray[i].Duedate, borrowersArray[i].DateBorrowed);
+            generateTableBorrower(i,borrowersArray[i].Idnum, borrowersArray[i].Name,  borrowersArray[i].DateBorrowed);
         }
     }
 }
@@ -50,6 +49,10 @@ function addItem() {
         itemsArray.push(itemsObject);
         localStorage.itemsRecord = JSON.stringify(itemsArray);
         initItem();
+
+        document.getElementById("input_description").value = "";
+        document.getElementById("input_quantity").value = "";
+
     }
 }
 
@@ -104,7 +107,6 @@ function removeItem(i) {
 
 function editItem(i){
 
-
     //Hide the edit button and show the save button
     document.getElementById("edit_button"+i).style.display="none";
     document.getElementById("save_button"+i).style.display="inline";
@@ -150,7 +152,6 @@ function saveItem(i){
         //Refresh the Page
         initItem();
     }
-
 }
 
 
@@ -209,17 +210,20 @@ function addInput() {
 	removeBtn.textContent = "x"
 
 	container.setAttribute('id','container_'+itemIndex);
-    container.setAttribute("class","id_container");
+
 	//Date
 	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
-	item_date_label.setAttribute('for','date_return_'+itemIndex);
+item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for','date_return_'+itemIndex);
+    
 	item_date_label.textContent = 'Due Date: ';
 
 	//Item Description
 	item_desc.setAttribute('type','select');
 	item_desc.setAttribute('id','item_description_'+itemIndex);
-	item_desc.setAttribute('class','item_choice');
+    
+	item_desc.setAttribute('class','item_choice select-style');
+    
 	item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 	item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 	item_desc_label.setAttribute('for','item_description_'+itemIndex);
@@ -231,11 +235,11 @@ function addInput() {
 
 
 	//The Quantity you would like to get
-	item_quant.setAttribute('type','input');
+	item_quant.setAttribute('type','text');
 	item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
 	item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
 	item_quant_label.textContent = ' Item Quantity: ';
-
+    item_quant.setAttribute("class","")
 	
 
 
@@ -495,6 +499,7 @@ function addBorrower() {
     borrowersObj = {
                     'Idnum': id,
                     'Name': name,
+                    'DateBorrowed':dateBorrowed,
                     'Items': []
                 };
 
@@ -515,20 +520,21 @@ function addBorrower() {
                     var itemObj = {
                         'ItemName':item,
                         'Quantity':quantityBorrow,
-                        'DateBorrowed':dateBorrowed,
                         'Duedate':date
                     };
 
                     tempItemArray.push(itemObj);
-                    borrowersObj.Items = tempItemArray;
+                    
 
-                    borrowersArray.push(borrowersObj);
-                    localStorage.loanRecord = JSON.stringify(borrowersArray);
-                    break;
-                
+                   
+                    break;            
             }
     	}
+
     }
+    borrowersObj.Items = tempItemArray;
+    borrowersArray.push(borrowersObj);
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
     alert("Request Successfully Added");
     location.reload();
     itemIndex = 1;
@@ -594,7 +600,7 @@ function addBorrowerChecker() {
 }
 
 
-function generateTableBorrower(i,id, name, item, quantityBorrow, date, dateBorrowed) {
+function generateTableBorrower(i,id, name, dateBorrowed) {
     //Query table
     var table = document.querySelector("#mabody");
     //Insert a row into the table
@@ -603,27 +609,19 @@ function generateTableBorrower(i,id, name, item, quantityBorrow, date, dateBorro
     //Insert into the first and second column of the tabRow var
     var colStudentId = tabRow.insertCell(0);
     var colStudentName = tabRow.insertCell(1);
-    var colItemName = tabRow.insertCell(2);
-    var colItemQuant = tabRow.insertCell(3);
-    var colDateBorrow = tabRow.insertCell(4);
-    var colDateReturn = tabRow.insertCell(5);
-    var colAction = tabRow.insertCell(6);
+    var colDateBorrow = tabRow.insertCell(2);
+    var colAction = tabRow.insertCell(3);
 
     //put some values
     colStudentId.textContent = id;
     colStudentName.textContent = name;
-    colItemName.textContent = item;
-    colItemQuant.textContent = quantityBorrow;
     colDateBorrow.textContent = dateBorrowed;
-    colDateReturn.textContent = date;
     colAction.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueue('+i+')"> view details </button></a>'
 
     //Clear the values of the input
     document.getElementById("user_id").value = "";
     document.getElementById("user_name").value = "";
-    document.getElementById("date_return").value = "";
-    document.getElementById("item_description").value = "";
-    document.getElementById("input_quantityBorrow").value = "";
+    
 }
 
 function viewQueue(i){
@@ -660,18 +658,8 @@ function viewDetails(){
 			document.getElementById("nameLabel").style.display = "";
 			document.getElementById("name").style.display = "";
 
-			document.getElementById("itemLabel").style.display = "";
-			document.getElementById("item").style.display = "";
-
-			document.getElementById("quantityLabel").style.display = "";
-			document.getElementById("quantity").style.display = "";
-
 			document.getElementById("duedateLabel").style.display = "";
 			document.getElementById("duedate").style.display = "";
-
-			document.getElementById("datereturnLabel").style.display = "";
-			document.getElementById("datereturn").style.display = "";
-
 
 			document.getElementById("return_button").style.display = "";
 
@@ -681,13 +669,33 @@ function viewDetails(){
 
 			document.getElementById("idnum").textContent = borrowersArray[index].Idnum;
 			document.getElementById("name").textContent  = borrowersArray[index].Name;
-			document.getElementById("item").textContent = borrowersArray[index].Item;
-			document.getElementById("quantity").textContent  = borrowersArray[index].Quantity;
-			document.getElementById("duedate").textContent  = borrowersArray[index].DateBorrowed;
-			document.getElementById("datereturn").textContent  = borrowersArray[index].Duedate;
+            document.getElementById("duedate").textContent  = borrowersArray[index].DateBorrowed;
 
+            var outerContainer = document.querySelector(".itemdetails");
+            var temp = borrowersArray[index].Items;
+               
+            for (var c = 0; c < temp.length; c++) {
+                var pItem = document.createElement("p");
+                var pQuant = document.createElement("p");
+                var pReturn = document.createElement("p");
+                var pAction = document.createElement("p");
 
+                pItem.setAttribute("id","desc"+c);
+                pQuant.setAttribute("id","quant"+c);
+                pReturn.setAttribute("id","rdate"+c);
+                pAction.setAttribute("id", "action"+c);
 
+                pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
+                pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
+                pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
+                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return"> ';
+
+                outerContainer.appendChild(pItem);
+                outerContainer.appendChild(pQuant);
+                outerContainer.appendChild(pReturn);
+                outerContainer.appendChild(pAction);
+                
+			}	
 		}
 	}
 }
@@ -730,10 +738,9 @@ function search() {
     for (i = 0; i < tr.length; i++) {
         tdId = tr[i].getElementsByTagName("td")[0];
         tdName = tr[i].getElementsByTagName("td")[1];
-        tdItem = tr[i].getElementsByTagName("td")[2];
-        tdDate = tr[i].getElementsByTagName("td")[5];
+        tdDate = tr[i].getElementsByTagName("td")[2];
         if (tdId || tdName) {
-            if (tdId.innerHTML.toUpperCase().indexOf(filter) > -1 || tdName.innerHTML.toUpperCase().indexOf(filter) > -1 || tdItem.innerHTML.toUpperCase().indexOf(filter) > -1 || tdDate.innerHTML.toUpperCase().indexOf(filter) > -1){
+            if (tdId.innerHTML.toUpperCase().indexOf(filter) > -1 || tdName.innerHTML.toUpperCase().indexOf(filter) > -1 ||  tdDate.innerHTML.toUpperCase().indexOf(filter) > -1){
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";
@@ -742,29 +749,39 @@ function search() {
     }
 }
 
-/*===================================MODAL==================================*/
-var modal = document.getElementById('myModal');
+function returnAll() {  
+    var borrowersArray = [];
+    borrowersArray= JSON.parse(localStorage.loanRecord);
+    var itemsArray = [];
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    for (var c = 0; c < borrowersArray.length; c++) {
+        if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
+           
+            for (var i = 0; i < borrowersArray.length; i++) {
+                if (borrowersArray[c].Items[i] != 0) {
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+                    for (var x = 0; x < itemsArray.length; x++) {
+                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
+                            itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
+                            borrowersArray[c].Items[i].Quantity = 0;
+                            i++;
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+                            if (borrowersArray[c].Items.length == (i+1)) {
+                                break;
+                            }
+                        }
+                    }
+                }   
+            } 
+        }  
     }
+
+    alert("Successfully return all the Items borrowed!");
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
+    localStorage.itemsRecord = JSON.stringify(itemsArray);        
+
 }
-/*===================================END OF MODAL==================================*/
+
+function returnItem() {
+    
+}                
