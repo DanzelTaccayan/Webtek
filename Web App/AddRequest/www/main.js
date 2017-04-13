@@ -149,8 +149,7 @@ function saveItem(i){
         itemsArray[i].Description = newItem;
         itemsArray[i].Quantity = newQuant;
         localStorage.itemsRecord = JSON.stringify(itemsArray);
-        //Refresh the Page
-        initItem();
+
     }
 }
 
