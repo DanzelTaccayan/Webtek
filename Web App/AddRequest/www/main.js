@@ -746,10 +746,14 @@ function search() {
 }
 
 function returnAll() {  
+    var returnArray = [];
     var borrowersArray = [];
-    borrowersArray= JSON.parse(localStorage.loanRecord);
     var itemsArray = [];
+    localStorage.returnLog = JSON.stringify(returnArray);
+    borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
+    returnArray = JSON.parse(localStorage.returnLog);
+
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
            
@@ -764,8 +768,8 @@ function returnAll() {
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-                                localStorage.returnLog = JSON.stringify(borrowersArray);
-                                borrowersArray.splice(c);
+                                returnArray.push(borrowersArray[c]);
+                                borrowersArray.splice(c,1);
                                 break;
                             }
                         }
@@ -776,6 +780,7 @@ function returnAll() {
     }
 
     alert("Successfully return all the Items borrowed!");
+    localStorage.returnLog = JSON.stringify(returnArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
        
