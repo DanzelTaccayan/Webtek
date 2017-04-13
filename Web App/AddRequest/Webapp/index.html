@@ -10,27 +10,36 @@
 </head>
 
 <body onload="initItem()">
-
+   <!--=============================================NAVIGATION BAR=================================-->
+    <nav>
+        <label for="show-menu" class="show-menu">Menu</label>
+        <input type="checkbox" id="show-menu" role="button">
+        <a id="logo" href=""><span onclick=display()>Slu Carpentry</span></a>
+        <ul id="menu">
+            <li><a href="#">Items</a></li>
+            <li><a href="#">Loan</a></li>
+            <li><a href="#">View</a></li>
+        </ul>
+    </nav>
+    <!--=========================================== END OF NAVIGATION BAR===========================-->
+    
+    
+    
+    <!--=======================================INPUT OF DESC & QUANT================================-->
     <div class="top">
-        <input type="text" id="input_description" placeholder="Item Description"> 
+        <input type="text" id="input_description" placeholder="Item Description">
         <input type="text" id="input_quantity" placeholder="Quantity">
         <input type="button" id="add" value="Add" onclick="addItem()">
     </div>
-
-    <div class="bottom">
+    <!--===================================END OF INPUT OF DESC & QUANT================================-->
     
-    </div> 
-<footer class="footer">
-    <div class="item">
-        <a href="index.html">Items</a>
-        <a href="loan.html">Loan</a>
-        <a href="">view</a>
+    
+    
+    <!--==================================DIV FOR GENERATED INFO =======================================-->
+    <div class="bottom">
+
     </div>
-  <a href=""><img src="img/bank-building.png" alt="Home logo"></a>
-  <a href="index.html"><img src="img/list.png" alt="logo"></a>
-  <a href="loan.html"><img src="img/handshake.png" alt=""></a>
-</footer>
-   
+    <!--==================================END OF DIV FOR GENERATED INFO =======================================-->
     <script src="main.js">
     </script>
 </body>

@@ -1,61 +1,113 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
-@media (min-width: 600px) {
-    .footer {
-        text-align: center;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: space-around;
-        bottom: 0;
-        left: 0;
-        position: fixed;
-        width: 100%;
-        background-color: #3E474F;
-        height: 170px;
-    }
-    a {
-        width: auto;
-        display: inline-block;
-    }
-    footer .item a{
-        display: none;
-    }
-    img {
-        margin-top: 25px;
-        width: 35%;
-    }
-    .editInput {
-        height: 60px !important;
-    }
-    .footer {
-        box-shadow: 1px 1px 1px black;
-        text-align: center;
-        display: -webkit-flex;
-        display: flex;
-        justify-content: space-around;
-        top: 0;
-        left: 0;
-        position: fixed;
-        width: 100%;
-        background-color: #2EB79C;
-        height: 75px;
-    }
-    footer .item a {
-        float: left;
-        text-decoration: none;
-        color: white;
-        width: auto;
-        display: inline-block;
-        padding: 1.2% 2%;
-        font-size: 20px;
-    }
-    a:hover{
-        opacity: .5;
-        transition: .3s;
-    }
-    .item{
-        width: 100%;
-    }
-    img {
-        display: none;
-    }
+body{
+    background-color: #2C7FA9;
 }
+
+        a {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        nav {
+             background-color:  #2C7FA9;
+            
+            border-radius: 5px;
+        }
+        
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        nav li a { 
+            background-color: #282D31;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            padding: 2%;
+            margin-top: 5px;
+            font-size: 1.1em;
+        }
+        
+        nav #logo {
+            margin: 0 auto;
+            color: #a4a8ad;
+            display: none;
+        }
+        
+        nav li a:hover {
+            background-color: #555;
+        }
+        
+        #menu {
+            display: none;
+        }
+        
+        .show-menu {
+            border-radius: 3px;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-decoration: none;
+            color: #fff;
+            background-color: #282D31;
+            text-align: center;
+            padding: 10px 0;
+            display: block;
+            min-height: 25px;
+        }
+        /*Hide checkbox*/
+        
+        input[type=checkbox] {
+            display: none;
+        }
+        /*Show menu when invisible checkbox is checked*/
+        
+        input[type=checkbox]:checked~#menu {
+            display: block;
+        }
+        
+        
+        @media screen and (min-width: 930px) {
+            #menu{
+                display: flex;
+            }
+            nav {
+                background-color: #282D31;
+                display: flex;
+                box-shadow: 1px 1px 1px black;
+                
+            }
+            nav #logo {
+                margin: auto;
+                margin-left: 50px;
+                font-size: 2.5em;
+                width: 80%;
+                display: block;
+                color: white;
+            }
+            nav ul {
+                margin-right: 20px;
+                flex: 1 1 0;
+                display: flex;
+                justify-content: flex-end;
+            }
+            nav li {
+                flex: 1 1 0;
+                padding-right: 20%;
+            }
+            nav li a{
+                background-color: inherit;
+            }
+            nav li a:hover {
+                transition: .4s;
+                background-color: #2EB79C;
+                color: #555;
+            }
+            nav #logo:hover{
+                transition: .5s;
+                color: #555;
+            }
+            .show-menu {
+                display: none;
+            }
+        }
