@@ -258,6 +258,15 @@ function addInput() {
 	if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
 		document.getElementById('requestForm').removeChild(addBtn);
 	}
+
+    if(itemIndex == 2){
+        var rmv_btn0 = document.createElement('button');
+        rmv_btn0.setAttribute('onclick','removeInput(0)');
+        rmv_btn0.setAttribute('name','remove_buttonAt0');
+        rmv_btn0.textContent = "x";
+        document.getElementById('container_0').appendChild(rmv_btn0);
+    }
+
 	var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
 	item_choice.setAttribute('disabled', 'disabled');
 
@@ -411,6 +420,17 @@ function repopulateItems(index) {
 		if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
 			document.getElementById('requestForm').removeChild(addBtn);
 		}
+
+        if(itemIndex > 1 ){
+            if(!document.querySelector("button[name=remove_buttonAt0]")){
+                var rmv_btn0 = document.createElement('button');
+                rmv_btn0.setAttribute('onclick','removeInput(0)');
+                rmv_btn0.setAttribute('name','remove_buttonAt0');
+                rmv_btn0.textContent = "x";
+                document.getElementById('container_0').appendChild(rmv_btn0);
+            }
+        }
+
 		if(itemIndex > 1){
 			var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
 			item_choice.setAttribute('disabled', 'disabled');
