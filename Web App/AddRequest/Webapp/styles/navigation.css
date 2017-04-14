@@ -1,7 +1,10 @@
-body{
-    background-color: #2C7FA9;
-}
-
+    body{
+    font-family: open sans;
+    background-image: url('../img/cheap_diagonal_fabric.png');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center; 
+} 
         a {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             text-decoration: none;
@@ -9,7 +12,7 @@ body{
         }
         
         nav {
-             background-color:  #2C7FA9;
+             background-color:  #0D264C;
             
             border-radius: 5px;
         }
@@ -20,7 +23,7 @@ body{
         }
         
         nav li a { 
-            background-color: #282D31;
+            background-color: #0D264C;
             text-align: center;
             text-decoration: none;
             color: #fff;
@@ -50,7 +53,7 @@ body{
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             text-decoration: none;
             color: #fff;
-            background-color: #282D31;
+            background-color: #0D264C;
             text-align: center;
             padding: 10px 0;
             display: block;
@@ -73,7 +76,7 @@ body{
                 display: flex;
             }
             nav {
-                background-color: #282D31;
+                background-color: #0D264C;
                 display: flex;
                 box-shadow: 1px 1px 1px black;
                 

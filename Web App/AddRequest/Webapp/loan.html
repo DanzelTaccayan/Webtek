@@ -49,17 +49,17 @@
             <div id="requestForm">
                 <input type="text" id="user_id" placeholder="ID Number"> 
                 <input type="text" id="user_name" placeholder="Name">
-                <br>
-                <span id='items'>
-        <container id ="container_0" class="itemWrapper">
-           <label for="date_return_0" class="dueDate">Due Date</label> <br>
+                
+                <div id="items">
+                
+        <div id ="container_0" class="wrapper_container">
+          <h3>Item 1</h3> 
              <input type="date" class="modal_form"id="date_return_0" > <br>
-            Item <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice select-style" id="item_description_0"></select><br>
+           <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice select-style" id="item_description_0"></select><br>
             <span id ="item_left_0"></span> <input type="text" id="item_quantityBorrow_0"
              placeholder="Item Quantity">
-                </container>
-                </span>
-
+                </div>
+                </div>
             </div>
 
                 <input type="submit" id="add" value="Add to inventory" onclick="addBorrowerChecker()">

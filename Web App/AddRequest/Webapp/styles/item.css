@@ -1,4 +1,5 @@
-    .top {
+   
+.top {
         overflow: hidden;
         font-size: 50px;
         margin-top: 1%;
@@ -11,11 +12,11 @@
         height: 40px;
         width: 80%;
         margin: 6px;
-        background-color: #4CAF50;
+        background-color: #488DC3;
         /* Green */
         border: none;
         color: white;
-        padding: 15px 20px;
+        padding: 1px 20px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -61,11 +62,11 @@
         width: 50%;
         margin-left: 25%;
         margin-bottom: 1%;
-        background-color: #2EB79C;
+        background-color: #488DC3;
         color: white;
         text-align: center;
         text-decoration: none;
-        font-size: 0.8em;
+        font-size: 0.6em;
         display: block;
         border: none;
         
@@ -109,15 +110,15 @@
     input[type="button"] {
         width: 20%;
         margin-left: 40%;
-        background-color: #909da6;
         color: white;
         text-align: center;
         text-decoration: none;
         font-size: 1em;
         display: block;
+        border-radius: 4%;
     }
     input[type="button"]:hover{
-        background-color: #2EB79C;
+        background-color: #0D264C;
         transition: .4s;
         opacity: .8s;
     }
@@ -126,7 +127,7 @@
     border-radius: 0;
     display:inline-block;
     margin-left: 2%;
-    height: 30px;
+    height: 50px;
     width: 30%;
     }
     input[type=text]:focus {
@@ -156,7 +157,7 @@
         width: 50%;
         margin-left: 25%;
         margin-bottom: 2%;
-        background-color: #2EB79C;
+        background-color: #488DC3;
         color: white;
         text-align: center;
         text-decoration: none;
@@ -164,6 +165,10 @@
         display: block;
         border: none;
         
+    }
+    .container button:hover{
+        transition: .4s;
+        background-color: #0D264C;
     }
 
     .footer {
@@ -185,5 +190,14 @@
     .container{
         width: 15%;
         font-size: 1.5em;
+    }
+    input[type=text] {
+    padding:1%;
+    font-size: 1.2em;
+    border-radius: 5px;
+    display:inline-block;
+    margin-left: 2%;
+    height: 50px;
+    width: 30%;
     }
 }

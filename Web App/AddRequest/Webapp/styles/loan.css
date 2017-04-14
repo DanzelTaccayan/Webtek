@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
 /*--==========START OF MODAL=====--*/
 
 .modal {
@@ -83,6 +85,7 @@
 }
 
 .modal-header {
+    font-family: open sans;
     padding: 2px 16px;
     background-color: #1B4D66;
     color: white;
@@ -93,6 +96,7 @@
 }
 
 .modal-footer {
+    font-family: open sans;
     padding: 2px 16px;
     background-color: #1B4D66;
     color: white;
@@ -245,8 +249,14 @@ label {
     display: block;
     width: 100%;
 }
-
-
+.wrapper_container {
+    padding-bottom: 4%;
+    border-top: 2px dotted black;
+    border-bottom: 2px dotted black;
+}
+#items h3{
+    text-align: center;
+}
 /*--==========END OF REQUEST FORM=====--*/
 
 
@@ -255,24 +265,41 @@ label {
 table {
     border-collapse: collapse;
     width: 100%;
-    font-family: arial;
-    font-size: .7em;
+    font-size: .6em;
+    border: 1px solid black;
 }
 
 th,
 td {
     text-align: left;
-    padding: 8px;
+    padding: 3px;
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2
+    background-color: #f2f2f2;
 }
-
-th {
-    background-color: #4CAF50;
+tr:nth-child(odd) {
+    background-color: #FFFFCC;
+}
+th{
+    background-color: #113160;
     color: white;
 }
+table button{
+    width: 90%;
+    margin-left: 4%;
+    background-color: #337AB7;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2em;
+    margin-top: 3%;
+    
+}
+
 
 
 /*--==========END OF TABLE=====--*/
@@ -280,28 +307,33 @@ th {
 @media screen and (min-width:1024px) {
     /*--==========START OF TOP PORTION=====--*/
     .top {
-        margin-top: 6%;
+        margin-top: 2%;
         margin-bottom: 1%;
-        padding-bottom: 9%;
+        padding-bottom: 11%;
     }
     #myBtn {
-        float: right;
-        margin-right: 10%;
-        background-image: url(../img/add.png);
-        background-repeat: no-repeat;
-        background-position: center;
-        height: 75px;
-        width: 75px;
-        border: none;
-        border-radius: 50%;
+        margin-right: 15%;
+        height: 110px;
+        width: 110px;
+        
+    }
+    #myBtn:hover{
+        transition:.4s;
+        opacity: .5;
     }
     #search_box {
-        margin-top: 1%;
-        margin-left: 5%;
+        margin-top: 2%;
+        margin-left: 8%;
     }
     /*--==========END OF TOP PORTION=====--*/
+    
     /*--==========START OF REQUEST FORM=====--*/
+    .modal-content{
+        width: 35%;
+    }
     .modal input[type=text] {
+        margin-left: 2%;
+        width: 50%;
         font-size: 1.3em;
     }
     .modal_form {
@@ -312,8 +344,8 @@ th {
         min-width: 90%;
     }
     .select-style {
-        margin-left: 1PX;
-        height: 40px;
+        margin:2% 1%;
+        height: 50px;
         min-width: 97%;
         font-size: 1em;
         display: inline-block;
@@ -350,8 +382,9 @@ th {
     /*--==========END OF OF REQUEST FORM=====--*/
     /*--==========START OF TABLE=====--*/
     table {
+        margin: auto;
         border-collapse: collapse;
-        width: 100%;
+        width: 70%;
         font-family: arial;
         font-size: 1.2em;
     }
@@ -360,11 +393,11 @@ th {
         text-align: left;
         padding: 8px;
     }
-    tr:nth-child(even) {
-        background-color: #f2f2f2
+    table button{
+        margin: 0;
+        width: 50%;
+        font-size:.9em;
     }
-    th {
-        background-color: #4CAF50;
-        color: white;
-    }
+
+    
 }

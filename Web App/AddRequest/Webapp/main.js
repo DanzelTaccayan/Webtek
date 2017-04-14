@@ -3,6 +3,7 @@ var borrowersArray = [];
 var itemIndex = 1;
 var RepopItemsArray = [];
 
+
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
 function initItem() {
@@ -148,7 +149,8 @@ function saveItem(i){
         itemsArray[i].Description = newItem;
         itemsArray[i].Quantity = newQuant;
         localStorage.itemsRecord = JSON.stringify(itemsArray);
-
+        //Refresh the Page
+        initItem();
     }
 }
 
@@ -185,10 +187,10 @@ function validate() {
 }
 
 function addInput() {
-	var container = document.createElement("container");
+	var container = document.createElement("div");
 	var createBreak = document.createElement('br');
 	var addBtn = document.getElementById('addInput');
-
+    
 	var item_date = document.createElement("input");
 	var item_date_label = document.createElement("label");
 
@@ -196,29 +198,37 @@ function addInput() {
 	var item_desc_label = document.createElement("label");
 
 	var item_quant = document.createElement("input");
-	var item_quant_label = document.createElement("label");
 
 	var removeBtn = document.createElement("button");
 
 	var itemLeft = document.createElement("span");
 
 	var previousItems = "";
-
+    
+    var itemHeader = document.createElement('h3');
+    itemHeader.textContent="Item "+ (itemIndex + 1);
+    
 	removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
-	removeBtn.textContent = "x"
-
+	removeBtn.textContent = "Delete Item"
+removeBtn.setAttribute('class','deleteItem');
 	container.setAttribute('id','container_'+itemIndex);
-
+    container.setAttribute('class','wrapper_container');
+    container.appendChild(itemHeader);
+        
+    
 	//Date
 	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
-	item_date_label.setAttribute('for','date_return_'+itemIndex);
+item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for','date_return_'+itemIndex);
+    
 	item_date_label.textContent = 'Due Date: ';
 
 	//Item Description
 	item_desc.setAttribute('type','select');
 	item_desc.setAttribute('id','item_description_'+itemIndex);
-	item_desc.setAttribute('class','item_choice');
+    
+	item_desc.setAttribute('class','item_choice select-style');
+    
 	item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 	item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 	item_desc_label.setAttribute('for','item_description_'+itemIndex);
@@ -230,13 +240,11 @@ function addInput() {
 
 
 	//The Quantity you would like to get
-	item_quant.setAttribute('type','input');
+	item_quant.setAttribute('type','text');
 	item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
-	item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
-	item_quant_label.textContent = ' Item Quantity: ';
-
-	
-
+    item_quant.setAttribute('placeholder','Item Quantity')
+    item_quant.setAttribute("class","")
+        
 
 	container.appendChild(item_date_label);
 	container.appendChild(item_date);
@@ -247,26 +255,18 @@ function addInput() {
 
 	container.appendChild(itemLeft);
 	
-	container.appendChild(item_quant_label);
 	container.appendChild(item_quant);
 	
 	container.appendChild(removeBtn);
 
+
 	container.insertBefore(createBreak, item_date_label);
+   
 	document.getElementById("items").appendChild(container);
 	itemIndex++;
 	if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
 		document.getElementById('requestForm').removeChild(addBtn);
 	}
-
-    if(itemIndex == 2){
-        var rmv_btn0 = document.createElement('button');
-        rmv_btn0.setAttribute('onclick','removeInput(0)');
-        rmv_btn0.setAttribute('name','remove_buttonAt0');
-        rmv_btn0.textContent = "x";
-        document.getElementById('container_0').appendChild(rmv_btn0);
-    }
-
 	var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
 	item_choice.setAttribute('disabled', 'disabled');
 
@@ -276,6 +276,7 @@ function addInput() {
 		previousItems += tempChoice[tempChoice.selectedIndex].value+" ";
 		
 	}
+
 
 	prepareNewlyAddedItems(previousItems);
 	itemQtyLeft(itemIndex-1);
@@ -291,7 +292,7 @@ function prepareNewlyAddedItems(prev_item) {
 
     add_btn.setAttribute('id','addInput');
     add_btn.setAttribute('onclick','addInput()');
-    add_btn.textContent = "+";
+    add_btn.textContent = "New Item";
 
     if(!document.getElementById("addInput")){
 	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
@@ -301,10 +302,9 @@ function prepareNewlyAddedItems(prev_item) {
 
 	var tempItem = itemChoice[itemIndex-1];
 
-	var prev_item_array = prev_item.split(" ");
-	
+
 	    for(var i =0 ;i < items.length; i++) {
-	    	if(prev_item_array.indexOf(items[i].Description) >= 0){
+	    	if(prev_item.indexOf(items[i].Description) >= 0){
 	    		continue;
 	    	}
 	    	else{
@@ -317,7 +317,6 @@ function prepareNewlyAddedItems(prev_item) {
 
 
 }
-
 
 function itemQtyLeft(index){
 	var showQty = document.getElementById("item_left_"+index);
@@ -343,11 +342,12 @@ function itemQtyLeft(index){
 function repopulateItems(index) {
 
     for(var i = 0; i < index; i++){
-
-		var container = document.createElement("container");
+        var itemHeader = document.createElement('h3');
+        
+		var container = document.createElement("div");
 		var createBreak = document.createElement('br');
 		var addBtn = document.getElementById('addInput');
-
+        
 		var item_date = document.createElement("input");
 		var item_date_label = document.createElement("label");
 
@@ -355,7 +355,7 @@ function repopulateItems(index) {
 		var item_desc_label = document.createElement("label");
 
 		var item_quant = document.createElement("input");
-		var item_quant_label = document.createElement("label");
+
 
 		var removeBtn = document.createElement("button");
 
@@ -363,15 +363,19 @@ function repopulateItems(index) {
 
 		var previousItems = "";
 
+        itemHeader.textContent="Item " + (itemIndex + 1);
+        
 		removeBtn.setAttribute('onclick','removeInput('+itemIndex+')');
-		removeBtn.textContent = "x"
+        removeBtn.setAttribute('class','deleteItem');
+		removeBtn.textContent = "Delete Item"
 
 		container.setAttribute('id','container_'+itemIndex);
-
+        container.setAttribute('class','wrapper_container');
 
 		//The Due Date of the Item
 		item_date.setAttribute('type','date');
 		item_date.setAttribute('id','date_return_'+itemIndex);
+        item_date.setAttribute('class','modal_form');
 		item_date.setAttribute('value',RepopItemsArray[i].DueDate);
 		item_date_label.setAttribute('for','date_return_'+itemIndex);
 		item_date_label.textContent = 'Due Date: ';
@@ -379,7 +383,7 @@ function repopulateItems(index) {
 		//The Description of the Item
 		item_desc.setAttribute('type','select');
 		item_desc.setAttribute('id','item_description_'+itemIndex);
-		item_desc.setAttribute('class','item_choice');
+		item_desc.setAttribute('class','item_choice select-style');
 		item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 		item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
 		item_desc_label.setAttribute('for','item_description_'+itemIndex);
@@ -389,12 +393,13 @@ function repopulateItems(index) {
 		itemLeft.setAttribute('id', 'item_left_'+itemIndex);
 
 		//The Quantity you would like to get
-		item_quant.setAttribute('type','input');
+		
+        item_quant.setAttribute('type','text');
 		item_quant.setAttribute('id','item_quantityBorrow_'+itemIndex);
 		item_quant.setAttribute('value', RepopItemsArray[i].itemQuant);
-		item_quant_label.setAttribute('for','item_quantityBorrow_'+itemIndex);
-		item_quant_label.textContent = ' Item Quantity: ';
-
+        
+        container.appendChild(itemHeader);
+        
 		container.appendChild(item_date_label);
 		container.appendChild(item_date);
 
@@ -404,7 +409,7 @@ function repopulateItems(index) {
 
 		container.appendChild(itemLeft);
 		
-		container.appendChild(item_quant_label);
+
 		container.appendChild(item_quant);
 		
 
@@ -420,17 +425,11 @@ function repopulateItems(index) {
 		if(itemIndex == JSON.parse(localStorage.itemsRecord).length){
 			document.getElementById('requestForm').removeChild(addBtn);
 		}
+        
+        
+        
 
-        if(itemIndex > 1 ){
-            if(!document.querySelector("button[name=remove_buttonAt0]")){
-                var rmv_btn0 = document.createElement('button');
-                rmv_btn0.setAttribute('onclick','removeInput(0)');
-                rmv_btn0.setAttribute('name','remove_buttonAt0');
-                rmv_btn0.textContent = "x";
-                document.getElementById('container_0').appendChild(rmv_btn0);
-            }
-        }
-
+        
 		if(itemIndex > 1){
 			var item_choice = document.getElementsByClassName("item_choice")[itemIndex-2];
 			item_choice.setAttribute('disabled', 'disabled');
@@ -660,6 +659,8 @@ function viewDetails(){
 		console.log(index);
 
 		if(index != undefined){
+			
+			
 
 			//Now Remove it in order for the others to access their details
 			viewQueueArray.splice(0,1);
@@ -703,7 +704,7 @@ function viewDetails(){
                 pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
                 pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
                 pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
-                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return" onclick = "returnItem()"> ';
+                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return"> ';
 
                 outerContainer.appendChild(pItem);
                 outerContainer.appendChild(pQuant);
@@ -722,7 +723,7 @@ function prepareItems() {
 
     add_btn.setAttribute('id','addInput');
     add_btn.setAttribute('onclick','addInput()');
-    add_btn.textContent = "+";
+    add_btn.textContent = "New Item";
 
     if(!document.getElementById("addInput")){
 	    if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
@@ -765,16 +766,10 @@ function search() {
 }
 
 function returnAll() {  
-    var returnArray = [];
     var borrowersArray = [];
-    var itemsArray = [];
     borrowersArray= JSON.parse(localStorage.loanRecord);
+    var itemsArray = [];
     itemsArray = JSON.parse(localStorage.itemsRecord);
-
-    if(localStorage.returnLog){
-        returnArray = JSON.parse(localStorage.returnLog);
-    }
-
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
            
@@ -786,11 +781,8 @@ function returnAll() {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
-                            x = -1;
 
-                            if (borrowersArray[c].Items.length == (i)) {
-                                returnArray.push(borrowersArray[c]);
-                                borrowersArray.splice(c,1);
+                            if (borrowersArray[c].Items.length == (i+1)) {
                                 break;
                             }
                         }
@@ -801,58 +793,11 @@ function returnAll() {
     }
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray);  
-       
+    localStorage.itemsRecord = JSON.stringify(itemsArray);        
 
 }
 
 function returnItem() {
-    var borrowersArray = [];
-    var itemsArray = [];     
-    itemsArray = JSON.parse(localStorage.itemsRecord);
-    borrowersArray = JSON.parse(localStorage.loanRecord);
-
-    for (var a = 0; a < 10000; a++) {
-        var value = document.getElementById('rText'+a).value;
-        var item = document.getElementById('desc'+a).textContent;
-        
-        if (value != "") {
-            for (var i = 0; i < borrowersArray.length; i++) { 
-                if (borrowersArray[i].Idnum == document.getElementById('idnum').textContent) {
-
-                    for (var c = 0; c < borrowersArray[i].Items.length; c++) {
-                        if (item == borrowersArray[i].Items[c].ItemName) {
-                            if (value <= 0 || isNaN(value) || parseInt(borrowersArray[i].Items[c].Quantity) < value) {
-                                alert('Invalid input!');
-                                break;
-                            } else {
-                                borrowersArray[i].Items[c].Quantity -= parseInt(value);
-                                for (var x = 0; x < borrowersArray[i].Items.length; x++) {
-                                    if (item == itemsArray[x].Description) {
-                                        itemsArray[x].Quantity += parseInt(value);
-                                        alert("Successfully returned the partial Quantity Items borrowed!");
-                                        break;            
-                                    
-                                    }
-                                    continue;
-                                }
-                            }    
-                        }
-                        continue;
-                    }
-
-                }
-                
-            }     
-        }
-
-        if (value != "") {
-            break;
-        }      
-    }
-
-    localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray); 
+    
 }                
