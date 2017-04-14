@@ -26,13 +26,16 @@
         font-size: .4em;
         width: 80%;
         height: 40px;
-        padding: 10px 15x;
+        padding-left: 1%;
         margin: 5px 0;
         display: inline-block;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
     }
+.bottom .editInput{
+    font-size: .7em;
+}
     input[type=text]:focus {
         background-color: lightblue;
     }
@@ -123,6 +126,7 @@
         opacity: .8s;
     }
     input[type=text] {
+     
     font-size: 1.2em;
     border-radius: 0;
     display:inline-block;
@@ -133,6 +137,9 @@
     input[type=text]:focus {
         background-color: lightblue;
     }
+    .bottom .editInput{
+    font-size: 1em;
+}
     .bottom {
         height: auto;
         overflow: hidden;
@@ -149,7 +156,7 @@
         display: inline-block;
         background-color: #FFFFFF;
         width: 20%;
-        height: 220px;
+        height: auto;
         border-radius: 0;
         box-shadow: 1px 10px 5px #313947;
     }

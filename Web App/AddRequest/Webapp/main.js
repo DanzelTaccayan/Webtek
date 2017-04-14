@@ -192,10 +192,8 @@ function addInput() {
 	var addBtn = document.getElementById('addInput');
     
 	var item_date = document.createElement("input");
-	var item_date_label = document.createElement("label");
 
 	var item_desc = document.createElement("select");
-	var item_desc_label = document.createElement("label");
 
 	var item_quant = document.createElement("input");
 
@@ -219,9 +217,9 @@ removeBtn.setAttribute('class','deleteItem');
 	//Date
 	item_date.setAttribute('type','date');
 	item_date.setAttribute('id','date_return_'+itemIndex);
-item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for','date_return_'+itemIndex);
+item_date.setAttribute("class","modal_form");
     
-	item_date_label.textContent = 'Due Date: ';
+	
 
 	//Item Description
 	item_desc.setAttribute('type','select');
@@ -231,8 +229,6 @@ item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for'
     
 	item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 	item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
-	item_desc_label.setAttribute('for','item_description_'+itemIndex);
-	item_desc_label.textContent = ' Item: ';
 
 
 	//The Item Left for a certain Item
@@ -246,11 +242,8 @@ item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for'
     item_quant.setAttribute("class","")
         
 
-	container.appendChild(item_date_label);
 	container.appendChild(item_date);
 
-	
-	container.appendChild(item_desc_label);
 	container.appendChild(item_desc);
 
 	container.appendChild(itemLeft);
@@ -260,7 +253,6 @@ item_date.setAttribute("class","modal_form");	item_date_label.setAttribute('for'
 	container.appendChild(removeBtn);
 
 
-	container.insertBefore(createBreak, item_date_label);
    
 	document.getElementById("items").appendChild(container);
 	itemIndex++;
@@ -349,10 +341,9 @@ function repopulateItems(index) {
 		var addBtn = document.getElementById('addInput');
         
 		var item_date = document.createElement("input");
-		var item_date_label = document.createElement("label");
+		
 
 		var item_desc = document.createElement("select");
-		var item_desc_label = document.createElement("label");
 
 		var item_quant = document.createElement("input");
 
@@ -377,8 +368,6 @@ function repopulateItems(index) {
 		item_date.setAttribute('id','date_return_'+itemIndex);
         item_date.setAttribute('class','modal_form');
 		item_date.setAttribute('value',RepopItemsArray[i].DueDate);
-		item_date_label.setAttribute('for','date_return_'+itemIndex);
-		item_date_label.textContent = 'Due Date: ';
 
 		//The Description of the Item
 		item_desc.setAttribute('type','select');
@@ -386,8 +375,6 @@ function repopulateItems(index) {
 		item_desc.setAttribute('class','item_choice select-style');
 		item_desc.setAttribute('onchange', 'itemQtyLeft('+itemIndex+')');
 		item_desc.setAttribute('onfocus', 'itemQtyLeft('+itemIndex+')');
-		item_desc_label.setAttribute('for','item_description_'+itemIndex);
-		item_desc_label.textContent = ' Item: ';
 
 		//The Item Left for a certain Item
 		itemLeft.setAttribute('id', 'item_left_'+itemIndex);
@@ -400,11 +387,10 @@ function repopulateItems(index) {
         
         container.appendChild(itemHeader);
         
-		container.appendChild(item_date_label);
+
 		container.appendChild(item_date);
 
 		
-		container.appendChild(item_desc_label);
 		container.appendChild(item_desc);
 
 		container.appendChild(itemLeft);
@@ -417,7 +403,6 @@ function repopulateItems(index) {
 
 		if(i != 0){
 			container.appendChild(removeBtn);
-			container.insertBefore(createBreak, item_date_label);
 		}
 
 		itemIndex++;

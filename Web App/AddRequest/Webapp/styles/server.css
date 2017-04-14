@@ -1,0 +1,47 @@
+header{
+    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0.1)),url('../img/arts-and-crafts-1850025_1920.jpg');
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
+    height: 60vh;
+
+}
+.servButton {
+    display: inline-block;
+    width: 40%;
+    border-radius: 1%;
+    margin-left: 7%;
+    background-color: #337AB7;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    margin-top: 3%;
+}
+#generate{
+    width: 50%;
+    margin-left: 25%;
+    padding: 4%;
+    
+}
+@media screen and (min-width: 568px){
+    .servButton{
+        width: 30%;
+        margin-left: 2%;
+    }
+    #generate{
+        width: 30%;
+        margin-left: 2%;
+        padding:  10px 15px;
+    }
+}
+@media screen and (min-width: 768px){
+
+    .servButton{
+        height: 50px;
+    }
+}
+}

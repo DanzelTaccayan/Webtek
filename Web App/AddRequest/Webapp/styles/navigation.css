@@ -100,11 +100,12 @@
                 padding-right: 20%;
             }
             nav li a{
+                font-size: 1.4em;
                 background-color: inherit;
             }
             nav li a:hover {
                 transition: .4s;
-                background-color: #2EB79C;
+                background-color: #0D264C;
                 color: #555;
             }
             nav #logo:hover{
