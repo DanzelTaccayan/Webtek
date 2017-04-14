@@ -12,6 +12,10 @@
 		<p id = "nameLabel" style="display:none"><b>Name:</b> </p>
 		<p id = "name" style="display:none"></p>
 
+		<p id = "schoolLabel" style="display:none"><b>School:</b> </p>
+		<p id = "school" style="display:none"></p>
+
+
 		<p id = "duedateLabel" style="display:none"><b>Date Borrowed: </b></p>
 		<p id = "duedate" style="display:none"></p>
 
@@ -19,7 +23,22 @@
 			<p><b>Items borrowed: </b></p>
 		</div>
 
-		<button id ="return_button" style="display:none" onclick="returnAll()">Return All</button>	
+		<button id ="return_button" style="display:none" onclick="returnAll()">Return All</button>
+
+		<!-- Modal Here haha nilagyan ko lang ng on click para ma populate ung nasa baba na div -->
+		<button id ="add_items" style ="display:none" onclick="addNewItems()">Add New Items to Borrow</button>
+		<div id = 'requestForm' style = "display:none">
+			<div id = 'items'>
+			 <container id ="container_0">
+	            Due Date: <input type="date" id="date_return_0"> 
+	            Item: <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice" id="item_description_0"></select>
+	            <span id ="item_left_0"></span>
+	            Item Quantity: <input type="text" id="item_quantityBorrow_0">
+	        </container>
+			</div>
+			<input type="submit" id="add" value="add" onclick="addNewItemsToBorrowerChecker()">
+		</div>
+
 		
 	</div>
 </body>

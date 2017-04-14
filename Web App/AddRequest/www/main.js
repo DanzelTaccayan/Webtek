@@ -2,6 +2,35 @@ var itemsArray = [];
 var borrowersArray = [];
 var itemIndex = 1;
 var RepopItemsArray = [];
+var returnersArray = [];
+
+function DateToday() {
+    var month,day,year,hour,minute;
+    var dateAtm = new Date();
+    month = dateAtm.getMonth();
+    day = dateAtm.getDate();
+    year = dateAtm.getFullYear();
+    hour = dateAtm.getHours();
+    minute = dateAtm.getMinutes();
+
+    var date = month+'/'+day+'/'+year;
+    var time = hour+":"+minute;
+    return date+" at "+time+" ";
+}
+
+function lateRequestChecker(date) {
+    var dueDate = new Date(date);
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    if(dueDate <= today){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+
 
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
@@ -26,6 +55,17 @@ function initBorrow() {
         }
     }
 }
+
+function initReturner(){
+        if(localStorage.returnLog){
+        document.querySelector("#mabody").innerHTML = "";
+        returnersArray = JSON.parse(localStorage.returnLog)
+            for (var i = 0; i < returnersArray.length; i++) {
+                generateTableReturner(i,returnersArray[i].Idnum, returnersArray[i].Name,  returnersArray[i].DateBorrowed);
+            }
+        }
+}
+
 
 function addItem() {
     var description = document.getElementById("input_description").value.trim();
@@ -503,8 +543,10 @@ function removeInput(index) {
 function addBorrower() {
     var id = document.getElementById("user_id").value.trim();
     var name = document.getElementById("user_name").value.trim();
+    var school = document.getElementById("school");
+    var contact = document.getElementById("contactNumber").value.trim();
 
-    var dateBorrowed = new Date();
+    var dateBorrowed = DateToday();
     var tempArray = [];
     var tempItemArray = [];
     var borrowersObj = {};
@@ -517,6 +559,8 @@ function addBorrower() {
                     'Idnum': id,
                     'Name': name,
                     'DateBorrowed':dateBorrowed,
+                    'School':school[school.selectedIndex].value,
+                    'Contact No.':contact,
                     'Items': []
                 };
 
@@ -529,6 +573,7 @@ function addBorrower() {
         var date = document.getElementById("date_return_"+c).value;
 
 
+
     	for (var i = 0; i < tempArray.length; i++) {
             if (item === tempArray[i].Description) {
                     tempArray[i].Quantity -= quantityBorrow;
@@ -538,7 +583,10 @@ function addBorrower() {
                         'ItemName':item,
                         'Quantity':quantityBorrow,
                         'Duedate':date,
-                        'ReturnDate': ''
+                        'QuantityReturned':'0',
+                        'ReturnDate': '',
+                        'UsableItemsReturned': '',
+                        'UnusableItemsReturned': ''
                     };
 
                     tempItemArray.push(itemObj);
@@ -558,22 +606,64 @@ function addBorrower() {
     itemIndex = 1;
 }
 
+function borrowerExist(idnum){
+    if(localStorage.loanRecord){
+        borrowersArray = JSON.parse(localStorage.loanRecord);
+
+        for(var i = 0; i < borrowersArray.length;i++){
+            if(borrowersArray[i].Idnum == idnum){
+                return i;
+                break;
+            }
+        }
+    } 
+    else{
+        return -1;
+    }
+}
+
+function returnerExist(idnum){
+    if(localStorage.returnLog){
+    returnersArray = JSON.parse(localStorage.returnLog);
+
+        for(var i = 0; i < returnersArray.length; i++){
+            if(returnersArray[i].Idnum == idnum){
+                return i
+                break;
+            }
+        }
+    } 
+    else{
+        return false;
+    }
+
+}
+
 function addBorrowerChecker() {
     var id = document.getElementById("user_id").value.trim();
     var name = document.getElementById("user_name").value.trim();
+    var contact = document.getElementById("contactNumber").value.trim();
     var errors = 0;
 
-    var dateBorrowed = new Date();
+
+    var dateBorrowed = DateToday();
     var tempArray = [];
 
     tempArray = JSON.parse(localStorage.itemsRecord);
 
     //First check the Id and the name
-    if (id === "" || name === "") {
+    if (id === "" || name === "" || contact === "") {
         alert("Complete the information needed");
         errors++;
     } else if (isNaN(id)) {
         alert("ID expecting number format");
+        errors++;
+    }else if(borrowerExist(id) > -1){
+        alert("Borrower Already Exists");
+        errors++;
+    }
+    else if(isNaN(contact)){
+        alert("Contact Number expecting number format");
         errors++;
     }
 
@@ -642,6 +732,28 @@ function generateTableBorrower(i,id, name, dateBorrowed) {
     
 }
 
+function generateTableReturner(i,id, name, dateBorrowed,status) {
+    //Query table
+    var table = document.querySelector("#mabody");
+    //Insert a row into the table
+    var tabRow = table.insertRow();
+
+    //Insert into the first and second column of the tabRow var
+    var colStudentId = tabRow.insertCell(0);
+    var colStudentName = tabRow.insertCell(1);
+    var colDateBorrow = tabRow.insertCell(2);
+    var colStatus = tabRow.insertCell(3);
+    var colAction = tabRow.insertCell(4);
+
+    //put some values
+    colStudentId.textContent = id;
+    colStudentName.textContent = name;
+    colDateBorrow.textContent = dateBorrowed;
+    colStatus.textContent = status; 
+    colAction.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueueReturner('+i+')"> view details </button></a>'
+    
+}
+
 function viewQueue(i){
 	var myArray = [];
 	myArray.push(i);
@@ -650,15 +762,31 @@ function viewQueue(i){
 
 }
 
+function viewQueueReturner(i){
+    var myArray = [];
+    myArray.push(i);
+
+    localStorage.viewQueueReturner = JSON.stringify(myArray);
+}
+
 function viewDetails(){
-	if(localStorage.viewQueue){
+if(localStorage.viewQueue){
+    var checkerBorrowerQueue = [];
+    checkerBorrowerQueue = JSON.parse(localStorage.viewQueue);
+}
+
+if(localStorage.viewQueueReturner){
+    var checkerReturnerQueue = [];
+    checkerReturnerQueue = JSON.parse(localStorage.viewQueueReturner);
+}
+
+	if(checkerBorrowerQueue[0] != undefined){
 		var viewQueueArray = [];
 		var index;
 
 		//store the index of who pressed the viewDetails
 		viewQueueArray = JSON.parse(localStorage.viewQueue);
 		index = viewQueueArray[0];
-		console.log(index);
 
 		if(index != undefined){
 
@@ -678,6 +806,7 @@ function viewDetails(){
 			document.getElementById("duedate").style.display = "";
 
 			document.getElementById("return_button").style.display = "";
+            document.getElementById("add_items").style.display = "";
 
 			//Get Elements and the local storage
 			var retbtn = document.getElementById("return_button");
@@ -692,28 +821,109 @@ function viewDetails(){
                
             for (var c = 0; c < temp.length; c++) {
                 var pItem = document.createElement("p");
+                var pItemLabel = document.createElement("p");
+
                 var pQuant = document.createElement("p");
+                var pQuantLabel = document.createElement("p");
+
                 var pReturn = document.createElement("p");
+                var pReturnLabel = document.createElement("p");
+
                 var pAction = document.createElement("p");
+
+
 
                 pItem.setAttribute("id","desc"+c);
                 pQuant.setAttribute("id","quant"+c);
                 pReturn.setAttribute("id","rdate"+c);
                 pAction.setAttribute("id", "action"+c);
 
+                pItemLabel.textContent = "Item Name: ";
                 pItem.innerHTML  = borrowersArray[index].Items[c].ItemName;  
-                pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity;  
-                pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate; 
-                pAction.innerHTML = '<input type = "text" id = "rText'+c+'"> <input type = "button" id = "retbtn'+c+'" value = "Return" onclick = "returnItem()"> ';
 
+                pQuantLabel.textContent = "Quantity Borrowed: ";
+                pQuant.innerHTML  = borrowersArray[index].Items[c].Quantity; 
+
+                pReturnLabel.textContent = "Item Due Date: "; 
+                pReturn.innerHTML  = borrowersArray[index].Items[c].Duedate;
+
+                pAction.innerHTML = 'Partialy Return Items:<br>Return Usable Items: <input type = "text" id = "rUsable'+c+'"><br>Return Unusable Items: <input type = "text" id = "rUnusable'+c+'"><br><input type = "button" value = "Return" onclick = "returnItem('+c+')"><br>';
+
+                outerContainer.appendChild(pItemLabel);
                 outerContainer.appendChild(pItem);
+
+                outerContainer.appendChild(pQuantLabel);
                 outerContainer.appendChild(pQuant);
+
+                outerContainer.appendChild(pReturnLabel);
                 outerContainer.appendChild(pReturn);
+
                 outerContainer.appendChild(pAction);
                 
 			}	
 		}
 	}
+    else if(checkerReturnerQueue[0] != undefined){
+        var viewQueueReturnerArray = [];
+        var index;
+
+        //store the index of who pressed the viewDetails
+        viewQueueReturnerArray = JSON.parse(localStorage.viewQueueReturner);
+        index = viewQueueReturnerArray[0];
+
+        if(index != undefined){
+
+            //Now Remove it in order for the others to access their details
+            viewQueueReturnerArray.splice(0,1);
+            localStorage.viewQueueReturner = JSON.stringify(viewQueueReturnerArray);
+
+            
+            //Show Them all!
+            document.getElementById("idnumLabel").style.display = "";
+            document.getElementById("idnum").style.display = "";
+
+            document.getElementById("nameLabel").style.display = "";
+            document.getElementById("name").style.display = "";
+
+            document.getElementById("schoolLabel").style.display = "";
+            document.getElementById("school").style.display = "";
+
+            document.getElementById("duedateLabel").style.display = "";
+            document.getElementById("duedate").style.display = "";
+
+            //Get Elements and the local storage
+            var retbtn = document.getElementById("return_button");
+            var returnersArray = JSON.parse(localStorage.returnLog);
+
+            document.getElementById("idnum").textContent = returnersArray[index].Idnum;
+            document.getElementById("name").textContent  = returnersArray[index].Name;
+            document.getElementById("duedate").textContent  = returnersArray[index].DateBorrowed;
+            document.getElementById("school").textContent = returnersArray[index].School;
+
+            var outerContainer = document.querySelector(".itemdetails");
+            var temp = returnersArray[index].Items;
+               
+            for (var c = 0; c < temp.length; c++) {
+                var pItem = document.createElement("p");
+                var pQuant = document.createElement("p");
+                var pReturn = document.createElement("p");
+
+                pItem.setAttribute("id","desc"+c);
+                pQuant.setAttribute("id","quant"+c);
+                pReturn.setAttribute("id","rdate"+c);
+
+                pItem.innerHTML  = "Item Name: "+returnersArray[index].Items[c].ItemName;  
+                pQuant.innerHTML  = "Quantity Returned: "+returnersArray[index].Items[c].Quantity;  
+                pReturn.innerHTML  = "Returned At: "+returnersArray[index].Items[c].ReturnDate; 
+
+                outerContainer.appendChild(pItem);
+                outerContainer.appendChild(pQuant);
+                outerContainer.appendChild(pReturn);
+                
+            }
+
+        }
+    }
 }
 
 function prepareItems() {
@@ -769,13 +979,15 @@ function returnAll() {
     var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
-    var retDate = new Date();
+    var retDate = DateToday();
+
     borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
     if(localStorage.returnLog){
         returnArray = JSON.parse(localStorage.returnLog);
     }
+
 
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
@@ -786,8 +998,11 @@ function returnAll() {
                     for (var x = 0; x < itemsArray.length; x++) {
                         if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
-                            borrowersArray[c].Items[i].Quantity = 0;
+
                             borrowersArray[c].Items[i].ReturnDate = retDate;
+                            borrowersArray[c].Items[i].UsableItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+                            borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
@@ -808,55 +1023,439 @@ function returnAll() {
     localStorage.returnLog = JSON.stringify(returnArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
-   
+    window.location.href = "loan.html";
 
 }
 
-function returnItem() {
+
+function returnItem(index) {
     var borrowersArray = [];
-    var itemsArray = [];     
+    var itemsArray = []; 
+    var id_num = document.getElementById('idnum').textContent;
+    var valueUsable = document.getElementById('rUsable'+index).value;
+    var valueUnusable = document.getElementById('rUnusable'+index).value;
+    var item = document.getElementById('desc'+index).textContent;
+    var trueTest = false; 
+
+    var i = borrowerExist(id_num);
+    var c = borrowerItemExist(i, item);
+
     itemsArray = JSON.parse(localStorage.itemsRecord);
     borrowersArray = JSON.parse(localStorage.loanRecord);
 
-    for (var a = 0; a < 10000; a++) {
-        var value = document.getElementById('rText'+a).value;
-        var item = document.getElementById('desc'+a).textContent;
-        
-        if (value != "") {
-            for (var i = 0; i < borrowersArray.length; i++) { 
-                if (borrowersArray[i].Idnum == document.getElementById('idnum').textContent) {
-
-                    for (var c = 0; c < borrowersArray[i].Items.length; c++) {
-                        if (item == borrowersArray[i].Items[c].ItemName) {
-                            if (value <= 0 || isNaN(value) || parseInt(borrowersArray[i].Items[c].Quantity) < value) {
-                                alert('Invalid input!');
-                                break;
-                            } else {
-                                borrowersArray[i].Items[c].Quantity -= parseInt(value);
-                                for (var x = 0; x < borrowersArray[i].Items.length; x++) {
-                                    if (item == itemsArray[x].Description) {
-                                        itemsArray[x].Quantity += parseInt(value);
-                                        alert("Successfully returned the partial Quantity Items borrowed!");
-                                        break;            
-                                    
-                                    }
-                                    continue;
-                                }
-                            }    
-                        }
-                        continue;
-                    }
-
-                }
-                
-            }     
-        }
-
-        if (value != "") {
-            break;
-        }      
+    if(localStorage.returnLog){
+        returnersArray = JSON.parse(localStorage.loanRecord);
     }
 
+
+        
+    if (valueUsable != "" || valueUnusable != "") {
+
+            if(valueUnusable == ""){
+
+                if(!isNaN(valueUsable)){
+
+                    if (valueUsable <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < valueUsable) {
+
+                        alert('The quantity of the usable item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                    } 
+                    else {
+                        //Subtract the Quantity Borrowed to the Quantity Returned
+                        borrowersArray[i].Items[c].Quantity -= parseInt(valueUsable);
+
+                        //Check if the UsableItemsReturned is empty
+                        if(borrowersArray[i].Items[c].UsableItemsReturned = ""){
+
+                            borrowersArray[i].Items[c].UsableItemsReturned = parseInt(valueUsable);
+                        }
+                        else {
+                            borrowersArray[i].Items[c].UsableItemsReturned += parseInt(valueUsable);
+                        }
+
+                        //Store the Quantity Returned by the User
+                        borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(valueUsable);
+                        borrowersArray[i].Items[c].ReturnDate = DateToday();
+
+                        /**==================== Store The Borrower as a Returner =========================**/
+                        var returnerObject = {
+                            'Idnum': borrowersArray[i].Idnum,
+                            'Name': borrowersArray[i].Name,
+                            'DateBorrowed':borrowersArray[i].DateBorrowed,
+                            'School':borrowersArray[i].School,
+                            'ContactNum':borrowersArray[i].ContactNum,
+                            'Items': []
+                        };
+
+                        returnerObject.Items.push(borrowersArray[i].Items[c]);
+
+                        
+                        if(localStorage.returnLog){
+                            if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                returnersArray[returnerIndex] = returnerObject;
+
+                            }
+                            else{
+                                returnersArray.push(returnerObject);
+                                
+                            }
+                        }
+                        else{
+                            returnersArray.push(returnerObject);
+                            
+                        }
+                        localStorage.returnLog = JSON.stringify(returnersArray);
+                        /**========================== Up until Here ========================================**/
+
+                        //If the returner has returned all items remove him from the loanrecord Storage
+                        if(borrowersArray[i].Items[c].Quantity == 0){
+
+                            borrowersArray[i].Items.splice(c, 1);
+
+                            if(!borrowersArray[i].Items[0]){
+                                trueTest = true;
+                                borrowersArray.splice(i,1);
+                            }
+                        }
+
+
+                        //Change the value of the original Items
+                        var x = itemExist(item);
+                        itemsArray[x].Quantity += parseInt(valueUsable);
+                        alert("Successfully returned the partial Quantity Items borrowed!");
+  
+                        
+                    }   
+                    
+                }
+                else{
+                     alert('The quantity of the usable item:"'+item+'" you have entered is not a number!');
+                }
+            }
+            else if(valueUsable == ""){
+
+                if(!isNaN(valueUnusable)){
+
+                        if (valueUnusable <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < valueUnusable) {
+
+                            alert('The quantity of the Unusable item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                        } 
+                        else {
+                            //Subtract the Quantity Borrowed to the Quantity Returned
+                            borrowersArray[i].Items[c].Quantity -= parseInt(valueUnusable);
+
+                            //Check if the UsableItemsReturned is empty
+                            if(borrowersArray[i].Items[c].UnusableItemsReturned = ""){
+
+                                borrowersArray[i].Items[c].UnusableItemsReturned = parseInt(valueUnusable);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].UnusableItemsReturned += parseInt(valueUnusable);
+                            }
+
+                            //Store the Quantity Returned by the User
+                            borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(valueUnusable);
+                            borrowersArray[i].Items[c].ReturnDate = DateToday();
+
+                            /**==================== Store The Borrower as a Returner =========================**/
+                            var returnerObject = {
+                                'Idnum': borrowersArray[i].Idnum,
+                                'Name': borrowersArray[i].Name,
+                                'DateBorrowed':borrowersArray[i].DateBorrowed,
+                                'School':borrowersArray[i].School,
+                                'ContactNum':borrowersArray[i].ContactNum,
+                                'Items': []
+                            };
+
+                            returnerObject.Items.push(borrowersArray[i].Items[c]);
+
+                            
+                            if(localStorage.returnLog){
+                                if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                    var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                    returnersArray[returnerIndex] = returnerObject;
+
+                                }
+                                else{
+                                    returnersArray.push(returnerObject);
+                                    
+                                }
+                            }
+                            else{
+                                returnersArray.push(returnerObject);
+                                
+                            }
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                            /**========================== Up until Here ========================================**/
+
+                            //If the returner has returned all items remove him from the loanrecord Storage
+                            if(borrowersArray[i].Items[c].Quantity == 0){
+
+                                borrowersArray[i].Items.splice(c, 1);
+
+                                if(!borrowersArray[i].Items[0]){
+                                    trueTest = true;
+                                    borrowersArray.splice(i,1);
+                                }
+                            }
+
+
+                            alert('Successfully returned '+valueUnusable+' '+item+' borrowed!');
+      
+                            
+                        }   
+                    
+                }
+                else{
+                     alert('The quantity of the unusable item/s:"'+item+'" you have entered is not a number!');
+                }
+
+            }
+            else {
+
+
+                if(!isNaN(valueUnusable) && !isNaN(valueUsable)){
+                    var total = parseInt(valueUnusable) + parseInt(valueUsable);
+                        if (total <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < total) {
+
+                            alert('The quantity of the Unusable or Usable item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                        } 
+                        else {
+                            //Subtract the Quantity Borrowed to the Quantity Returned
+                            borrowersArray[i].Items[c].Quantity -= parseInt(total);
+
+                            //Check if the UnusableItemsReturned is empty
+                            if(borrowersArray[i].Items[c].UnusableItemsReturned = ""){
+
+                                borrowersArray[i].Items[c].UnusableItemsReturned = parseInt(valueUnusable);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].UnusableItemsReturned += parseInt(valueUnusable);
+                            }
+
+                            //Check if the UsableItemsReturned is empty
+                            if(borrowersArray[i].Items[c].UsableItemsReturned = ""){
+
+                                borrowersArray[i].Items[c].UsableItemsReturned = parseInt(valueUsable);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].UsableItemsReturned += parseInt(valueUsable);
+                            }
+
+                            //Store the Quantity Returned by the User
+                            borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(total);
+                            borrowersArray[i].Items[c].ReturnDate = DateToday();
+
+                            /**==================== Store The Borrower as a Returner =========================**/
+                            var returnerObject = {
+                                'Idnum': borrowersArray[i].Idnum,
+                                'Name': borrowersArray[i].Name,
+                                'DateBorrowed':borrowersArray[i].DateBorrowed,
+                                'School':borrowersArray[i].School,
+                                'ContactNum':borrowersArray[i].ContactNum,
+                                'Items': []
+                            };
+
+                            returnerObject.Items.push(borrowersArray[i].Items[c]);
+
+                            
+                            if(localStorage.returnLog){
+                                if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                    var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                    returnersArray[returnerIndex] = returnerObject;
+
+                                }
+                                else{
+                                    returnersArray.push(returnerObject);
+                                    
+                                }
+                            }
+                            else{
+                                returnersArray.push(returnerObject);
+                                
+                            }
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                            /**========================== Up until Here ========================================**/
+
+                            //If the returner has returned all items remove him from the loanrecord Storage
+                            if(borrowersArray[i].Items[c].Quantity == 0){
+
+                                borrowersArray[i].Items.splice(c, 1);
+
+                                if(!borrowersArray[i].Items[0]){
+                                    trueTest = true;
+                                    borrowersArray.splice(i,1);
+                                }
+                            }
+
+                            //Change the value of the original Items
+                            var x = itemExist(item);
+                            itemsArray[x].Quantity += parseInt(valueUsable);
+                            alert('Successfully returned '+total+' '+item+' borrowed!('+valueUsable+' Usable Items '+valueUnusable+' Unusable Items)');
+                            
+                            
+                        }   
+                    
+                }
+                else{
+                     alert('The either the quantity of the unusable or usable item/s:"'+item+'" you have entered is not a number!');
+                }
+
+            }
+      
+            localStorage.loanRecord = JSON.stringify(borrowersArray);
+            localStorage.itemsRecord = JSON.stringify(itemsArray);
+            viewQueue(i);
+            if(trueTest){
+                window.location.href="loan.html"
+            }
+            else {
+                window.location.href = "viewdetails.html";
+            }
+    }
+    else {
+        alert("Please Enter a value on either the Return Usable Items or the Return Unusable Items input");
+    }
+}
+
+function itemExist(itemName){
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        if (itemName == itemsArray[i].Description) {
+            return i;
+            break;            
+        }
+    }
+}
+
+function borrowerItemExist(borrowerIndex, itemName){
+borrowersArray = JSON.parse(localStorage.loanRecord);
+
+    for (var i = 0; i < borrowersArray[borrowerIndex].Items.length; i++) {
+        if (itemName == borrowersArray[borrowerIndex].Items[i].ItemName) {
+            return i;
+            break;
+        }
+
+    }
+}
+
+function addNewItems() {
+    document.getElementById('requestForm').style.display = "";
+    prepareItems();
+}     
+
+
+
+
+function addNewItemsToBorrowerChecker() {
+    var errors = 0;
+
+
+    var dateBorrowed = DateToday();
+    var tempArray = [];
+
+    tempArray = JSON.parse(localStorage.itemsRecord);
+
+    for(c = 0; c < itemIndex; c++ ){
+        var selectedItem = document.getElementById("item_description_"+c).selectedIndex;
+
+        var quantityBorrow = document.getElementById("item_quantityBorrow_"+c).value.trim(); 
+        var item = document.getElementById("item_description_"+c).childNodes[selectedItem].value;
+        var date = document.getElementById("date_return_"+c).value;
+
+        if (quantityBorrow === "" || date === "") {
+            alert("Complete the information needed");
+            errors++;
+            break;
+        } else if (isNaN(quantityBorrow)) {
+            alert("Quantity expecting number format");
+            errors++;
+            break;
+        } else {
+            for (var i = 0; i < tempArray.length; i++) {
+                if (item === tempArray[i].Description) {
+                    if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0 ) {
+                        errors++;
+                        alert("The Quantity that you have entered on the item: "+tempArray[i].Description+" which is "+quantityBorrow+" is greater than the current item inventory");
+                        c = itemIndex+1;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    //If still no errors, add it to the local Storage
+    if(errors == 0){
+        addNewItemsToBorrower();
+    }
+    
+}
+
+/** ADDING BORROWERS **/
+function addNewItemsToBorrower() {
+    var id = document.getElementById("idnum").textContent;
+
+    var index = borrowerExist(id);
+
+    var dateBorrowed = DateToday();
+    var tempArray = [];
+    var borrowersItemArray = [];
+
+
+    tempArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+    borrowersItemArray = borrowersArray[index].Items;
+
+
+
+    //Put the Items
+    for(c = 0; c < itemIndex; c++ ){
+        var selectedItem = document.getElementById("item_description_"+c).selectedIndex;
+
+        var quantityBorrow = document.getElementById("item_quantityBorrow_"+c).value.trim();
+        var item = document.getElementById("item_description_"+c).childNodes[selectedItem].value;
+        var date = document.getElementById("date_return_"+c).value;
+
+
+
+        for (var i = 0; i < tempArray.length; i++) {
+            if (item === tempArray[i].Description) {
+                    tempArray[i].Quantity -= quantityBorrow;
+                    localStorage.itemsRecord = JSON.stringify(tempArray);
+
+            if(borrowerItemExist(index, item) > -1) {
+                var z = borrowerItemExist(index, item);
+                borrowersItemArray[z].Quantity = parseInt(borrowersItemArray[z].Quantity) + parseInt(quantityBorrow);
+                borrowersItemArray[z].Duedate = date;
+            }
+            else{
+                var itemObj = {
+                    'ItemName':item,
+                    'Quantity':quantityBorrow,
+                    'Duedate':date,
+                    'QuantityReturned':'0',
+                    'ReturnDate': '',
+                    'UsableItemsReturned': '',
+                    'UnusableItemsReturned': ''
+                };
+                borrowersItemArray.push(itemObj);
+            }
+
+                           
+                break;            
+            }
+        }
+
+    }
+    borrowersArray[index].Items = borrowersItemArray;
     localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray); 
-}                
+    alert("New Items Successfully Added");
+    viewQueue(index);
+    window.location.href = "viewdetails.html";          
+    itemIndex = 1;
+}           
