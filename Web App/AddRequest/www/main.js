@@ -770,7 +770,10 @@ function returnAll() {
     var itemsArray = [];
     borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
-    returnArray = JSON.parse(localStorage.returnLog);
+
+    if(localStorage.returnLog){
+        returnArray = JSON.parse(localStorage.returnLog);
+    }
 
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
