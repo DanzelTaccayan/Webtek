@@ -537,7 +537,8 @@ function addBorrower() {
                     var itemObj = {
                         'ItemName':item,
                         'Quantity':quantityBorrow,
-                        'Duedate':date
+                        'Duedate':date,
+                        'ReturnDate': ''
                     };
 
                     tempItemArray.push(itemObj);
@@ -768,6 +769,7 @@ function returnAll() {
     var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
+    var retDate = new Date();
     borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
@@ -785,10 +787,12 @@ function returnAll() {
                         if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
                             borrowersArray[c].Items[i].Quantity = 0;
+                            borrowersArray[c].Items[i].ReturnDate = retDate;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
+
                                 returnArray.push(borrowersArray[c]);
                                 borrowersArray.splice(c,1);
                                 break;
@@ -804,7 +808,7 @@ function returnAll() {
     localStorage.returnLog = JSON.stringify(returnArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
-       
+   
 
 }
 
