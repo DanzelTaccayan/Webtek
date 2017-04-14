@@ -6,21 +6,33 @@
 <script src="main.js"></script>
 <body onload="viewDetails()">
 	<div clas = "details">
-		<p id = "idnumLabel" style="display:none"><b>Id Number: </b></p>
-		<p id = "idnum" style="display:none"></p>
+		<div>
+			<span id = "idnumLabel" style="display:none; font-weight: bold;">Id Number:</span>
+			<span id = "idnum" style="display:none"></span>
+		</div>
+		
+		<div>
+			<span id = "nameLabel" style="display:none; font-weight: bold;">Name: </span>
+			<span id = "name" style="display:none"></span>
+		</div>
+
+		<div>
+			<span id = "schoolLabel" style="display:none; font-weight: bold;">School: </span>
+			<span id = "school" style="display:none"></span>
+		</div>
+		
+		<div>
+			<span id = "contactnumLabel" style="display:none; font-weight: bold;">Contact Number:</span>
+			<span id = "contactnum" style = "display:none"></span>
+		</div>
+
+		<div>
+			<span id = "duedateLabel" style="display:none; font-weight: bold;">Date Borrowed:</span>
+			<span id = "duedate" style="display:none"></span>
+		</div>
 	
-		<p id = "nameLabel" style="display:none"><b>Name:</b> </p>
-		<p id = "name" style="display:none"></p>
-
-		<p id = "schoolLabel" style="display:none"><b>School:</b> </p>
-		<p id = "school" style="display:none"></p>
-
-
-		<p id = "duedateLabel" style="display:none"><b>Date Borrowed: </b></p>
-		<p id = "duedate" style="display:none"></p>
-
-		<div class = "itemdetails">
-			<p><b>Items borrowed: </b></p>
+		<div id ="itemDet" style="display:none" class = "itemdetails">
+			<p style="font-weight:bold">Items borrowed:</p>
 		</div>
 
 		<button id ="return_button" style="display:none" onclick="returnAll()">Return All</button>
