@@ -3,7 +3,6 @@ var borrowersArray = [];
 var itemIndex = 1;
 var RepopItemsArray = [];
 
-
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
 function initItem() {
@@ -749,7 +748,6 @@ function returnAll() {
     var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
-    localStorage.returnLog = JSON.stringify(returnArray);
     borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
     returnArray = JSON.parse(localStorage.returnLog);
