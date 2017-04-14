@@ -30,6 +30,22 @@ function lateRequestChecker(date) {
     }
 }
 
+function saveToServer () {
+    var xmlhttp = new XMLHttpRequest();   
+    xmlhttp.open("POST", "json-handler.json", false);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(localStorage.getItem("itemsRecord"));
+
+    xmlhttp.open("POST", "json-handler.json", false);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(localStorage.getItem("loanRecord"));
+
+    xmlhttp.open("POST", "json-handler.json", false); 
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(localStorage.getItem("returnLog")); 
+    alert('Successfully added the files into the server');
+   
+}
 
 
 /** ADDING ITEMS **/
