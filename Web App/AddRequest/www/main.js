@@ -4,6 +4,43 @@ var itemIndex = 1;
 var RepopItemsArray = [];
 var returnersArray = [];
 
+function saveToServer() {
+    try {
+        var xmlhttp = new XMLHttpRequest();   
+        xmlhttp.open("POST", "json-handler-items.json", false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("itemsRecord"));
+
+        xmlhttp.open("POST", "json-handler-loan.json", false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("loanRecord"));
+
+        xmlhttp.open("POST", "json-handler-return.json", false); 
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("returnLog")); 
+        alert('Successfully added the files into the server');
+    } catch (error) {
+        alert("You don't have network connection can't save data to the server.");
+    }
+   
+}
+
+function downloadData() {
+    var xhr = new XMLHttpRequest();
+    try {
+        xhr.open("GET", "http://localHost/WebTek/json-handler-items.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-loan.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
+        xhr.send(null);
+        if (xhr.status == 200) {
+             // w8  
+        }
+
+    }  catch (error) {
+        alert('No Network connection.');
+    }
+}
+
 function DateToday() {
     var month,day,year,hour,minute;
     var dateAtm = new Date();
@@ -29,24 +66,6 @@ function lateRequestChecker(date) {
         return true;
     }
 }
-
-function saveToServer () {
-    var xmlhttp = new XMLHttpRequest();   
-    xmlhttp.open("POST", "json-handler.json", false);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("itemsRecord"));
-
-    xmlhttp.open("POST", "json-handler.json", false);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("loanRecord"));
-
-    xmlhttp.open("POST", "json-handler.json", false); 
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("returnLog")); 
-    alert('Successfully added the files into the server');
-   
-}
-
 
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
