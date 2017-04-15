@@ -1170,7 +1170,29 @@ function restoreDefectiveItems(returnerIndex, index) {
     } else if (quantityRestored == 0) {
         alert("Invalid Input, The Quantity you have entered should be greater than 0");
     } else {
+
+        if(!isNaN(borrowerExist(returnersArray[returnerIndex].Idnum))){
+            borrowersArray = JSON.parse(localStorage.loanRecord);
+            var borrowerIndex = borrowerExist(returnersArray[returnerIndex].Idnum);
+            var itemIndex =  borrowerItemExist(borrowerIndex, returnersItemsArray[index].ItemName);
+            
+
+            borrowersArray[index].Items[itemIndex].DefectiveItemsReturned = parseInt(borrowersArray[index].Items[itemIndex].DefectiveItemsReturned) - parseInt(quantityRestored);
+
+                    if (borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned == "") {
+                        borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned = parseInt(quantityRestored);
+                    } else {
+                        borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned = parseInt(borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned) + parseInt(quantityRestored);
+                    }
+            borrowersArray[index].Items[itemIndex].ReturnDate = DateToday();
+            if (parseInt(borrowersArray[index].Items[itemIndex].DefectiveItemsReturned) == 0) {
+                    borrowersArray[index].Items[itemIndex].DefectiveItemsReturned = "";
+            }
+            localStorage.loanRecord = JSON.stringify(borrowersArray);
+        }
+
         returnersItemsArray[index].DefectiveItemsReturned = parseInt(returnersItemsArray[index].DefectiveItemsReturned) - parseInt(quantityRestored);
+        
         if (returnersItemsArray[index].GoodConditionItemsReturned == "") {
             returnersItemsArray[index].GoodConditionItemsReturned = parseInt(quantityRestored);
         } else {
