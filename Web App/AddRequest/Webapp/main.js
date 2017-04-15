@@ -319,7 +319,8 @@ function addInput() {
         var rmv_btn0 = document.createElement('button');
         rmv_btn0.setAttribute('onclick', 'removeInput(0)');
         rmv_btn0.setAttribute('name', 'remove_buttonAt0');
-        rmv_btn0.textContent = "x";
+        rmv_btn0.setAttribute('class','deleteItem');
+                rmv_btn0.textContent = "Delete Item";
         document.getElementById('container_0').appendChild(rmv_btn0);
     }
 
@@ -346,29 +347,31 @@ function prepareNewlyAddedItems(prev_item) {
     var itemChoice = document.getElementsByClassName("item_choice");
     var add_btn = document.createElement('button');
 
-    add_btn.setAttribute('id', 'addInput');
-    add_btn.setAttribute('onclick', 'addInput()');
-    add_btn.textContent = "New Item";
+    add_btn.setAttribute('id','addInput');
+    add_btn.setAttribute('onclick','addInput()');
+    add_btn.textContent = "+";
 
-    if (!document.getElementById("addInput")) {
-        if (JSON.parse(localStorage.itemsRecord).length > itemIndex) {
+    if(!document.getElementById("addInput")){
+        if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
             document.getElementById("requestForm").appendChild(add_btn);
         }
     }
 
-    var tempItem = itemChoice[itemIndex - 1];
+    var tempItem = itemChoice[itemIndex-1];
 
-
-    for (var i = 0; i < items.length; i++) {
-        if (prev_item_array.indexOf(items[i].Description) >= 0) {
-            continue;
-        } else {
-            var optionEl = document.createElement("option");
-            optionEl.setAttribute("value", items[i].Description);
-            tempItem.appendChild(optionEl);
-            optionEl.textContent = items[i].Description;
+    var prev_item_array = prev_item.split(" ");
+    
+        for(var i =0 ;i < items.length; i++) {
+            if(prev_item_array.indexOf(items[i].Description) >= 0){
+                continue;
+            }
+            else{
+                var optionEl = document.createElement("option");
+                optionEl.setAttribute("value", items[i].Description);
+                tempItem.appendChild(optionEl);
+                optionEl.textContent = items[i].Description;
+            }
         }
-    }
 
 
 }
@@ -480,7 +483,8 @@ function repopulateItems(index) {
                 var rmv_btn0 = document.createElement('button');
                 rmv_btn0.setAttribute('onclick', 'removeInput(0)');
                 rmv_btn0.setAttribute('name', 'remove_buttonAt0');
-                rmv_btn0.textContent = "x";
+                rmv_btn0.setAttribute('class','deleteItem');
+                rmv_btn0.textContent = "Delete Item";
                 document.getElementById('container_0').appendChild(rmv_btn0);
             }
         }
