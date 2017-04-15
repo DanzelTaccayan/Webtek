@@ -861,8 +861,11 @@ function viewDetails() {
 
 
                 pItem.setAttribute("id", "desc" + c);
+                pItem.setAttribute("class", "right");
                 pQuant.setAttribute("id", "quant" + c);
+                pQuant.setAttribute("class", "right");
                 pReturn.setAttribute("id", "rdate" + c);
+                pReturn.setAttribute("class", "right");
                 pAction.setAttribute("id", "action" + c);
 
                 pItemLabel.style.fontWeight = "bold";
@@ -880,8 +883,8 @@ function viewDetails() {
                 pReturnLabel.textContent = "Item Due Date: ";
                 pReturn.innerHTML = borrowersArray[index].Items[c].Duedate;
 
-                pActionLabel.textContent = "Partialy Return Items: ";
-                pAction.innerHTML = 'Return Items that are in Good Condition: <input type = "text" id = "rGoodCondition' + c + '"><br>Return Items that are Defective: <input type = "text" id = "rDefective' + c + '"><br><input type = "button" value = "Return" onclick = "returnItem(' + c + ')"><br>';
+                pActionLabel.innerHTML = "<h4>Partialy Return Items</h4>";
+                pAction.innerHTML = '<span class="inputDesc">Return Items that are in Good Condition:</span> <input type = "text" id = "rGoodCondition' + c + '"><span class="inputDesc">Return Items that are Defective:<span class="inputDesc"> <input type = "text" id = "rDefective' + c + '"><input type = "button" class="returnButton" value = "Return" onclick = "returnItem(' + c + ')">';
 
                 pItemContainer.appendChild(pItemLabel);
                 pItemContainer.appendChild(pItem);
@@ -1005,8 +1008,9 @@ function viewDetails() {
 
                 pQuantLabel.textContent = "Quantity Borrowed Left: ";
                 pQuant.textContent = returnersArray[index].Items[c].Quantity;
-
+                    
                 pConvertLabel.textContent = "Number of Defective Items Restored/Repaired: ";
+                pConvertButton.setAttribute('class','returnButton');
                 pConvertButton.textContent = "Enter";
 
 
@@ -1035,7 +1039,9 @@ function viewDetails() {
 
                 pQuantContainer.appendChild(pQuantLabel);
                 pQuantContainer.appendChild(pQuant);
-
+                
+                    
+                
                 innerContainer.appendChild(pItemContainer);
                 innerContainer.appendChild(pQuantContainer);
                 outerContainer.appendChild(innerContainer);
