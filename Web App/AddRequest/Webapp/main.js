@@ -124,7 +124,8 @@ function generateReport() {
     var date = now.substring(0,9);
     overAll.appendChild(pReturn);
   
-    for (var i = 0; i < returnArray.length; i++) {
+    for (var i = 0; i < returnArray.length; i++) { 
+
         for (var c = 0; c < returnArray[i].Items.length; c++ ) {
             var dateReturn = returnArray[i].Items[c].ReturnDate;
             var returnDate = dateReturn.substring(0,9); 
@@ -150,8 +151,9 @@ function generateReport() {
                 pContainer.appendChild(sView);
                 returnToday.appendChild(pContainer);
                 overAll.appendChild(returnToday);
-
+                break;
             }
+            continue;
         }
     }
     container.appendChild(overAll);
