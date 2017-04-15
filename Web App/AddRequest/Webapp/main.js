@@ -4,49 +4,86 @@ var itemIndex = 1;
 var RepopItemsArray = [];
 var returnersArray = [];
 
-function generateReport() {
-    var itemsArray = [];
-    var borrowersArray = [];
-    var returnArray = [];
-    var now = new Date();
+function saveToServer() {
+    try {
+        var xmlhttp = new XMLHttpRequest();   
+        xmlhttp.open("POST", "json-handler-items.json", false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("itemsRecord"));
 
-    itemsArray = JSON.parse(localStorage.itemsRecord);
-    borrowersArray = JSON.parse(localStorage.loanRecord);
-    returnArray = JSON.parse(localStorage.returnLog);
+        xmlhttp.open("POST", "json-handler-loan.json", false);
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("loanRecord"));
 
-    var Container = document.querySelector("#outerContainer");
-    var overAll = document.createElement("div");
-    var sDate = document.createElement("span");
-    var pLabelitems = document.createElement("p");
-    var pLabelborrowed = document.createElement("p");
-    var borrowedQuant = document.createElement("div");
-
-    sDate.innerHTML = 'As of now: ' + now + '<br>';
-    pLabelitems.innerHTML = 'Items available: ';
-    pLabelborrowed.innerHTML = 'Items borrowed: ';
-
-    pLabelitems.style.fontWeight = "bold";
-    pLabelborrowed.style.fontWeight = "bold";
-
-    overAll.appendChild(sDate);
-    overAll.appendChild(pLabelitems);
-
-    for (var i = 0; i < itemsArray.length; i++) {
-        var pInventory = document.createElement("div");
-
-        pInventory.innerHTML = itemsArray[i].Description +': '+ itemsArray[i].Quantity;
-
-        overAll.appendChild(pInventory);
-        Container.appendChild(overAll);
+        xmlhttp.open("POST", "json-handler-return.json", false); 
+        xmlhttp.setRequestHeader("Content-Type", "application/json");
+        xmlhttp.send(localStorage.getItem("returnLog")); 
+        alert('Successfully added the files into the server');
+    } catch (error) {
+        alert("You don't have network connection can't save data to the server.");
     }
+   
+}
 
-    overAll.appendChild(pLabelborrowed);
-    var itemsBorrowed = document.createElement("div");
-    for (var i = 0; i < borrowersArray.length; i++) {
-        
-    
+function downloadData() {
+    var xhr = new XMLHttpRequest();
+    try {
+        xhr.open("GET", "http://localHost/WebTek/json-handler-items.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-loan.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
+        xhr.send(null);
+        if (xhr.status == 200) {
+             // w8  
+        }
+
+    }  catch (error) {
+        alert('No Network connection.');
     }
 }
+
+function generateReport() {
+     var itemsArray = [];
+     var borrowersArray = [];
+     var returnArray = [];
+     var now = new Date();
+ 
+     itemsArray = JSON.parse(localStorage.itemsRecord);
+     borrowersArray = JSON.parse(localStorage.loanRecord);
+     returnArray = JSON.parse(localStorage.returnLog);
+ 
+     var Container = document.querySelector("#outerContainer");
+     var overAll = document.createElement("div");
+     var sDate = document.createElement("span");
+     var pLabelitems = document.createElement("p");
+     var pLabelborrowed = document.createElement("p");
+     var borrowedQuant = document.createElement("div");
+ 
+     sDate.innerHTML = 'As of now: ' + now + '<br>';
+     pLabelitems.innerHTML = 'Items available: ';
+     pLabelborrowed.innerHTML = 'Items borrowed: ';
+ 
+     pLabelitems.style.fontWeight = "bold";
+     pLabelborrowed.style.fontWeight = "bold";
+ 
+     overAll.appendChild(sDate);
+     overAll.appendChild(pLabelitems);
+ 
+     for (var i = 0; i < itemsArray.length; i++) {
+         var pInventory = document.createElement("div");
+ 
+         pInventory.innerHTML = itemsArray[i].Description +': '+ itemsArray[i].Quantity;
+ 
+         overAll.appendChild(pInventory);
+         Container.appendChild(overAll);
+     }
+ 
+     overAll.appendChild(pLabelborrowed);
+     var itemsBorrowed = document.createElement("div");
+     for (var i = 0; i < borrowersArray.length; i++) {
+         
+     
+     }
+ }
 
 function DateToday() {
     var month, day, year, hour, minute;
@@ -1210,7 +1247,6 @@ function search() {
 }
 
 function returnAll() {  
-    var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
     var retDate = DateToday();
@@ -1219,7 +1255,7 @@ function returnAll() {
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
     if(localStorage.returnLog){
-        returnArray = JSON.parse(localStorage.returnLog);
+        returnersArray = JSON.parse(localStorage.returnLog);
     }
 
 
@@ -1234,15 +1270,36 @@ function returnAll() {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
 
                             borrowersArray[c].Items[i].ReturnDate = retDate;
-                            borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
-                            borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+
+                            //Check if their is already an existing item returned
+                            if(borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null){
+                                borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                                borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
+                            if(borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null){
+                                borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                                borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-
-                                returnArray.push(borrowersArray[c]);
+                                if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
+                                    returnArray.push(borrowersArray[c]);
+                                }
+                                else{
+                                    
+                                    var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
+                                    returnersArray[returnerLocation] = borrowersArray[c];
+                                }
+                                
                                 borrowersArray.splice(c,1);
                                 break;
                             }
@@ -1254,7 +1311,7 @@ function returnAll() {
     }
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnArray);
+    localStorage.returnLog = JSON.stringify(returnersArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
     window.location.href = "loan.html";
@@ -1297,12 +1354,12 @@ function returnItem(index) {
                         borrowersArray[i].Items[c].Quantity -= parseInt(valueGoodCondition);
 
                         //Check if the GoodConditionItemsReturned is empty
-                        if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
+                        if(borrowersArray[i].Items[c].GoodConditionItemsReturned === "" || borrowersArray[i].Items[c].GoodConditionItemsReturned === null){
 
                             borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
                         }
                         else {
-                            borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
+                            borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(borrowersArray[i].Items[c].GoodConditionItemsReturned)+parseInt(valueGoodCondition);
                         }
 
                         //Store the Quantity Returned by the User
@@ -1384,13 +1441,13 @@ function returnItem(index) {
                             //Subtract the Quantity Borrowed to the Quantity Returned
                             borrowersArray[i].Items[c].Quantity -= parseInt(valueDefective);
 
-                            //Check if the GoodConditionItemsReturned is empty
-                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
+                            //Check if the Defective ItemsReturned is empty
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned === ""|| borrowersArray[i].Items[c].DefectiveItemsReturned === null){
 
                                 borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
                             }
                             else {
-                                borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
+                                borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(borrowersArray[i].Items[c].DefectiveItemsReturned) +parseInt(valueDefective);
                             }
 
                             //Store the Quantity Returned by the User
@@ -1472,21 +1529,21 @@ function returnItem(index) {
                             borrowersArray[i].Items[c].Quantity -= parseInt(total);
 
                             //Check if the DefectiveItemsReturned is empty
-                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned === "" || borrowersArray[i].Items[c].DefectiveItemsReturned === null){
 
                                 borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
                             }
                             else {
-                                borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
+                                borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(borrowersArray[i].Items[c].DefectiveItemsReturned)+parseInt(valueDefective);
                             }
 
                             //Check if the GoodConditionItemsReturned is empty
-                            if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
+                            if(borrowersArray[i].Items[c].GoodConditionItemsReturned === "" || borrowersArray[i].Items[c].GoodConditionItemsReturned === null){
 
                                 borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
                             }
                             else {
-                                borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
+                                borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(borrowersArray[i].Items[c].GoodConditionItemsReturned)+parseInt(valueGoodCondition);
                             }
 
                             //Store the Quantity Returned by the User
@@ -1723,41 +1780,4 @@ function addNewItemsToBorrower() {
     viewQueue(index);
     window.location.href = "viewdetails.html";
     itemIndex = 1;
-}
-
-function saveToServer() {
-    try {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "json-handler-items.json", false);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(localStorage.getItem("itemsRecord"));
-
-        xmlhttp.open("POST", "json-handler-loan.json", false);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(localStorage.getItem("loanRecord"));
-
-        xmlhttp.open("POST", "json-handler-return.json", false);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(localStorage.getItem("returnLog"));
-        alert('Successfully added the files into the server');
-    } catch (error) {
-        alert("You don't have network connection can't save data to the server.");
-    }
-
-}
-
-function downloadData() {
-    var xhr = new XMLHttpRequest();
-    try {
-        xhr.open("GET", "http://localHost/WebTek/json-handler-items.json", false);
-        xhr.open("GET", "http://localHost/WebTek/json-handler-loan.json", false);
-        xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
-        xhr.send(null);
-        if (xhr.status == 200) {
-            // w8  
-        }
-
-    } catch (error) {
-        alert('No Network connection.');
-    }
 }
