@@ -1132,54 +1132,74 @@ function search() {
     }
 }
 
-function returnAll() {
-    var returnArray = [];
+function returnAll() {  
     var borrowersArray = [];
     var itemsArray = [];
     var retDate = DateToday();
 
-    borrowersArray = JSON.parse(localStorage.loanRecord);
+    borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
-    if (localStorage.returnLog) {
-        returnArray = JSON.parse(localStorage.returnLog);
+    if(localStorage.returnLog){
+        returnersArray = JSON.parse(localStorage.returnLog);
     }
 
 
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
-
+           
             for (var i = 0; i < borrowersArray.length; i++) {
                 if (borrowersArray[c].Items[i] != 0) {
 
                     for (var x = 0; x < itemsArray.length; x++) {
-                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName) {
+                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
 
                             borrowersArray[c].Items[i].ReturnDate = retDate;
-                            borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
-                            borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+
+                            //Check if their is already an existing item returned
+                            if(borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null){
+                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
+                            if(borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null){
+                            	borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                            	borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-
-                                returnArray.push(borrowersArray[c]);
-                                borrowersArray.splice(c, 1);
+                            	if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
+                            		returnArray.push(borrowersArray[c]);
+                            	}
+                            	else{
+                            		
+                            		var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
+                            		returnersArray[returnerLocation] = borrowersArray[c];
+                            	}
+                                
+                                borrowersArray.splice(c,1);
                                 break;
                             }
                         }
                     }
-                }
-            }
-        }
+                }   
+            } 
+        }  
     }
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnArray);
+    localStorage.returnLog = JSON.stringify(returnersArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray);
+    localStorage.itemsRecord = JSON.stringify(itemsArray);  
     window.location.href = "loan.html";
 
 }
@@ -1624,19 +1644,39 @@ function returnAll() {
         itemIndex = 1;
     }
 
-    function saveToServer() {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "json-handler.json", false);
+ function saveToServer() {
+    try {
+        var xmlhttp = new XMLHttpRequest();   
+        xmlhttp.open("POST", "json-handler-items.json", false);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(localStorage.getItem("itemsRecord"));
 
-        xmlhttp.open("POST", "json-handler.json", false);
+        xmlhttp.open("POST", "json-handler-loan.json", false);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(localStorage.getItem("loanRecord"));
 
-        xmlhttp.open("POST", "json-handler.json", false);
+        xmlhttp.open("POST", "json-handler-return.json", false); 
         xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(localStorage.getItem("returnLog"));
+        xmlhttp.send(localStorage.getItem("returnLog")); 
         alert('Successfully added the files into the server');
-
+    } catch (error) {
+        alert("You don't have network connection can't save data to the server.");
     }
+   
+}
+
+function downloadData() {
+    var xhr = new XMLHttpRequest();
+    try {
+        xhr.open("GET", "http://localHost/WebTek/json-handler-items.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-loan.json", false);
+        xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
+        xhr.send(null);
+        if (xhr.status == 200) {
+             // w8  
+        }
+
+    }  catch (error) {
+        alert('No Network connection.');
+    }
+}
