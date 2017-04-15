@@ -319,8 +319,8 @@ function addInput() {
         var rmv_btn0 = document.createElement('button');
         rmv_btn0.setAttribute('onclick', 'removeInput(0)');
         rmv_btn0.setAttribute('name', 'remove_buttonAt0');
-        rmv_btn0.setAttribute('class','deleteItem');
-                rmv_btn0.textContent = "Delete Item";
+        rmv_btn0.setAttribute('class', 'deleteItem');
+        rmv_btn0.textContent = "Delete Item";
         document.getElementById('container_0').appendChild(rmv_btn0);
     }
 
@@ -347,31 +347,30 @@ function prepareNewlyAddedItems(prev_item) {
     var itemChoice = document.getElementsByClassName("item_choice");
     var add_btn = document.createElement('button');
 
-    add_btn.setAttribute('id','addInput');
-    add_btn.setAttribute('onclick','addInput()');
+    add_btn.setAttribute('id', 'addInput');
+    add_btn.setAttribute('onclick', 'addInput()');
     add_btn.textContent = "+";
 
-    if(!document.getElementById("addInput")){
-        if(JSON.parse(localStorage.itemsRecord).length > itemIndex){
+    if (!document.getElementById("addInput")) {
+        if (JSON.parse(localStorage.itemsRecord).length > itemIndex) {
             document.getElementById("requestForm").appendChild(add_btn);
         }
     }
 
-    var tempItem = itemChoice[itemIndex-1];
+    var tempItem = itemChoice[itemIndex - 1];
 
     var prev_item_array = prev_item.split(" ");
-    
-        for(var i =0 ;i < items.length; i++) {
-            if(prev_item_array.indexOf(items[i].Description) >= 0){
-                continue;
-            }
-            else{
-                var optionEl = document.createElement("option");
-                optionEl.setAttribute("value", items[i].Description);
-                tempItem.appendChild(optionEl);
-                optionEl.textContent = items[i].Description;
-            }
+
+    for (var i = 0; i < items.length; i++) {
+        if (prev_item_array.indexOf(items[i].Description) >= 0) {
+            continue;
+        } else {
+            var optionEl = document.createElement("option");
+            optionEl.setAttribute("value", items[i].Description);
+            tempItem.appendChild(optionEl);
+            optionEl.textContent = items[i].Description;
         }
+    }
 
 
 }
@@ -483,7 +482,7 @@ function repopulateItems(index) {
                 var rmv_btn0 = document.createElement('button');
                 rmv_btn0.setAttribute('onclick', 'removeInput(0)');
                 rmv_btn0.setAttribute('name', 'remove_buttonAt0');
-                rmv_btn0.setAttribute('class','deleteItem');
+                rmv_btn0.setAttribute('class', 'deleteItem');
                 rmv_btn0.textContent = "Delete Item";
                 document.getElementById('container_0').appendChild(rmv_btn0);
             }
@@ -861,11 +860,8 @@ function viewDetails() {
 
 
                 pItem.setAttribute("id", "desc" + c);
-                pItem.setAttribute("class", "right");
                 pQuant.setAttribute("id", "quant" + c);
-                pQuant.setAttribute("class", "right");
                 pReturn.setAttribute("id", "rdate" + c);
-                pReturn.setAttribute("class", "right");
                 pAction.setAttribute("id", "action" + c);
 
                 pItemLabel.style.fontWeight = "bold";
@@ -883,8 +879,8 @@ function viewDetails() {
                 pReturnLabel.textContent = "Item Due Date: ";
                 pReturn.innerHTML = borrowersArray[index].Items[c].Duedate;
 
-                pActionLabel.innerHTML = "<h4>Partialy Return Items</h4>";
-                pAction.innerHTML = '<span class="inputDesc">Return Items that are in Good Condition:</span> <input type = "text" id = "rGoodCondition' + c + '"><span class="inputDesc">Return Items that are Defective:<span class="inputDesc"> <input type = "text" id = "rDefective' + c + '"><input type = "button" class="returnButton" value = "Return" onclick = "returnItem(' + c + ')">';
+                pActionLabel.textContent = "Partialy Return Items: ";
+                pAction.innerHTML = 'Return Items that are in Good Condition: <input type = "text" id = "rGoodCondition' + c + '"><br>Return Items that are Defective: <input type = "text" id = "rDefective' + c + '"><br><input type = "button" value = "Return" onclick = "returnItem(' + c + ')"><br>';
 
                 pItemContainer.appendChild(pItemLabel);
                 pItemContainer.appendChild(pItem);
@@ -1008,9 +1004,8 @@ function viewDetails() {
 
                 pQuantLabel.textContent = "Quantity Borrowed Left: ";
                 pQuant.textContent = returnersArray[index].Items[c].Quantity;
-                    
+
                 pConvertLabel.textContent = "Number of Defective Items Restored/Repaired: ";
-                pConvertButton.setAttribute('class','returnButton');
                 pConvertButton.textContent = "Enter";
 
 
@@ -1039,9 +1034,7 @@ function viewDetails() {
 
                 pQuantContainer.appendChild(pQuantLabel);
                 pQuantContainer.appendChild(pQuant);
-                
-                    
-                
+
                 innerContainer.appendChild(pItemContainer);
                 innerContainer.appendChild(pQuantContainer);
                 outerContainer.appendChild(innerContainer);
@@ -1082,6 +1075,47 @@ function viewDetails() {
         }
     }
 }
+
+function restoreDefectiveItems(returnerIndex, index) {
+    returnersArray = JSON.parse(localStorage.returnLog);
+    var returnersItemsArray = returnersArray[returnerIndex].Items;
+
+    var quantityRestored = document.getElementById("NumDefective" + index).value.trim();
+    if (quantityRestored == "") {
+        alert("Please Don't Leave the Number of Defective Items Restored/Repaired input blank!");
+    } else if (isNaN(quantityRestored)) {
+        alert("Please Enter a Number");
+    } else if (parseInt(returnersItemsArray[index].DefectiveItemsReturned) < parseInt(quantityRestored)) {
+        alert("The Quantity you have Entered is Greater than the Quantity of the Defective Item!");
+    } else if (quantityRestored == 0) {
+        alert("Invalid Input, The Quantity you have entered should be greater than 0");
+    } else {
+        returnersItemsArray[index].DefectiveItemsReturned = parseInt(returnersItemsArray[index].DefectiveItemsReturned) - parseInt(quantityRestored);
+        if (returnersItemsArray[index].GoodConditionItemsReturned == "") {
+            returnersItemsArray[index].GoodConditionItemsReturned = parseInt(quantityRestored);
+        } else {
+            returnersItemsArray[index].GoodConditionItemsReturned = parseInt(returnersItemsArray[index].GoodConditionItemsReturned) + parseInt(quantityRestored);
+        }
+        returnersItemsArray[index].ReturnDate = DateToday();
+
+        itemsArray = JSON.parse(localStorage.itemsRecord);
+        var itemIndex = itemExist(returnersItemsArray[index].ItemName);
+
+        itemsArray[itemIndex].Quantity = parseInt(itemsArray[itemIndex].Quantity) + parseInt(quantityRestored);
+        localStorage.itemsRecord = JSON.stringify(itemsArray);
+        alert('Successfully Restored/Repaired ' + quantityRestored + ' ' + itemsArray[itemIndex].Description);
+
+        if (parseInt(returnersItemsArray[index].DefectiveItemsReturned) == 0) {
+            returnersItemsArray[index].DefectiveItemsReturned = "";
+        }
+
+        returnersArray[returnerIndex].Items = returnersItemsArray;
+        localStorage.returnLog = JSON.stringify(returnersArray);
+        viewQueueReturner(returnerIndex);
+        window.location.href = "viewdetails.html";
+    }
+}
+
 
 function prepareItems() {
     var items = JSON.parse(localStorage.itemsRecord);
@@ -1132,166 +1166,169 @@ function search() {
     }
 }
 
-function returnAll() {  
+function returnAll() {
     var borrowersArray = [];
     var itemsArray = [];
     var retDate = DateToday();
 
-    borrowersArray= JSON.parse(localStorage.loanRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
-    if(localStorage.returnLog){
+    if (localStorage.returnLog) {
         returnersArray = JSON.parse(localStorage.returnLog);
     }
 
 
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
-           
+
             for (var i = 0; i < borrowersArray.length; i++) {
                 if (borrowersArray[c].Items[i] != 0) {
 
                     for (var x = 0; x < itemsArray.length; x++) {
-                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
+                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
 
                             borrowersArray[c].Items[i].ReturnDate = retDate;
 
                             //Check if their is already an existing item returned
-                            if(borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null){
-                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            if (borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null) {
+                                borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            } else {
+                                borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned) + parseInt(borrowersArray[c].Items[i].Quantity);
                             }
-                            else{
-                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+
+                            if (borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null) {
+                                borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+                            } else {
+                                borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned) + parseInt(borrowersArray[c].Items[i].Quantity);
                             }
-                            
-                            if(borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null){
-                            	borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
-                            }
-                            else{
-                            	borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
-                            }
-                            
+
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-                            	if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
-                            		returnArray.push(borrowersArray[c]);
-                            	}
-                            	else{
-                            		
-                            		var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
-                            		returnersArray[returnerLocation] = borrowersArray[c];
-                            	}
-                                
-                                borrowersArray.splice(c,1);
+                                if (isNaN(returnerExist(document.getElementById('idnum').textContent))) {
+                                    returnArray.push(borrowersArray[c]);
+                                } else {
+
+                                    var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
+                                    returnersArray[returnerLocation] = borrowersArray[c];
+                                }
+
+                                borrowersArray.splice(c, 1);
                                 break;
                             }
                         }
                     }
-                }   
-            } 
-        }  
+                }
+            }
+        }
     }
 
     alert("Successfully return all the Items borrowed!");
     localStorage.returnLog = JSON.stringify(returnersArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray);  
+    localStorage.itemsRecord = JSON.stringify(itemsArray);
     window.location.href = "loan.html";
 
 }
-    function returnItem(index) {
-        var borrowersArray = [];
-        var itemsArray = [];
-        var id_num = document.getElementById('idnum').textContent;
-        var valueGoodCondition = document.getElementById('rGoodCondition' + index).value;
-        var valueDefective = document.getElementById('rDefective' + index).value;
-        var item = document.getElementById('desc' + index).textContent;
-        var trueTest = false;
 
-        var i = borrowerExist(id_num);
-        var c = borrowerItemExist(i, item);
+function returnItem(index) {
+    var borrowersArray = [];
+    var itemsArray = []; 
+    var id_num = document.getElementById('idnum').textContent;
+    var valueGoodCondition = document.getElementById('rGoodCondition'+index).value;
+    var valueDefective = document.getElementById('rDefective'+index).value;
+    var item = document.getElementById('desc'+index).textContent;
+    var trueTest = false; 
 
-        itemsArray = JSON.parse(localStorage.itemsRecord);
-        borrowersArray = JSON.parse(localStorage.loanRecord);
+    var i = borrowerExist(id_num);
+    var c = borrowerItemExist(i, item);
 
-        if (localStorage.returnLog) {
-            returnersArray = JSON.parse(localStorage.loanRecord);
-        }
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+
+    if(localStorage.returnLog){
+        returnersArray = JSON.parse(localStorage.loanRecord);
+    }
 
 
+        
+    if (valueGoodCondition != "" || valueDefective != "") {
 
-        if (valueGoodCondition != "" || valueDefective != "") {
+            if(valueDefective == ""){
 
-            if (valueDefective == "") {
-
-                if (!isNaN(valueGoodCondition)) {
+                if(!isNaN(valueGoodCondition)){
 
                     if (valueGoodCondition <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < valueGoodCondition) {
 
-                        alert('The quantity of the Good Condition item/s:"' + item + '" you have entered is greater than or less than what you have borrowed');
-                    } else {
+                        alert('The quantity of the Good Condition item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                    } 
+                    else {
                         //Subtract the Quantity Borrowed to the Quantity Returned
                         borrowersArray[i].Items[c].Quantity -= parseInt(valueGoodCondition);
 
                         //Check if the GoodConditionItemsReturned is empty
-                        if (borrowersArray[i].Items[c].GoodConditionItemsReturned = "") {
+                        if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
 
                             borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
-                        } else {
+                        }
+                        else {
                             borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
                         }
 
                         //Store the Quantity Returned by the User
-                        borrowersArray[i].Items[c].QuantityReturned = parseInt(borrowersArray[i].Items[c].QuantityReturned) + parseInt(valueGoodCondition);
+                        borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(valueGoodCondition);
                         borrowersArray[i].Items[c].ReturnDate = DateToday();
 
                         /**==================== Store The Borrower as a Returner =========================**/
-                        var returnerObject = {
-                            'Idnum': borrowersArray[i].Idnum,
-                            'Name': borrowersArray[i].Name,
-                            'DateBorrowed': borrowersArray[i].DateBorrowed,
-                            'School': borrowersArray[i].School,
-                            'ContactNum': borrowersArray[i].ContactNum,
-                            'Items': []
-                        };
+                            var returnerObject = {
+                                'Idnum': borrowersArray[i].Idnum,
+                                'Name': borrowersArray[i].Name,
+                                'DateBorrowed':borrowersArray[i].DateBorrowed,
+                                'School':borrowersArray[i].School,
+                                'ContactNum':borrowersArray[i].ContactNum,
+                                'Items': []
+                            };
 
-                        returnerObject.Items.push(borrowersArray[i].Items[c]);
+                            returnerObject.Items.push(borrowersArray[i].Items[c]);
 
+                            
+                            if(localStorage.returnLog){
+                                if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                    var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                    
+                                    if(isNaN(returnerItemExist(i, item))){
+                                        returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
+                                    }
+                                    else{
+                                        var returnerItemIndex = returnerItemExist(i, item);
+                                        returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
+                                    }
 
-                        if (localStorage.returnLog) {
-                            if (!isNaN(returnerExist(borrowersArray[i].Idnum))) {
-                                var returnerIndex = returnerExist(borrowersArray[i].Idnum);
-
-                                if (isNaN(returnerItemExist(i, item))) {
-                                    returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
-                                } else {
-                                    var returnerItemIndex = returnerItemExist(i, item);
-                                    returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
                                 }
-
-                            } else {
-                                returnersArray.push(returnerObject);
-
+                                else{
+                                    returnersArray.push(returnerObject);
+                                    
+                                }
                             }
-                        } else {
-                            returnersArray.push(returnerObject);
-
-                        }
-                        localStorage.returnLog = JSON.stringify(returnersArray);
+                            else{
+                                returnersArray.push(returnerObject);
+                                
+                            }
+                            localStorage.returnLog = JSON.stringify(returnersArray);
                         /**========================== Up until Here ========================================**/
 
                         //If the returner has returned all items remove him from the loanrecord Storage
-                        if (borrowersArray[i].Items[c].Quantity == 0) {
+                        if(borrowersArray[i].Items[c].Quantity == 0){
 
                             borrowersArray[i].Items.splice(c, 1);
 
-                            if (!borrowersArray[i].Items[0]) {
+                            if(!borrowersArray[i].Items[0]){
                                 trueTest = true;
-                                borrowersArray.splice(i, 1);
+                                borrowersArray.splice(i,1);
                             }
                         }
 
@@ -1300,353 +1337,371 @@ function returnAll() {
                         var x = itemExist(item);
                         itemsArray[x].Quantity += parseInt(valueGoodCondition);
                         alert("Successfully returned the partial Quantity Items borrowed!");
-
-
-                    }
-
-                } else {
-                    alert('The quantity of the Good Condition item:"' + item + '" you have entered is not a number!');
+  
+                        
+                    }   
+                    
                 }
-            } else if (valueGoodCondition == "") {
-
-                if (!isNaN(valueDefective)) {
-
-                    if (valueDefective <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < valueDefective) {
-
-                        alert('The quantity of the Defective item/s:"' + item + '" you have entered is greater than or less than what you have borrowed');
-                    } else {
-                        //Subtract the Quantity Borrowed to the Quantity Returned
-                        borrowersArray[i].Items[c].Quantity -= parseInt(valueDefective);
-
-                        //Check if the GoodConditionItemsReturned is empty
-                        if (borrowersArray[i].Items[c].DefectiveItemsReturned = "") {
-
-                            borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
-                        } else {
-                            borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
-                        }
-
-                        //Store the Quantity Returned by the User
-                        borrowersArray[i].Items[c].QuantityReturned = parseInt(borrowersArray[i].Items[c].QuantityReturned) + parseInt(valueDefective);
-                        borrowersArray[i].Items[c].ReturnDate = DateToday();
-
-                        /**==================== Store The Borrower as a Returner =========================**/
-                        var returnerObject = {
-                            'Idnum': borrowersArray[i].Idnum,
-                            'Name': borrowersArray[i].Name,
-                            'DateBorrowed': borrowersArray[i].DateBorrowed,
-                            'School': borrowersArray[i].School,
-                            'ContactNum': borrowersArray[i].ContactNum,
-                            'Items': []
-                        };
-
-                        returnerObject.Items.push(borrowersArray[i].Items[c]);
-
-
-                        if (localStorage.returnLog) {
-                            if (!isNaN(returnerExist(borrowersArray[i].Idnum))) {
-                                var returnerIndex = returnerExist(borrowersArray[i].Idnum);
-
-                                if (isNaN(returnerItemExist(i, item))) {
-                                    returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
-                                } else {
-                                    var returnerItemIndex = returnerItemExist(i, item);
-                                    returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
-                                }
-
-                            } else {
-                                returnersArray.push(returnerObject);
-
-                            }
-                        } else {
-                            returnersArray.push(returnerObject);
-
-                        }
-                        localStorage.returnLog = JSON.stringify(returnersArray);
-                        /**========================== Up until Here ========================================**/
-
-                        //If the returner has returned all items remove him from the loanrecord Storage
-                        if (borrowersArray[i].Items[c].Quantity == 0) {
-
-                            borrowersArray[i].Items.splice(c, 1);
-
-                            if (!borrowersArray[i].Items[0]) {
-                                trueTest = true;
-                                borrowersArray.splice(i, 1);
-                            }
-                        }
-
-
-                        alert('Successfully returned ' + valueDefective + ' ' + item + ' borrowed!');
-
-
-                    }
-
-                } else {
-                    alert('The quantity of the Defective item/s:"' + item + '" you have entered is not a number!');
+                else{
+                     alert('The quantity of the Good Condition item:"'+item+'" you have entered is not a number!');
                 }
+            }
+            else if(valueGoodCondition == ""){
 
-            } else {
+                if(!isNaN(valueDefective)){
 
+                        if (valueDefective <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < valueDefective) {
 
-                if (!isNaN(valueDefective) && !isNaN(valueGoodCondition)) {
-                    var total = parseInt(valueDefective) + parseInt(valueGoodCondition);
-                    if (total <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < total) {
+                            alert('The quantity of the Defective item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                        } 
+                        else {
+                            //Subtract the Quantity Borrowed to the Quantity Returned
+                            borrowersArray[i].Items[c].Quantity -= parseInt(valueDefective);
 
-                        alert('The quantity of the Defective or Good Condition item/s:"' + item + '" you have entered is greater than or less than what you have borrowed');
-                    } else {
-                        //Subtract the Quantity Borrowed to the Quantity Returned
-                        borrowersArray[i].Items[c].Quantity -= parseInt(total);
+                            //Check if the GoodConditionItemsReturned is empty
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
 
-                        //Check if the DefectiveItemsReturned is empty
-                        if (borrowersArray[i].Items[c].DefectiveItemsReturned = "") {
+                                borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
+                            }
 
-                            borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
-                        } else {
-                            borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
-                        }
+                            //Store the Quantity Returned by the User
+                            borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(valueDefective);
+                            borrowersArray[i].Items[c].ReturnDate = DateToday();
 
-                        //Check if the GoodConditionItemsReturned is empty
-                        if (borrowersArray[i].Items[c].GoodConditionItemsReturned = "") {
+                            /**==================== Store The Borrower as a Returner =========================**/
+                            var returnerObject = {
+                                'Idnum': borrowersArray[i].Idnum,
+                                'Name': borrowersArray[i].Name,
+                                'DateBorrowed':borrowersArray[i].DateBorrowed,
+                                'School':borrowersArray[i].School,
+                                'ContactNum':borrowersArray[i].ContactNum,
+                                'Items': []
+                            };
 
-                            borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
-                        } else {
-                            borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
-                        }
+                            returnerObject.Items.push(borrowersArray[i].Items[c]);
 
-                        //Store the Quantity Returned by the User
-                        borrowersArray[i].Items[c].QuantityReturned = parseInt(borrowersArray[i].Items[c].QuantityReturned) + parseInt(total);
-                        borrowersArray[i].Items[c].ReturnDate = DateToday();
+                            
+                            if(localStorage.returnLog){
+                                if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                    var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                    
+                                    if(isNaN(returnerItemExist(i, item))){
+                                        returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
+                                    }
+                                    else{
+                                        var returnerItemIndex = returnerItemExist(i, item);
+                                        returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
+                                    }
 
-                        /**==================== Store The Borrower as a Returner =========================**/
-                        var returnerObject = {
-                            'Idnum': borrowersArray[i].Idnum,
-                            'Name': borrowersArray[i].Name,
-                            'DateBorrowed': borrowersArray[i].DateBorrowed,
-                            'School': borrowersArray[i].School,
-                            'ContactNum': borrowersArray[i].ContactNum,
-                            'Items': []
-                        };
-
-                        returnerObject.Items.push(borrowersArray[i].Items[c]);
-
-
-                        if (localStorage.returnLog) {
-                            if (!isNaN(returnerExist(borrowersArray[i].Idnum))) {
-                                var returnerIndex = returnerExist(borrowersArray[i].Idnum);
-
-                                if (isNaN(returnerItemExist(i, item))) {
-                                    returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
-                                } else {
-                                    var returnerItemIndex = returnerItemExist(i, item);
-                                    returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
                                 }
-
-                            } else {
+                                else{
+                                    returnersArray.push(returnerObject);
+                                    
+                                }
+                            }
+                            else{
                                 returnersArray.push(returnerObject);
-
+                                
                             }
-                        } else {
-                            returnersArray.push(returnerObject);
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                            /**========================== Up until Here ========================================**/
 
-                        }
-                        localStorage.returnLog = JSON.stringify(returnersArray);
-                        /**========================== Up until Here ========================================**/
+                            //If the returner has returned all items remove him from the loanrecord Storage
+                            if(borrowersArray[i].Items[c].Quantity == 0){
 
-                        //If the returner has returned all items remove him from the loanrecord Storage
-                        if (borrowersArray[i].Items[c].Quantity == 0) {
+                                borrowersArray[i].Items.splice(c, 1);
 
-                            borrowersArray[i].Items.splice(c, 1);
-
-                            if (!borrowersArray[i].Items[0]) {
-                                trueTest = true;
-                                borrowersArray.splice(i, 1);
+                                if(!borrowersArray[i].Items[0]){
+                                    trueTest = true;
+                                    borrowersArray.splice(i,1);
+                                }
                             }
-                        }
-
-                        //Change the value of the original Items
-                        var x = itemExist(item);
-                        itemsArray[x].Quantity += parseInt(valueGoodCondition);
-                        alert('Successfully returned ' + total + ' ' + item + ' borrowed!(' + valueGoodCondition + ' Good Condition Items ' + valueDefective + ' Defective Items)');
 
 
-                    }
-
-                } else {
-                    alert('The either the quantity of the Defective or Good Condition item/s:"' + item + '" you have entered is not a number!');
+                            alert('Successfully returned '+valueDefective+' '+item+' borrowed!');
+      
+                            
+                        }   
+                    
+                }
+                else{
+                     alert('The quantity of the Defective item/s:"'+item+'" you have entered is not a number!');
                 }
 
             }
+            else {
 
+
+                if(!isNaN(valueDefective) && !isNaN(valueGoodCondition)){
+                    var total = parseInt(valueDefective) + parseInt(valueGoodCondition);
+                        if (total <= 0 || parseInt(borrowersArray[i].Items[c].Quantity) < total) {
+
+                            alert('The quantity of the Defective or Good Condition item/s:"'+item+'" you have entered is greater than or less than what you have borrowed');
+                        } 
+                        else {
+                            //Subtract the Quantity Borrowed to the Quantity Returned
+                            borrowersArray[i].Items[c].Quantity -= parseInt(total);
+
+                            //Check if the DefectiveItemsReturned is empty
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
+
+                                borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
+                            }
+
+                            //Check if the GoodConditionItemsReturned is empty
+                            if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
+
+                                borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
+                            }
+                            else {
+                                borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
+                            }
+
+                            //Store the Quantity Returned by the User
+                            borrowersArray[i].Items[c].QuantityReturned =  parseInt(borrowersArray[i].Items[c].QuantityReturned)+parseInt(total);
+                            borrowersArray[i].Items[c].ReturnDate = DateToday();
+
+                            /**==================== Store The Borrower as a Returner =========================**/
+                            var returnerObject = {
+                                'Idnum': borrowersArray[i].Idnum,
+                                'Name': borrowersArray[i].Name,
+                                'DateBorrowed':borrowersArray[i].DateBorrowed,
+                                'School':borrowersArray[i].School,
+                                'ContactNum':borrowersArray[i].ContactNum,
+                                'Items': []
+                            };
+
+                            returnerObject.Items.push(borrowersArray[i].Items[c]);
+
+                            
+                            if(localStorage.returnLog){
+                                if(!isNaN(returnerExist(borrowersArray[i].Idnum))) {
+                                    var returnerIndex = returnerExist(borrowersArray[i].Idnum);
+                                    
+                                    if(isNaN(returnerItemExist(i, item))){
+                                        returnersArray[returnerIndex].Items.push(borrowersArray[i].Items[c]);
+                                    }
+                                    else{
+                                        var returnerItemIndex = returnerItemExist(i, item);
+                                        returnersArray[returnerIndex].Items[returnerItemIndex] = borrowersArray[i].Items[c];
+                                    }
+
+                                }
+                                else{
+                                    returnersArray.push(returnerObject);
+                                    
+                                }
+                            }
+                            else{
+                                returnersArray.push(returnerObject);
+                                
+                            }
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                            /**========================== Up until Here ========================================**/
+
+                            //If the returner has returned all items remove him from the loanrecord Storage
+                            if(borrowersArray[i].Items[c].Quantity == 0){
+
+                                borrowersArray[i].Items.splice(c, 1);
+
+                                if(!borrowersArray[i].Items[0]){
+                                    trueTest = true;
+                                    borrowersArray.splice(i,1);
+                                }
+                            }
+
+                            //Change the value of the original Items
+                            var x = itemExist(item);
+                            itemsArray[x].Quantity += parseInt(valueGoodCondition);
+                            alert('Successfully returned '+total+' '+item+' borrowed!('+valueGoodCondition+' Good Condition Items '+valueDefective+' Defective Items)');
+                            
+                            
+                        }   
+                    
+                }
+                else{
+                     alert('The either the quantity of the Defective or Good Condition item/s:"'+item+'" you have entered is not a number!');
+                }
+
+            }
+      
             localStorage.loanRecord = JSON.stringify(borrowersArray);
             localStorage.itemsRecord = JSON.stringify(itemsArray);
             viewQueue(i);
-            if (trueTest) {
-                window.location.href = "loan.html"
-            } else {
+            if(trueTest){
+                window.location.href="loan.html"
+            }
+            else {
                 window.location.href = "viewdetails.html";
             }
+    }
+    else {
+        alert("Please Enter a value on either the Return Good Condition Items or the Return Defective Items input");
+    }
+}
+
+function itemExist(itemName) {
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        if (itemName == itemsArray[i].Description) {
+            return i;
+            break;
+        }
+    }
+}
+
+function borrowerItemExist(borrowerIndex, itemName) {
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+
+    for (var i = 0; i < borrowersArray[borrowerIndex].Items.length; i++) {
+        if (itemName == borrowersArray[borrowerIndex].Items[i].ItemName) {
+            return i;
+            break;
+        }
+
+    }
+}
+
+function returnerItemExist(returnerIndex, itemName) {
+    returnersArray = JSON.parse(localStorage.returnLog);
+
+    for (var i = 0; i < returnersArray[returnerIndex].Items.length; i++) {
+        if (itemName == returnersArray[returnerIndex].Items[i].ItemName) {
+            return i;
+            break;
+        }
+
+    }
+}
+
+function addNewItems() {
+    document.getElementById('requestForm').style.display = "";
+    prepareItems();
+}
+
+
+
+
+function addNewItemsToBorrowerChecker() {
+    var errors = 0;
+
+
+    var dateBorrowed = DateToday();
+    var tempArray = [];
+
+    tempArray = JSON.parse(localStorage.itemsRecord);
+
+    for (c = 0; c < itemIndex; c++) {
+        var selectedItem = document.getElementById("item_description_" + c).selectedIndex;
+
+        var quantityBorrow = document.getElementById("item_quantityBorrow_" + c).value.trim();
+        var item = document.getElementById("item_description_" + c).childNodes[selectedItem].value;
+        var date = document.getElementById("date_return_" + c).value;
+
+        if (quantityBorrow === "" || date === "") {
+            alert("Complete the information needed");
+            errors++;
+            break;
+        } else if (isNaN(quantityBorrow)) {
+            alert("Quantity expecting number format");
+            errors++;
+            break;
         } else {
-            alert("Please Enter a value on either the Return Good Condition Items or the Return Defective Items input");
-        }
-    }
-
-    function itemExist(itemName) {
-        itemsArray = JSON.parse(localStorage.itemsRecord);
-
-        for (var i = 0; i < itemsArray.length; i++) {
-            if (itemName == itemsArray[i].Description) {
-                return i;
-                break;
-            }
-        }
-    }
-
-    function borrowerItemExist(borrowerIndex, itemName) {
-        borrowersArray = JSON.parse(localStorage.loanRecord);
-
-        for (var i = 0; i < borrowersArray[borrowerIndex].Items.length; i++) {
-            if (itemName == borrowersArray[borrowerIndex].Items[i].ItemName) {
-                return i;
-                break;
-            }
-
-        }
-    }
-
-    function returnerItemExist(returnerIndex, itemName) {
-        returnersArray = JSON.parse(localStorage.returnLog);
-
-        for (var i = 0; i < returnersArray[returnerIndex].Items.length; i++) {
-            if (itemName == returnersArray[returnerIndex].Items[i].ItemName) {
-                return i;
-                break;
-            }
-
-        }
-    }
-
-    function addNewItems() {
-        document.getElementById('requestForm').style.display = "";
-        prepareItems();
-    }
-
-
-
-
-    function addNewItemsToBorrowerChecker() {
-        var errors = 0;
-
-
-        var dateBorrowed = DateToday();
-        var tempArray = [];
-
-        tempArray = JSON.parse(localStorage.itemsRecord);
-
-        for (c = 0; c < itemIndex; c++) {
-            var selectedItem = document.getElementById("item_description_" + c).selectedIndex;
-
-            var quantityBorrow = document.getElementById("item_quantityBorrow_" + c).value.trim();
-            var item = document.getElementById("item_description_" + c).childNodes[selectedItem].value;
-            var date = document.getElementById("date_return_" + c).value;
-
-            if (quantityBorrow === "" || date === "") {
-                alert("Complete the information needed");
-                errors++;
-                break;
-            } else if (isNaN(quantityBorrow)) {
-                alert("Quantity expecting number format");
-                errors++;
-                break;
-            } else {
-                for (var i = 0; i < tempArray.length; i++) {
-                    if (item === tempArray[i].Description) {
-                        if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0) {
-                            errors++;
-                            alert("The Quantity that you have entered on the item: " + tempArray[i].Description + " which is " + quantityBorrow + " is greater than the current item inventory");
-                            c = itemIndex + 1;
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-        }
-
-        //If still no errors, add it to the local Storage
-        if (errors == 0) {
-            addNewItemsToBorrower();
-        }
-
-    }
-
-    /** ADDING BORROWERS **/
-    function addNewItemsToBorrower() {
-        var id = document.getElementById("idnum").textContent;
-
-        var index = borrowerExist(id);
-
-        var dateBorrowed = DateToday();
-        var tempArray = [];
-        var borrowersItemArray = [];
-
-
-        tempArray = JSON.parse(localStorage.itemsRecord);
-        borrowersArray = JSON.parse(localStorage.loanRecord);
-        borrowersItemArray = borrowersArray[index].Items;
-
-
-
-        //Put the Items
-        for (c = 0; c < itemIndex; c++) {
-            var selectedItem = document.getElementById("item_description_" + c).selectedIndex;
-
-            var quantityBorrow = document.getElementById("item_quantityBorrow_" + c).value.trim();
-            var item = document.getElementById("item_description_" + c).childNodes[selectedItem].value;
-            var date = document.getElementById("date_return_" + c).value;
-
-
-
             for (var i = 0; i < tempArray.length; i++) {
                 if (item === tempArray[i].Description) {
-                    tempArray[i].Quantity -= quantityBorrow;
-                    localStorage.itemsRecord = JSON.stringify(tempArray);
-
-                    if (borrowerItemExist(index, item) > -1) {
-                        var z = borrowerItemExist(index, item);
-                        borrowersItemArray[z].Quantity = parseInt(borrowersItemArray[z].Quantity) + parseInt(quantityBorrow);
-                        borrowersItemArray[z].Duedate = date;
-                    } else {
-                        var itemObj = {
-                            'ItemName': item,
-                            'Quantity': quantityBorrow,
-                            'Duedate': date,
-                            'QuantityReturned': '0',
-                            'ReturnDate': '',
-                            'GoodConditionItemsReturned': '',
-                            'DefectiveItemsReturned': ''
-                        };
-                        borrowersItemArray.push(itemObj);
+                    if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0) {
+                        errors++;
+                        alert("The Quantity that you have entered on the item: " + tempArray[i].Description + " which is " + quantityBorrow + " is greater than the current item inventory");
+                        c = itemIndex + 1;
+                        break;
                     }
-
-
-                    break;
                 }
             }
 
         }
-        borrowersArray[index].Items = borrowersItemArray;
-        localStorage.loanRecord = JSON.stringify(borrowersArray);
-        alert("New Items Successfully Added");
-        viewQueue(index);
-        window.location.href = "viewdetails.html";
-        itemIndex = 1;
+
     }
 
- function saveToServer() {
+    //If still no errors, add it to the local Storage
+    if (errors == 0) {
+        addNewItemsToBorrower();
+    }
+
+}
+
+/** ADDING BORROWERS **/
+function addNewItemsToBorrower() {
+    var id = document.getElementById("idnum").textContent;
+
+    var index = borrowerExist(id);
+
+    var dateBorrowed = DateToday();
+    var tempArray = [];
+    var borrowersItemArray = [];
+
+
+    tempArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+    borrowersItemArray = borrowersArray[index].Items;
+
+
+
+    //Put the Items
+    for (c = 0; c < itemIndex; c++) {
+        var selectedItem = document.getElementById("item_description_" + c).selectedIndex;
+
+        var quantityBorrow = document.getElementById("item_quantityBorrow_" + c).value.trim();
+        var item = document.getElementById("item_description_" + c).childNodes[selectedItem].value;
+        var date = document.getElementById("date_return_" + c).value;
+
+
+
+        for (var i = 0; i < tempArray.length; i++) {
+            if (item === tempArray[i].Description) {
+                tempArray[i].Quantity -= quantityBorrow;
+                localStorage.itemsRecord = JSON.stringify(tempArray);
+
+                if (borrowerItemExist(index, item) > -1) {
+                    var z = borrowerItemExist(index, item);
+                    borrowersItemArray[z].Quantity = parseInt(borrowersItemArray[z].Quantity) + parseInt(quantityBorrow);
+                    borrowersItemArray[z].Duedate = date;
+                } else {
+                    var itemObj = {
+                        'ItemName': item,
+                        'Quantity': quantityBorrow,
+                        'Duedate': date,
+                        'QuantityReturned': '0',
+                        'ReturnDate': '',
+                        'GoodConditionItemsReturned': '',
+                        'DefectiveItemsReturned': ''
+                    };
+                    borrowersItemArray.push(itemObj);
+                }
+
+
+                break;
+            }
+        }
+
+    }
+    borrowersArray[index].Items = borrowersItemArray;
+    localStorage.loanRecord = JSON.stringify(borrowersArray);
+    alert("New Items Successfully Added");
+    viewQueue(index);
+    window.location.href = "viewdetails.html";
+    itemIndex = 1;
+}
+
+function saveToServer() {
     try {
-        var xmlhttp = new XMLHttpRequest();   
+        var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("POST", "json-handler-items.json", false);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(localStorage.getItem("itemsRecord"));
@@ -1655,14 +1710,14 @@ function returnAll() {
         xmlhttp.setRequestHeader("Content-Type", "application/json");
         xmlhttp.send(localStorage.getItem("loanRecord"));
 
-        xmlhttp.open("POST", "json-handler-return.json", false); 
+        xmlhttp.open("POST", "json-handler-return.json", false);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(localStorage.getItem("returnLog")); 
+        xmlhttp.send(localStorage.getItem("returnLog"));
         alert('Successfully added the files into the server');
     } catch (error) {
         alert("You don't have network connection can't save data to the server.");
     }
-   
+
 }
 
 function downloadData() {
@@ -1673,10 +1728,10 @@ function downloadData() {
         xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
         xhr.send(null);
         if (xhr.status == 200) {
-             // w8  
+            // w8  
         }
 
-    }  catch (error) {
+    } catch (error) {
         alert('No Network connection.');
     }
 }
