@@ -1354,7 +1354,7 @@ function returnAll() {
 
                             if (borrowersArray[c].Items.length == (i)) {
                                 if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
-                                    returnArray.push(borrowersArray[c]);
+                                    returnersArray.push(borrowersArray[c]);
                                 }
                                 else{
                                     
