@@ -16,11 +16,11 @@
     <nav>
         <label for="show-menu" class="show-menu">Menu</label>
         <input type="checkbox" id="show-menu" role="button">
-        <a id="logo" href="index.html"><span>Slu Carpentry</span></a>
+        <a  href="index.html" id="logo">Slu Carpentry</span></a>
         <ul id="menu">
             <li><a href="index.html">Items</a></li>
             <li><a href="loan.html">Loan</a></li>
-            <li><a href="#">View</a></li>
+            <li><a href="returner.html">Returner</a></li>
         </ul>
     </nav>
     <!--=========================================== END OF NAVIGATION BAR===========================-->
@@ -30,7 +30,7 @@
 
     <!--====START OF UPPER PORTION===-->
     <div class="top">
-        <button id="myBtn"> </button>
+        <button id="myBtn" onclick="display()"> </button>
         <input type="text" id="search_box" onKeyUp="search()" placeholder="Search ID/ITEM/DATE">
     </div>
     <!--====END OF UPPER PORTION===-->
@@ -66,7 +66,7 @@
                 
         <div id ="container_0" class="wrapper_container">
           <h3>Item 1</h3> 
-             <input type="date" class="modal_form"id="date_return_0" > <br>
+             <input type="date" class="modal_form"id="date_return_0" placeholder="Due Date"> 
            <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice select-style" id="item_description_0"></select><br>
             <span id ="item_left_0"></span> <input type="text" id="item_quantityBorrow_0"
              placeholder="Item Quantity">

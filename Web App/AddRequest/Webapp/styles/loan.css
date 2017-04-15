@@ -39,7 +39,7 @@
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
 }
 
 
@@ -172,22 +172,29 @@ h3{
 }
 
 .modal_form {
-    display: inline-block;
+    font-family: openSans;
+    text-align: center;
+    display: block;
     -webkit-appearance: none;
     -moz-appearance: none;
     font-size: 1em;
     padding: 12px 20px;
-    margin: 0 auto;
-    height: 17px;
-    width: 78%;
+    margin: 5% auto;
+    height: 40px;
+    width: 70%;
+}
+.modal_form:before {
+    margin-right: .5em;
+    content: attr(placeholder) !important;
 }
 
+
 .select-style {
-    margin-left: 3%;
+    margin: auto;
     height: 40px;
     min-width: 95%;
     font-size: 1em;
-    display: inline-block;
+    display: block;
     border: 1px solid black;
     border-radius: 3px;
     overflow: hidden;

@@ -1,3 +1,224 @@
+/*====START  OF MODAL===*/
+
+
+/* The Modal (background) */
+
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+    
+}
+
+
+/* Modal Content */
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+
+/* Add Animation */
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+
+/* The Close Button */
+
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #0D264C;
+    color: white;
+}
+
+.modal-body {
+    padding: 2px 16px;
+}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #0D264C;
+    color: white;
+}
+
+
+/*====END OF MODAL===*/
+
+
+/*====START OF FORM===*/
+
+#requestForm {
+        margin-top: 1%;
+    margin-bottom: 5%;
+}
+
+.modal select {
+    margin: 1% auto;
+    height: 40px;
+    width: 0;
+    font-size: 1em;
+    display: block;
+    overflow: hidden;
+    padding: 5px 8px;
+    width: 70%;
+    border: 1px solid black;
+    background-image: none;
+}
+
+.modal input[type=text] {
+    display: block;
+    font-size: 1em;
+    overflow: hidden;
+    width: 70%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+}
+
+.modal input[type="date"]:before {
+    margin-right: .5em;
+    content: attr(placeholder) !important;
+}
+
+.modal input[type=date] {
+    font-family: openSans;
+    text-align: center;
+    display: block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 1em;
+    padding: 12px 20px;
+    margin: 5% auto;
+    height: 40px;
+    width: 70%;
+}
+
+.modal #requestForm span {
+    color: #B6B6B6;
+    display: block;
+    width: 80%;
+    margin-left:auto;
+    margin-bottom: 1%;
+}
+
+#add {
+    margin:3% auto;
+    width: 50%;
+    background-color: #4CAF50;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+#addInput {
+    width: 50%;
+    margin:3% auto;
+    background-color: #337AB7;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display:block;
+    font-size: 16px;
+    margin-top: 3%;
+    border-radius: 5px;
+}
+.deleteItem {
+    width: 90%;
+    margin-left: 4%;
+    background-color: #D9534F;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 3%;
+    border-radius: 5px;
+}
+.wrapper_container {
+    padding-bottom: 4%;
+    border-top: 2px dotted black;
+    border-bottom: 2px dotted black;
+}
+#requestForm #items h3 {
+    text-align: center;
+    position: relative;
+    
+}
+button[name=remove_buttonAt0]{
+    margin-bottom: 3%;
+
+}
+/*====END OF FORM===*/
+
 header {
     padding: 2%;
 }
@@ -79,7 +300,7 @@ h3 {
     text-decoration: none;
     display: block;
     font-size: 1em;
-    border-radius: 4%;
+    border-radius: 5px;
 }
 
 input[type=text] {
@@ -154,19 +375,35 @@ input[type=text] {
 }
 
 @media screen and (min-width: 1024px) {
+    .modal-content{
+        width: 50%;
+    }
     .wrapper-header {
         margin-top: -30px;
         height: 60px;
     }
-        .borrowerInformation span {
+    .borrowerInformation span {
         font-size: 1.3em;
     }
     #duedate {
         font-size: 1.2em;
     }
     #itemDet div {
-        font-size: 1.3em;
+        font-size: 1.1em;
     }
+    .modal input[type=date] {
+    margin: 2% auto;
+    height: 40px;
+    width: 70%;
+}
+    #add {
+    margin-top:-20px;
+    width: 30%;
+}
+    #addInput {
+        width: 30%;
+    margin:1% auto;
+}
 }
 
 @media screen and (min-width: 1400px) {
@@ -174,7 +411,6 @@ input[type=text] {
         margin-top: -35px;
         height: 70px;
     }
-
 }
 
 @media screen and (min-width: 1920px) {

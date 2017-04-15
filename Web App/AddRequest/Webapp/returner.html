@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Returners</title>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/navigation.css">
+    <link rel="stylesheet" href="styles/returner.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+
+<body onload="initReturner()">
+    <!--=============================================NAVIGATION BAR=================================-->
+    <nav>
+        <label for="show-menu" class="show-menu">Menu</label>
+        <input type="checkbox" id="show-menu" role="button">
+        <a href="index.html" id="logo">Slu Carpentry</span></a>
+        <ul id="menu">
+            <li><a href="index.html">Items</a></li>
+            <li><a href="loan.html">Loan</a></li>
+            <li><a href="returner.html">Returner</a></li>
+        </ul>
+    </nav>
+    <!--=========================================== END OF NAVIGATION BAR===========================-->
+
+    <header>
+        <h1>Return</h1>
+    </header>
+    <div class="top">
+        <input type="text" id="search_box" onKeyUp="search()" placeholder="search">
+    </div>
+        <div class="bottom">
+
+
+    <table name="borrowerTable">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Date Borrowed</th>
+                <th>Returned Items Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="mabody">
+        </tbody>
+    </table>
+        </div>
+    <script src="main.js">
+    </script>
+
+</body>
+
+</html>
