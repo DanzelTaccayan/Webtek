@@ -45,7 +45,7 @@ function generateReport() {
     var itemsArray = [];
     var borrowersArray = [];
     var returnArray = [];
-    var now = new Date();
+    var now = DateToday();
 
     itemsArray = JSON.parse(localStorage.itemsRecord);
     borrowersArray = JSON.parse(localStorage.loanRecord);
@@ -58,6 +58,7 @@ function generateReport() {
     var pLabelborrowed = document.createElement("p");
     var plabelDefect = document.createElement("p");
     var pDidNotReturn = document.createElement("p");
+    var pReturn = document.createElement("p");
     var borrowedQuant = document.createElement("div");
 
     sDate.innerHTML = 'As of now: ' + now + '<br>';
@@ -65,11 +66,13 @@ function generateReport() {
     pLabelborrowed.innerHTML = 'Items borrowed: ';
     plabelDefect.innerHTML = 'Number of defective items: ';
     pDidNotReturn.innerHTML = 'Who did not return yet there items: ';
+    pReturn.innerHTML = 'does who return items today: ';
 
     pLabelitems.style.fontWeight = "bold";
     pLabelborrowed.style.fontWeight = "bold";
     plabelDefect.style.fontWeight = "bold";
     pDidNotReturn.style.fontWeight = "bold";
+    pReturn.style.fontWeight = "bold";
 
     overAll.appendChild(sDate);
     overAll.appendChild(pLabelitems);
@@ -116,13 +119,43 @@ function generateReport() {
         pContainer.appendChild(sView);
         notReturn.appendChild(pContainer);
         overAll.appendChild(notReturn);
-        container.appendChild(overAll);
-
     }
 
-     
+    var date = now.substring(0,9);
+    overAll.appendChild(pReturn);
+  
+    for (var i = 0; i < returnArray.length; i++) {
+        for (var c = 0; c < returnArray[i].Items.length; c++ ) {
+            var dateReturn = returnArray[i].Items[c].ReturnDate;
+            var returnDate = dateReturn.substring(0,9); 
+            if (date == returnDate) {
+                var returnToday = document.createElement("div");
+                var pContainer = document.createElement("p");
+                var sId = document.createElement("span");
+                var sName = document.createElement("span");
+                var sContact = document.createElement("span");
+                var sSchool = document.createElement("span");
+                var sView = document.createElement("span");
 
+                sId.innerHTML = 'ID number: ' + returnArray[i].Idnum + '<br>';
+                sName.innerHTML = 'Name: ' + returnArray[i].Name + '<br>';
+                sContact.innerHTML = 'Contact number: ' +  returnArray[i].ContactNum +'<br>';
+                sSchool.innerHTML = 'School/Department: ' + returnArray[i].School + '<br>';
+                sView.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueueReturner(' + i + ')"> view details </button></a>'
+                
+                pContainer.appendChild(sId);
+                pContainer.appendChild(sName);
+                pContainer.appendChild(sContact);
+                pContainer.appendChild(sSchool);
+                pContainer.appendChild(sView);
+                returnToday.appendChild(pContainer);
+                overAll.appendChild(returnToday);
 
+            }
+        }
+    }
+    container.appendChild(overAll);
+    
 }
 
 function DateToday() {
