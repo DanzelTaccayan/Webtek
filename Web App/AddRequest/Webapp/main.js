@@ -107,7 +107,7 @@ function generateReport() {
         sName.innerHTML = 'Name: ' + borrowersArray[i].Name + '<br>';
         sContact.innerHTML = 'Contact number: ' +  borrowersArray[i].ContactNum +'<br>';
         sSchool.innerHTML = 'School/Department: ' + borrowersArray[i].School + '<br>';
-        sView.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueueReturner(' + i + ')"> view details </button></a>';
+        sView.innerHTML =  sView.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueue(' + i + ')"> view details </button></a>'
 
         pContainer.appendChild(sId);
         pContainer.appendChild(sName);
