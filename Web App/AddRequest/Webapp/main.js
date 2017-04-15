@@ -42,48 +42,88 @@ function downloadData() {
 }
 
 function generateReport() {
-     var itemsArray = [];
-     var borrowersArray = [];
-     var returnArray = [];
-     var now = new Date();
- 
-     itemsArray = JSON.parse(localStorage.itemsRecord);
-     borrowersArray = JSON.parse(localStorage.loanRecord);
-     returnArray = JSON.parse(localStorage.returnLog);
- 
-     var Container = document.querySelector("#outerContainer");
-     var overAll = document.createElement("div");
-     var sDate = document.createElement("span");
-     var pLabelitems = document.createElement("p");
-     var pLabelborrowed = document.createElement("p");
-     var borrowedQuant = document.createElement("div");
- 
-     sDate.innerHTML = 'As of now: ' + now + '<br>';
-     pLabelitems.innerHTML = 'Items available: ';
-     pLabelborrowed.innerHTML = 'Items borrowed: ';
- 
-     pLabelitems.style.fontWeight = "bold";
-     pLabelborrowed.style.fontWeight = "bold";
- 
-     overAll.appendChild(sDate);
-     overAll.appendChild(pLabelitems);
- 
-     for (var i = 0; i < itemsArray.length; i++) {
-         var pInventory = document.createElement("div");
- 
-         pInventory.innerHTML = itemsArray[i].Description +': '+ itemsArray[i].Quantity;
- 
-         overAll.appendChild(pInventory);
-         Container.appendChild(overAll);
-     }
- 
-     overAll.appendChild(pLabelborrowed);
-     var itemsBorrowed = document.createElement("div");
-     for (var i = 0; i < borrowersArray.length; i++) {
-         
+    var itemsArray = [];
+    var borrowersArray = [];
+    var returnArray = [];
+    var now = new Date();
+
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+    returnArray = JSON.parse(localStorage.returnLog);
+
+    var container = document.querySelector("#outerContainer");
+    var overAll = document.createElement("div");
+    var sDate = document.createElement("span");
+    var pLabelitems = document.createElement("p");
+    var pLabelborrowed = document.createElement("p");
+    var plabelDefect = document.createElement("p");
+    var pDidNotReturn = document.createElement("p");
+    var borrowedQuant = document.createElement("div");
+
+    sDate.innerHTML = 'As of now: ' + now + '<br>';
+    pLabelitems.innerHTML = 'Items available: ';
+    pLabelborrowed.innerHTML = 'Items borrowed: ';
+    plabelDefect.innerHTML = 'Number of defective items: ';
+    pDidNotReturn.innerHTML = 'Who did not return yet there items: ';
+
+    pLabelitems.style.fontWeight = "bold";
+    pLabelborrowed.style.fontWeight = "bold";
+    plabelDefect.style.fontWeight = "bold";
+    pDidNotReturn.style.fontWeight = "bold";
+
+    overAll.appendChild(sDate);
+    overAll.appendChild(pLabelitems);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        var pInventory = document.createElement("div");
+
+        pInventory.innerHTML = itemsArray[i].Description +': '+ itemsArray[i].Quantity;
+
+        overAll.appendChild(pInventory);
+        container.appendChild(overAll);
+    }
+
+    //pang mga na hiram na item
+    overAll.appendChild(pLabelborrowed);
+    var itemsBorrowed = document.createElement("div");
+    for (var i = 0; i < itemsArray.length; i++) {
+                
+    }
+
+    overAll.appendChild(plabelDefect);
+    //pang mga defective item
+
+    overAll.appendChild(pDidNotReturn);
+    for (var i = 0; i < borrowersArray.length; i++) {
+        var notReturn = document.createElement("div");
+        var pContainer = document.createElement("p");
+        var sId = document.createElement("span");
+        var sName = document.createElement("span");
+        var sContact = document.createElement("span");
+        var sSchool = document.createElement("span");
+        var sView = document.createElement("span");
+
+        sId.innerHTML = 'ID number: ' + borrowersArray[i].Idnum + '<br>';
+        sName.innerHTML = 'Name: ' + borrowersArray[i].Name + '<br>';
+        sContact.innerHTML = 'Contact number: ' +  borrowersArray[i].ContactNum +'<br>';
+        sSchool.innerHTML = 'School/Department: ' + borrowersArray[i].School + '<br>';
+        sView.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueueReturner(' + i + ')"> view details </button></a>';
+
+        pContainer.appendChild(sId);
+        pContainer.appendChild(sName);
+        pContainer.appendChild(sContact);
+        pContainer.appendChild(sSchool);
+        pContainer.appendChild(sView);
+        notReturn.appendChild(pContainer);
+        overAll.appendChild(notReturn);
+        container.appendChild(overAll);
+
+    }
+
      
-     }
- }
+
+
+}
 
 function DateToday() {
     var month, day, year, hour, minute;
