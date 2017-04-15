@@ -61,8 +61,8 @@ function initItem() {
     bottom.innerHTML = "";
     if (localStorage.itemsRecord) {
         itemsArray = JSON.parse(localStorage.itemsRecord);
-        for (var i = 0; i < itemsArray.length; i++) {   
-            generateDiv(i,itemsArray[i].Description, itemsArray[i].Quantity);
+                for (var i = 0; i < itemsArray.length; i++) {
+            generateDiv(i, itemsArray[i].Description, itemsArray[i].Quantity);
         }
     }
 }

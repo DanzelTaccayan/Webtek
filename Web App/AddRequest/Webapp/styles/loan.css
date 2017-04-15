@@ -107,7 +107,13 @@
 
 
 /*--==========START OF TOP PORTION=====--*/
-
+header h1{
+    margin-top: 2%;
+    font-size: 2em;
+    font-family: sans-serif;
+    text-align: center;
+    color: #f2f2f2;
+}
 .top {
     margin-top: 5%;
     margin-bottom: 10%;
@@ -149,7 +155,9 @@
 
 
 /*--==========START OF REQUEST FORM=====--*/
-
+h3{
+    text-align: center;
+}
 #requestForm {
     margin-top: 1%;
     margin-bottom: 5%;
@@ -358,7 +366,7 @@ table button {
     /*--==========START OF TOP PORTION=====--*/
     .top {
         height: auto;
-        margin-top: 2%;
+        margin-top: 1%;
         margin-bottom: 1%;
         padding-bottom: 11%;
     }
@@ -449,7 +457,7 @@ table button {
     }
     table button {
         margin: 0;
-        width: 50%;
+        width: 60%;
         font-size: .9em;
     }
 }

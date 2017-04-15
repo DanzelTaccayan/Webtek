@@ -1,8 +1,12 @@
-   
+
+header h1{
+    font-size: 2em;
+    text-align: center;
+    color: #f2f2f2;
+}
 .top {
         overflow: hidden;
         font-size: 50px;
-        margin-top: 1%;
         margin-bottom: 20px;    
         text-align: center;
         height: auto;
@@ -104,7 +108,7 @@
     .top {
         overflow: hidden;
         font-size: 1em;
-        margin-top: 5%;
+        margin-top: 1%;
         margin-bottom: 15px;
         height: auto;
         border-bottom: solid 2px #47484B;
@@ -192,19 +196,4 @@
         height: 75px;
     }
   
-}
-@media screen and (min-width: 1024px) {
-    .container{
-        width: 15%;
-        font-size: 1.5em;
-    }
-    input[type=text] {
-    padding:1%;
-    font-size: 1.2em;
-    border-radius: 5px;
-    display:inline-block;
-    margin-left: 2%;
-    height: 50px;
-    width: 30%;
-    }
 }

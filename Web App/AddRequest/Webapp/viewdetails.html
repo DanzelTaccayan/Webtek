@@ -2,30 +2,70 @@
 <head>
 	<meta charset="UTF-8">
 	<title>View Details</title>
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/navigation.css">
 </head>
 <script src="main.js"></script>
 <body onload="viewDetails()">
-	<div>
-		<p id = "idnumLabel" style="display:none">Id Number: </p>
-		<p id = "idnum" style="display:none"></p>
+    <!--=============================================NAVIGATION BAR=================================-->
+    <nav>
+        <label for="show-menu" class="show-menu">Menu</label>
+        <input type="checkbox" id="show-menu" role="button">
+        <a id="logo" href="index.html"><span>Slu Carpentry</span></a>
+        <ul id="menu">
+            <li><a href="index.html">Items</a></li>
+            <li><a href="loan.html">Loan</a></li>
+            <li><a href="#">View</a></li>
+        </ul>
+    </nav>
+    <!--=========================================== END OF NAVIGATION BAR===========================-->
+	<div clas = "details">
+		<div>
+			<span id = "idnumLabel" style="display:none; font-weight: bold;">Id Number:</span>
+			<span id = "idnum" style="display:none"></span>
+		</div>
+		
+		<div>
+			<span id = "nameLabel" style="display:none; font-weight: bold;">Name: </span>
+			<span id = "name" style="display:none"></span>
+		</div>
+
+		<div>
+			<span id = "schoolLabel" style="display:none; font-weight: bold;">School: </span>
+			<span id = "school" style="display:none"></span>
+		</div>
+		
+		<div>
+			<span id = "contactnumLabel" style="display:none; font-weight: bold;">Contact Number:</span>
+			<span id = "contactnum" style = "display:none"></span>
+		</div>
+
+		<div>
+			<span id = "duedateLabel" style="display:none; font-weight: bold;">Date Borrowed:</span>
+			<span id = "duedate" style="display:none"></span>
+		</div>
 	
-		<p id = "nameLabel" style="display:none">Name: </p>
-		<p id = "name" style="display:none"></p>
+		<div id ="itemDet" style="display:none" class = "itemdetails">
+			<p style="font-weight:bold">Items borrowed:</p>
+		</div>
 
-		<p id = "itemLabel" style="display:none">Item Borrowed: </p>
-		<p id = "item" style="display:none"></p>
+		<button id ="return_button" style="display:none" onclick="returnAll()">Return All</button>
 
-		<p id = "quantityLabel" style="display:none">Quantity: </p>
-		<p id = "quantity" style="display:none"></p>
+		<!-- Modal Here haha nilagyan ko lang ng on click para ma populate ung nasa baba na div -->
+		<button id ="add_items" style ="display:none" onclick="addNewItems()">Add New Items to Borrow</button>
+		<div id = 'requestForm' style = "display:none">
+			<div id = 'items'>
+			 <container id ="container_0">
+	            Due Date: <input type="date" id="date_return_0"> 
+	            Item: <select onchange="itemQtyLeft(0)" onfocus="itemQtyLeft(0)" class="item_choice" id="item_description_0"></select>
+	            <span id ="item_left_0"></span>
+	            Item Quantity: <input type="text" id="item_quantityBorrow_0">
+	        </container>
+			</div>
+			<input type="submit" id="add" value="add" onclick="addNewItemsToBorrowerChecker()">
+		</div>
 
-		<p id = "duedateLabel" style="display:none">Due Date: </p>
-		<p id = "duedate" style="display:none"></p>
-
-
-		<p id = "datereturnLabel" style="display:none">Date Return: </p>
-		<p id = "datereturn" style="display:none"></p>
-
-		<button id ="return_button" style="display:none">Return</button>
+		
 	</div>
 </body>
 </html>
