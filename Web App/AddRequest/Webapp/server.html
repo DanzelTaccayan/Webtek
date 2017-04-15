@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body onload="initItem()">
+<body>
    <!--=============================================NAVIGATION BAR=================================-->
     <nav>
         <label for="show-menu" class="show-menu">Menu</label>
@@ -24,9 +24,9 @@
     <!--=========================================== END OF NAVIGATION BAR===========================-->
      <header></header>
      <div class="content">
-         <input type="button" class="servButton" id="upload" value="Upload" >
+         <input type="button" class="servButton" id="upload" value="Upload" onclick="saveToServer()">
          <input type="button" class="servButton" id="download" value="Download" >
-        <input type="button" class="servButton" id="generate" value="Generate Report" >
+        <input type="button" class="servButton" id="generate" value="Generate Report" onclick="generateReport()">
 
      </div>
     <script src="main.js">

@@ -4,6 +4,49 @@ var itemIndex = 1;
 var RepopItemsArray = [];
 var returnersArray = [];
 
+function generateReport() {
+    var itemsArray = [];
+    var borrowersArray = [];
+    var returnArray = [];
+    var now = new Date();
+
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    borrowersArray = JSON.parse(localStorage.loanRecord);
+    returnArray = JSON.parse(localStorage.returnLog);
+
+    var Container = document.querySelector("#outerContainer");
+    var overAll = document.createElement("div");
+    var sDate = document.createElement("span");
+    var pLabelitems = document.createElement("p");
+    var pLabelborrowed = document.createElement("p");
+    var borrowedQuant = document.createElement("div");
+
+    sDate.innerHTML = 'As of now: ' + now + '<br>';
+    pLabelitems.innerHTML = 'Items available: ';
+    pLabelborrowed.innerHTML = 'Items borrowed: ';
+
+    pLabelitems.style.fontWeight = "bold";
+    pLabelborrowed.style.fontWeight = "bold";
+
+    overAll.appendChild(sDate);
+    overAll.appendChild(pLabelitems);
+
+    for (var i = 0; i < itemsArray.length; i++) {
+        var pInventory = document.createElement("div");
+
+        pInventory.innerHTML = itemsArray[i].Description +': '+ itemsArray[i].Quantity;
+
+        overAll.appendChild(pInventory);
+        Container.appendChild(overAll);
+    }
+
+    overAll.appendChild(pLabelborrowed);
+    var itemsBorrowed = document.createElement("div");
+    for (var i = 0; i < borrowersArray.length; i++) {
+        
+    
+    }
+}
 
 function DateToday() {
     var month, day, year, hour, minute;
