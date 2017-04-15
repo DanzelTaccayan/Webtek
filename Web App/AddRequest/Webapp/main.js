@@ -1166,71 +1166,54 @@ function search() {
     }
 }
 
-function returnAll() {
+function returnAll() {  
+    var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
     var retDate = DateToday();
 
-    borrowersArray = JSON.parse(localStorage.loanRecord);
+    borrowersArray= JSON.parse(localStorage.loanRecord);
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
-    if (localStorage.returnLog) {
-        returnersArray = JSON.parse(localStorage.returnLog);
+    if(localStorage.returnLog){
+        returnArray = JSON.parse(localStorage.returnLog);
     }
 
 
     for (var c = 0; c < borrowersArray.length; c++) {
         if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
-
+           
             for (var i = 0; i < borrowersArray.length; i++) {
                 if (borrowersArray[c].Items[i] != 0) {
 
                     for (var x = 0; x < itemsArray.length; x++) {
-                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName) {
+                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
 
                             borrowersArray[c].Items[i].ReturnDate = retDate;
-
-                            //Check if their is already an existing item returned
-                            if (borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null) {
-                                borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
-                            } else {
-                                borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned) + parseInt(borrowersArray[c].Items[i].Quantity);
-                            }
-
-                            if (borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null) {
-                                borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
-                            } else {
-                                borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned) + parseInt(borrowersArray[c].Items[i].Quantity);
-                            }
-
+                            borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-                                if (isNaN(returnerExist(document.getElementById('idnum').textContent))) {
-                                    returnArray.push(borrowersArray[c]);
-                                } else {
 
-                                    var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
-                                    returnersArray[returnerLocation] = borrowersArray[c];
-                                }
-
-                                borrowersArray.splice(c, 1);
+                                returnArray.push(borrowersArray[c]);
+                                borrowersArray.splice(c,1);
                                 break;
                             }
                         }
                     }
-                }
-            }
-        }
+                }   
+            } 
+        }  
     }
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnersArray);
+    localStorage.returnLog = JSON.stringify(returnArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
-    localStorage.itemsRecord = JSON.stringify(itemsArray);
+    localStorage.itemsRecord = JSON.stringify(itemsArray);  
     window.location.href = "loan.html";
 
 }
