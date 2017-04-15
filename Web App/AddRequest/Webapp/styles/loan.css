@@ -107,7 +107,13 @@
 
 
 /*--==========START OF TOP PORTION=====--*/
-
+header h1{
+    margin-top: 2%;
+    font-size: 2em;
+    font-family: sans-serif;
+    text-align: center;
+    color: #f2f2f2;
+}
 .top {
     margin-top: 5%;
     margin-bottom: 10%;
@@ -149,7 +155,9 @@
 
 
 /*--==========START OF REQUEST FORM=====--*/
-
+h3{
+    text-align: center;
+}
 #requestForm {
     margin-top: 1%;
     margin-bottom: 5%;
@@ -164,13 +172,14 @@
 }
 
 .modal_form {
+    display: inline-block;
     -webkit-appearance: none;
     -moz-appearance: none;
     font-size: 1em;
     padding: 12px 20px;
-    margin-left: 3%;
+    margin: 0 auto;
     height: 17px;
-    min-width: 78%;
+    width: 78%;
 }
 
 .select-style {
@@ -249,14 +258,22 @@ label {
     display: block;
     width: 100%;
 }
+
 .wrapper_container {
     padding-bottom: 4%;
     border-top: 2px dotted black;
     border-bottom: 2px dotted black;
 }
-#items h3{
+
+#items h3 {
     text-align: center;
 }
+
+.modal span {
+    margin-left: 2%;
+}
+
+
 /*--==========END OF REQUEST FORM=====--*/
 
 
@@ -278,14 +295,17 @@ td {
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
 tr:nth-child(odd) {
     background-color: #FFFFCC;
 }
-th{
+
+th {
     background-color: #113160;
     color: white;
 }
-table button{
+
+table button {
     width: 90%;
     margin-left: 4%;
     background-color: #337AB7;
@@ -297,17 +317,56 @@ table button{
     display: inline-block;
     font-size: 1.2em;
     margin-top: 3%;
-    
 }
-
 
 
 /*--==========END OF TABLE=====--*/
 
+@media screen and (min-width:568px) {
+    /*--==========START OF TOP PORTION=====--*/
+    .top {
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
+    #myBtn {;
+    margin-right: 7%;
+
+}
+
+#search_box {
+    margin-top: 4%;
+    margin-left: 15%;
+    display: inline-block;
+    float: left;
+    width: 60%;
+
+
+}
+
+    /*--==========END OF TOP PORTION=====--*/
+     /*--==========START OF REQUEST FORM=====--*/
+    .modal_form {
+        font-size: 1em;
+        margin-left: 1%;
+        margin-bottom: 3%;
+        height: 17px;
+        min-width: 86%;
+    }
+    /*--==========END OF REQUEST FORM=====--*/
+    /*--==========START OF TABLE=====--*/
+    table{
+        font-size: .8em;
+    }
+    
+    /*--==========END OF TABLE=====--*/
+    
+}
+
 @media screen and (min-width:1024px) {
     /*--==========START OF TOP PORTION=====--*/
     .top {
-        margin-top: 2%;
+        height: auto;
+        margin-top: 1%;
         margin-bottom: 1%;
         padding-bottom: 11%;
     }
@@ -315,20 +374,19 @@ table button{
         margin-right: 15%;
         height: 110px;
         width: 110px;
-        
     }
-    #myBtn:hover{
-        transition:.4s;
+    #myBtn:hover {
+        transition: .4s;
         opacity: .5;
     }
     #search_box {
+        padding: 10px 20px 12px 40px;
         margin-top: 2%;
-        margin-left: 8%;
+        margin-left: 13%;
     }
     /*--==========END OF TOP PORTION=====--*/
-    
     /*--==========START OF REQUEST FORM=====--*/
-    .modal-content{
+    .modal-content {
         width: 35%;
     }
     .modal input[type=text] {
@@ -341,10 +399,10 @@ table button{
         padding: 14px 20px;
         margin-left: 1%;
         height: 19px;
-        min-width: 90%;
+        min-width: 85%;
     }
     .select-style {
-        margin:2% 1%;
+        margin: 2% 1%;
         height: 50px;
         min-width: 97%;
         font-size: 1em;
@@ -379,6 +437,10 @@ table button{
     #requestForm {
         margin-bottom: 1%;
     }
+    .wrapper_container{
+        border-top: 4px dotted black;
+        border-bottom: 4px dotted black;
+    }
     /*--==========END OF OF REQUEST FORM=====--*/
     /*--==========START OF TABLE=====--*/
     table {
@@ -393,11 +455,16 @@ table button{
         text-align: left;
         padding: 8px;
     }
-    table button{
+    table button {
         margin: 0;
-        width: 50%;
-        font-size:.9em;
+        width: 60%;
+        font-size: .9em;
     }
-
-    
+}
+@media screen and (min-width: 1920px){
+        #search_box {
+        padding: 10px 20px 12px 40px;
+        margin-top: 2%;
+        margin-left: 19%;
+    }
 }
