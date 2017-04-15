@@ -74,8 +74,7 @@ function lateRequestChecker(date) {
     }
 }
 
-<<<<<<< HEAD
-=======
+
 function statusChecker(index){
     returnersArray = JSON.parse(localStorage.returnLog);
     var returnersItems = [];
@@ -92,7 +91,6 @@ function statusChecker(index){
 }
 
 
->>>>>>> 1bc7d6f2da149959a33f50ada750cefac9f9724f
 /** ADDING ITEMS **/
 //when the body of the html loads do this function
 function initItem() {
@@ -1222,7 +1220,6 @@ function search() {
 }
 
 function returnAll() {  
-    var returnArray = [];
     var borrowersArray = [];
     var itemsArray = [];
     var retDate = DateToday();
@@ -1231,7 +1228,7 @@ function returnAll() {
     itemsArray = JSON.parse(localStorage.itemsRecord);
 
     if(localStorage.returnLog){
-        returnArray = JSON.parse(localStorage.returnLog);
+        returnersArray = JSON.parse(localStorage.returnLog);
     }
 
 
@@ -1246,15 +1243,36 @@ function returnAll() {
                             itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
 
                             borrowersArray[c].Items[i].ReturnDate = retDate;
-                            borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
-                            borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+
+                            //Check if their is already an existing item returned
+                            if(borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null){
+                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                            	borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
+                            if(borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null){
+                            	borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
+                            }
+                            else{
+                            	borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
+                            }
+                            
                             borrowersArray[c].Items[i].Quantity = 0;
                             i++;
                             x = -1;
 
                             if (borrowersArray[c].Items.length == (i)) {
-
-                                returnArray.push(borrowersArray[c]);
+                            	if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
+                            		returnArray.push(borrowersArray[c]);
+                            	}
+                            	else{
+                            		
+                            		var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
+                            		returnersArray[returnerLocation] = borrowersArray[c];
+                            	}
+                                
                                 borrowersArray.splice(c,1);
                                 break;
                             }
@@ -1266,7 +1284,7 @@ function returnAll() {
     }
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnArray);
+    localStorage.returnLog = JSON.stringify(returnersArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
     window.location.href = "loan.html";
@@ -1310,12 +1328,12 @@ function returnItem(index) {
                         borrowersArray[i].Items[c].Quantity -= parseInt(valueGoodCondition);
 
                         //Check if the GoodConditionItemsReturned is empty
-                        if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
+                        if(borrowersArray[i].Items[c].GoodConditionItemsReturned === "" || borrowersArray[i].Items[c].GoodConditionItemsReturned === null){
 
                             borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
                         }
                         else {
-                            borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
+                            borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(borrowersArray[i].Items[c].GoodConditionItemsReturned)+parseInt(valueGoodCondition);
                         }
 
                         //Store the Quantity Returned by the User
@@ -1397,13 +1415,13 @@ function returnItem(index) {
                             //Subtract the Quantity Borrowed to the Quantity Returned
                             borrowersArray[i].Items[c].Quantity -= parseInt(valueDefective);
 
-                            //Check if the GoodConditionItemsReturned is empty
-                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
+                            //Check if the DefectiveItemsReturned is empty
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned === ""|| borrowersArray[i].Items[c].DefectiveItemsReturned === null){
 
                                 borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
                             }
                             else {
-                                borrowersArray[i].Items[c].DefectiveItemsReturned += parseInt(valueDefective);
+                                borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(borrowersArray[i].Items[c].DefectiveItemsReturned) +parseInt(valueDefective);
                             }
 
                             //Store the Quantity Returned by the User
@@ -1485,7 +1503,7 @@ function returnItem(index) {
                             borrowersArray[i].Items[c].Quantity -= parseInt(total);
 
                             //Check if the DefectiveItemsReturned is empty
-                            if(borrowersArray[i].Items[c].DefectiveItemsReturned = ""){
+                            if(borrowersArray[i].Items[c].DefectiveItemsReturned === "" || borrowersArray[i].Items[c].DefectiveItemsReturned === null){
 
                                 borrowersArray[i].Items[c].DefectiveItemsReturned = parseInt(valueDefective);
                             }
@@ -1494,12 +1512,12 @@ function returnItem(index) {
                             }
 
                             //Check if the GoodConditionItemsReturned is empty
-                            if(borrowersArray[i].Items[c].GoodConditionItemsReturned = ""){
+                            if(borrowersArray[i].Items[c].GoodConditionItemsReturned === "" || borrowersArray[i].Items[c].GoodConditionItemsReturned === null){
 
                                 borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(valueGoodCondition);
                             }
                             else {
-                                borrowersArray[i].Items[c].GoodConditionItemsReturned += parseInt(valueGoodCondition);
+                                borrowersArray[i].Items[c].GoodConditionItemsReturned = parseInt(borrowersArray[i].Items[c].GoodConditionItemsReturned)+parseInt(valueGoodCondition);
                             }
 
                             //Store the Quantity Returned by the User
@@ -1738,20 +1756,3 @@ function addNewItemsToBorrower() {
     window.location.href = "viewdetails.html";          
     itemIndex = 1;
 }
-
-function saveToServer () {
-     var xmlhttp = new XMLHttpRequest();   
-    xmlhttp.open("POST", "json-handler.json", false);
-     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("itemsRecord"));
- 
-    xmlhttp.open("POST", "json-handler.json", false);
-     xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("loanRecord"));
- 
-     xmlhttp.open("POST", "json-handler.json", false); 
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
-    xmlhttp.send(localStorage.getItem("returnLog")); 
-     alert('Successfully added the files into the server');
-    
- }           
