@@ -377,11 +377,19 @@ input[type=text] {
     display:inline-block;
     margin-top: 5%;
 }
-.returnContainer{
+#itemDet .returnContainer{
     font-size: 1em;
     padding: 2%;
     margin: auto;
     margin-top: 3%;
+    width: 100%;
+    align-content: center;
+
+}
+.innerContainer{
+    
+    padding: 3%;
+    border: 1px dotted black;
 }
 @media screen and (min-width: 568px) {
     #itemDet div {

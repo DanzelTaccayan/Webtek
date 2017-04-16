@@ -1208,7 +1208,9 @@ function viewDetails() {
                 pTotalLabel.style.fontWeight = "bold";
                 pConvertLabel.style.fontWeight = "bold";
 
-
+                var innerContainer = document.createElement("div");
+                innerContainer.setAttribute("class","innerContainer");
+                pReturnContainer.setAttribute("class","returnContainer");
                 pItem.setAttribute("id", "desc" + c);
                 pQuant.setAttribute("id", "quant" + c);
                 pReturn.setAttribute("id", "rdate" + c);
