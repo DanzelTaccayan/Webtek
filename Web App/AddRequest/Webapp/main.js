@@ -1070,7 +1070,7 @@ function viewDetails() {
                 var pAction = document.createElement("p");
                 var pActionLabel = document.createElement("p");
 
-
+                pReturnContainer.setAttribute("class", "returnContainer");
                 pItem.setAttribute("id", "desc" + c);
                 pQuant.setAttribute("id", "quant" + c);
                 pReturn.setAttribute("id", "rdate" + c);
@@ -1213,9 +1213,13 @@ function viewDetails() {
                 pDefective.setAttribute("id", "DefectiveQuant" + c);
                 pGoodCondition.setAttribute("id", "GoodConditionQuant" + c);
                 pTotal.setAttribute("id", "total" + c);
+                pConvert.setAttribute("type", "text");
                 pConvert.setAttribute("id", "NumDefective" + c);
+                pConvert.setAttribute("class", "defectiveInput");
                 pConvertLabel.setAttribute("for", "NumDefective" + c);
+                pConvertLabel.setAttribute("class","defectLabel");
                 pConvertButton.setAttribute("onClick", 'restoreDefectiveItems(' + index + ',' + c + ')');
+                pConvertButton.setAttribute("class","restoreDefButton");
 
                 pItemLabel.textContent = "Item Name: ";
                 pItem.textContent = returnersArray[index].Items[c].ItemName;
