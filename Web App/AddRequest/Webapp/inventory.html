@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html  manifest="cache.manifest">
+<html manifest="cache.manifest">
 
 <head>
-    <title></title>
+    <title>Items</title>
     <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/item.css">
     <link rel="stylesheet" href="styles/navigation.css">
-    <link rel="stylesheet" href="styles/server.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body onload="initItem()">
    <!--=============================================NAVIGATION BAR=================================-->
     <nav>
         <label for="show-menu" class="show-menu">Menu</label>
@@ -23,13 +23,26 @@
         </ul>
     </nav>
     <!--=========================================== END OF NAVIGATION BAR===========================-->
-     <header></header>
-     <div class="content">
-         <input type="button" class="servButton" id="upload" value="Upload" onclick="saveToServer()">
-         <input type="button" class="servButton" id="download" value="Download" onclick="downloadData()">
-        <a href="report.html"><input type="button" class="servButton" id="generate" value="Generate Report"></a>
+    
+    <header>
+        <h1>ITEMS</h1>
+    </header>
+    
+    <!--=======================================INPUT OF DESC & QUANT================================-->
+    <div class="top">
+        <input type="text" id="input_description" placeholder="Item Description">
+        <input type="text" id="input_quantity" placeholder="Quantity">
+        <input type="button" id="add" value="Add" onclick="addItem()">
+    </div>
+    <!--===================================END OF INPUT OF DESC & QUANT================================-->
+    
+    
+    
+    <!--==================================DIV FOR GENERATED INFO =======================================-->
+    <div class="bottom">
 
-     </div>
+    </div>
+    <!--==================================END OF DIV FOR GENERATED INFO =======================================-->
     <script src="main.js">
     </script>
 </body>
