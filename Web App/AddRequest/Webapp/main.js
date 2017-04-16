@@ -108,22 +108,17 @@ function generateReport() {
 
     //pang mga na hiram na item
     overAll.appendChild(pLabelborrowed);
-    var itemsBorrowed = document.createElement("div");
-    for (var i = 0; i < borrowersArray.length; i++) {
-        for (var c = 0; c < borrowersArray[i].Items.length; c++) {
-            var pInventory = document.createElement("div");
+    for (var i = 0; i < itemsArray.length; i++) {
+        var pInventory = document.createElement("div");
 
-            pInventory.innerHTML = borrowersArray[i].Items[c].ItemName +': '+ borrowersArray[i].Items[c].Quantity;
+        pInventory.innerHTML = itemsArray[i].Description +': '+ itemsBorrowedCounter(itemsArray[i].Description);
 
-            overAll.appendChild(pInventory);
-            container.appendChild(overAll);
-            continue;
-        }
+        overAll.appendChild(pInventory);
+        container.appendChild(overAll);
     }
 
     overAll.appendChild(plabelDefect);
     //pang mga defective item
-
     overAll.appendChild(pDidNotReturn);
     for (var i = 0; i < borrowersArray.length; i++) {
         var notReturn = document.createElement("div");
