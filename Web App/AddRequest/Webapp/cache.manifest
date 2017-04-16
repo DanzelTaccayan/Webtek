@@ -1,0 +1,27 @@
+CACHE MANIFEST
+CACHE:
+index.html
+report.html
+returner.html
+server.html
+viewdetails.html
+loan.html
+main.js
+design.js
+styles/item.css
+styles/loan.css
+styles/navigation.css
+styles/normalize.css
+styles/report.css
+styles/returner.css
+styles/server.css
+styles/viewdet.css
+font/lobster.otf
+font/opensans.ttf
+img/add.png
+img/arts-and-crafts-1850025_1920.jpg
+img/background.jpg
+img/cheap_diagonal_fabric.png
+img/searchicon.png
+NETWORK:
+*
