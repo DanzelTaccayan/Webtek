@@ -1,11 +1,11 @@
 CACHE MANIFEST
 CACHE:
 index.html
+inventory.html
+loan.html
 report.html
 returner.html
-inventory.html
 viewdetails.html
-loan.html
 main.js
 design.js
 styles/item.css
@@ -23,5 +23,6 @@ img/arts-and-crafts-1850025_1920.jpg
 img/background.jpg
 img/cheap_diagonal_fabric.png
 img/searchicon.png
+items.txt
 NETWORK:
 *
