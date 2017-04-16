@@ -344,10 +344,48 @@ input[type=text] {
     display: inline-block;
     font-size: 1.3em;
 }
-
+#itemDet .defectiveInput{
+    margin: 1% auto;
+    margin-bottom: 2%;
+}
+.restoreDefButton{
+    color: white;
+    margin: auto;
+    width: 50%;
+    background-color: #4CAF50;
+    border: none;
+    padding: 10px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 1.3em;
+}
+#restoreAll_Button{
+    width: 90%;
+    margin:1% auto;
+    background-color: #D9534F;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 1.2em;
+    border-radius: 5px; 
+}
+#itemDet .defectLabel{
+    display:inline-block;
+    margin-top: 5%;
+}
+.returnContainer{
+    font-size: 1em;
+    padding: 2%;
+    margin: auto;
+    margin-top: 3%;
+}
 @media screen and (min-width: 568px) {
     #itemDet div {
-        width: 50%;
+        width: 80%;
         margin: 0 auto;
     }
     h4 {

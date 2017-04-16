@@ -80,11 +80,11 @@ function generateReport() {
     var borrowedQuant = document.createElement("div");
     
     sDate.setAttribute("id","dateReport");
-    sDate.innerHTML = 'As of now: ' + now + '<br>';
+    sDate.innerHTML = 'As of: ' + now + '<br>';
     pLabelitems.innerHTML = 'Items Available ';
     pLabelborrowed.innerHTML = 'Items Borrowed ';
     plabelDefect.innerHTML = 'With Defective Items ';
-    pDidNotReturn.innerHTML = 'Who did not return yet their items: ';
+    pDidNotReturn.innerHTML = 'Who did not return their items: ';
     pReturn.innerHTML = 'Those who returned items today: ';
 
     pLabelitems.setAttribute("class","description");
@@ -108,17 +108,22 @@ function generateReport() {
 
     //pang mga na hiram na item
     overAll.appendChild(pLabelborrowed);
-    for (var i = 0; i < itemsArray.length; i++) {
-        var pInventory = document.createElement("div");
+    var itemsBorrowed = document.createElement("div");
+    for (var i = 0; i < borrowersArray.length; i++) {
+        for (var c = 0; c < borrowersArray[i].Items.length; c++) {
+            var pInventory = document.createElement("div");
 
-        pInventory.innerHTML = itemsArray[i].Description +': '+ itemsBorrowedCounter(itemsArray[i].Description);
+            pInventory.innerHTML = borrowersArray[i].Items[c].ItemName +': '+ borrowersArray[i].Items[c].Quantity;
 
-        overAll.appendChild(pInventory);
-        container.appendChild(overAll);
+            overAll.appendChild(pInventory);
+            container.appendChild(overAll);
+            continue;
+        }
     }
 
     overAll.appendChild(plabelDefect);
     //pang mga defective item
+
     overAll.appendChild(pDidNotReturn);
     for (var i = 0; i < borrowersArray.length; i++) {
         var notReturn = document.createElement("div");
@@ -1206,24 +1211,30 @@ function viewDetails() {
                 pTotalLabel.style.fontWeight = "bold";
                 pConvertLabel.style.fontWeight = "bold";
 
-
+                var pReturnContainer = document.createElement("div");
+                pReturnContainer.setAttribute("class", "returnContainer");
                 pItem.setAttribute("id", "desc" + c);
                 pQuant.setAttribute("id", "quant" + c);
                 pReturn.setAttribute("id", "rdate" + c);
                 pDefective.setAttribute("id", "DefectiveQuant" + c);
                 pGoodCondition.setAttribute("id", "GoodConditionQuant" + c);
                 pTotal.setAttribute("id", "total" + c);
+                pConvert.setAttribute("type", "text");
+                pConvert.setAttribute("placeholder", "Input Quantity");
                 pConvert.setAttribute("id", "NumDefective" + c);
+                pConvert.setAttribute("class", "defectiveInput");
                 pConvertLabel.setAttribute("for", "NumDefective" + c);
+                pConvertLabel.setAttribute("class","defectLabel");
                 pConvertButton.setAttribute("onClick", 'restoreDefectiveItems(' + index + ',' + c + ')');
-
+                pConvertButton.setAttribute("class","restoreDefButton");
+                
                 pItemLabel.textContent = "Item Name: ";
                 pItem.textContent = returnersArray[index].Items[c].ItemName;
 
                 pQuantLabel.textContent = "Quantity Borrowed Left: ";
                 pQuant.textContent = returnersArray[index].Items[c].Quantity;
 
-                pConvertLabel.textContent = "Number of Defective Items Restored/Repaired: ";
+                pConvertLabel.textContent = "Number of Restored/Repaired: ";
                 pConvertButton.textContent = "Enter";
 
 
