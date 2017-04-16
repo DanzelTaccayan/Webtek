@@ -4,6 +4,24 @@ var itemIndex = 1;
 var RepopItemsArray = [];
 var returnersArray = [];
 
+function itemsBorrowedCounter(item){
+	if(localStorage.loanRecord){
+		var count = 0;
+		borrowersArray = JSON.parse(localStorage.loanRecord);
+		for(var i = 0; i < borrowersArray.length; i++){
+			if(borrowerItemExist(i, item) != undefined){
+				var itemIn = borrowerItemExist(i, item);
+				count = parseInt(count) + parseInt(borrowersArray[i].Items[itemIn].Quantity);
+			}
+		}
+	}
+	else{
+		count = -1;
+	}
+	
+	return count;
+}
+
 function saveToServer() {
     try {
         var xmlhttp = new XMLHttpRequest();   

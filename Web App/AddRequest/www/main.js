@@ -4,6 +4,22 @@ var itemIndex = 1;
 var RepopItemsArray = [];
 var returnersArray = [];
 
+function itemsBorrowedCounter(item){
+	if(localStorage.loanRecord){
+		var count = 0;
+		borrowersArray = JSON.parse(localStorage);
+		for(var i = 0; i < borrowersArray.length; i++){
+			if(borrowerItemExist(i, item) != undefined){
+				count = parseInt(count) + parseInt(borrowersArray[i].Quantity);
+			}
+		}
+	}
+	else{
+		count = -1;
+	}
+	
+	return count;
+}
 
 function DateToday() {
     var month, day, year, hour, minute;
