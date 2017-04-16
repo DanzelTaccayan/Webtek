@@ -2,10 +2,29 @@
 <html>
 <head>
 	<title>Report</title>
+	<link rel="stylesheet" href="styles/normalize.css">
+	<link rel="stylesheet" href="styles/navigation.css">
+	<link rel="stylesheet" href="styles/report.css">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body onload="generateReport()">
+   <!--=============================================NAVIGATION BAR=================================-->
+    <nav>
+        <label for="show-menu" class="show-menu">Menu</label>
+        <input type="checkbox" id="show-menu" role="button">
+        <a  href="server.html" id="logo">Slu Carpentry</span></a>
+        <ul id="menu">
+           <li><a href="server.html">Home</a></li>
+            <li><a href="index.html">Inventory</a></li>
+            <li><a href="loan.html">Rent</a></li>
+            <li><a href="returner.html">Returned</a></li>
+        </ul>
+    </nav>
+    <!--=========================================== END OF NAVIGATION BAR===========================-->
 	<h1> Report </h1>	
-	<div id = "outerContainer"></div>
+	<div id = "outerContainer">
+	    
+	</div>
 
 	<script src="main.js">
 	</script>

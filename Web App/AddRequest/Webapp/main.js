@@ -60,19 +60,21 @@ function generateReport() {
     var pDidNotReturn = document.createElement("p");
     var pReturn = document.createElement("p");
     var borrowedQuant = document.createElement("div");
-
+    
+    sDate.setAttribute("id","dateReport");
     sDate.innerHTML = 'As of now: ' + now + '<br>';
-    pLabelitems.innerHTML = 'Items available: ';
-    pLabelborrowed.innerHTML = 'Items borrowed: ';
-    plabelDefect.innerHTML = 'Number of defective items: ';
-    pDidNotReturn.innerHTML = 'Who did not return yet there items: ';
-    pReturn.innerHTML = 'does who return items today: ';
+    pLabelitems.innerHTML = 'Items Available ';
+    pLabelborrowed.innerHTML = 'Items Borrowed ';
+    plabelDefect.innerHTML = 'Number of Defective Items ';
+    pDidNotReturn.innerHTML = 'Who did not return yet their items: ';
+    pReturn.innerHTML = 'Those who returned items today: ';
 
-    pLabelitems.style.fontWeight = "bold";
-    pLabelborrowed.style.fontWeight = "bold";
-    plabelDefect.style.fontWeight = "bold";
-    pDidNotReturn.style.fontWeight = "bold";
-    pReturn.style.fontWeight = "bold";
+    pLabelitems.setAttribute("class","description");
+    pLabelitems.setAttribute("class","description");
+    pLabelborrowed.setAttribute("class","description");
+    plabelDefect.setAttribute("class","description");
+    pDidNotReturn.setAttribute("class","description");
+    pReturn.setAttribute("class","description");
 
     overAll.appendChild(sDate);
     overAll.appendChild(pLabelitems);
