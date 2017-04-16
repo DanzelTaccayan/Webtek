@@ -1,0 +1,26 @@
+[
+	{
+	"Description": "chair",
+	"Quantity": 100	
+	},
+	{
+	"Description": "Table",
+	"Quantity": 100	
+	},
+	{
+	"Description": "hammer",
+	"Quantity": 10	
+	},
+	{
+	"Description": "Arm Chair",
+	"Quantity": 125	
+	},
+	{
+	"Description": "Driller",
+	"Quantity": 5	
+	},
+	{
+	"Description": "Rope",
+	"Quantity": 3	
+	}
+]

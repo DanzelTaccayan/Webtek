@@ -46,13 +46,15 @@ function saveToServer() {
 function downloadData() {
     var xhr = new XMLHttpRequest();
     try {
-        xhr.open("GET", "http://localHost/WebTek/json-handler-items.json", false);
-        xhr.open("GET", "http://localHost/WebTek/json-handler-loan.json", false);
-        xhr.open("GET", "http://localHost/WebTek/json-handler-return.json", false);
+        xhr.open("GET", "items.txt", false);
         xhr.send(null);
         if (xhr.status == 200) {
-             // w8  
-        }
+             var items = JSON.parse(xhr.responseText);
+             localStorage.itemsRecord = JSON.stringify(items);
+             alert("Successfully downloaded the inventory.");
+        } else {
+            alert("Error encountered while downloading survey.");
+        } 
 
     }  catch (error) {
         alert('No Network connection.');
