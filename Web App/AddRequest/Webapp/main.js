@@ -1296,21 +1296,25 @@ function restoreDefectiveItems(returnerIndex, index) {
         if(!isNaN(borrowerExist(returnersArray[returnerIndex].Idnum))){
             borrowersArray = JSON.parse(localStorage.loanRecord);
             var borrowerIndex = borrowerExist(returnersArray[returnerIndex].Idnum);
-            var itemIndex =  borrowerItemExist(borrowerIndex, returnersItemsArray[index].ItemName);
-            
 
-            borrowersArray[index].Items[itemIndex].DefectiveItemsReturned = parseInt(borrowersArray[index].Items[itemIndex].DefectiveItemsReturned) - parseInt(quantityRestored);
+            if(borrowerItemExist(borrowerIndex, returnersItemsArray[index].ItemName) > -1) {
+                
+                var itemIndex =  borrowerItemExist(borrowerIndex, returnersItemsArray[index].ItemName);
+                
 
-                    if (borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned == "") {
-                        borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned = parseInt(quantityRestored);
-                    } else {
-                        borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned = parseInt(borrowersArray[index].Items[itemIndex].GoodConditionItemsReturned) + parseInt(quantityRestored);
-                    }
-            borrowersArray[index].Items[itemIndex].ReturnDate = DateToday();
-            if (parseInt(borrowersArray[index].Items[itemIndex].DefectiveItemsReturned) == 0) {
-                    borrowersArray[index].Items[itemIndex].DefectiveItemsReturned = "";
+                borrowersArray[borrowerIndex].Items[itemIndex].DefectiveItemsReturned = parseInt(borrowersArray[borrowerIndex].Items[itemIndex].DefectiveItemsReturned) - parseInt(quantityRestored);
+
+                        if (borrowersArray[borrowerIndex].Items[itemIndex].GoodConditionItemsReturned == "") {
+                            borrowersArray[borrowerIndex].Items[itemIndex].GoodConditionItemsReturned = parseInt(quantityRestored);
+                        } else {
+                            borrowersArray[borrowerIndex].Items[itemIndex].GoodConditionItemsReturned = parseInt(borrowersArray[borrowerIndex].Items[itemIndex].GoodConditionItemsReturned) + parseInt(quantityRestored);
+                        }
+                borrowersArray[borrowerIndex].Items[itemIndex].ReturnDate = DateToday();
+                if (parseInt(borrowersArray[borrowerIndex].Items[itemIndex].DefectiveItemsReturned) == 0) {
+                        borrowersArray[borrowerIndex].Items[itemIndex].DefectiveItemsReturned = "";
+                }
+                localStorage.loanRecord = JSON.stringify(borrowersArray);
             }
-            localStorage.loanRecord = JSON.stringify(borrowersArray);
         }
 
         returnersItemsArray[index].DefectiveItemsReturned = parseInt(returnersItemsArray[index].DefectiveItemsReturned) - parseInt(quantityRestored);
@@ -1402,60 +1406,85 @@ function returnAll() {
         returnersArray = JSON.parse(localStorage.returnLog);
     }
 
-
-    for (var c = 0; c < borrowersArray.length; c++) {
-        if (borrowersArray[c].Idnum == document.getElementById('idnum').textContent) {
+    var borrowerInd = borrowerExist(document.getElementById('idnum').textContent);
+    
            
-            for (var i = 0; i < borrowersArray.length; i++) {
-                if (borrowersArray[c].Items[i] != 0) {
+            for (var i = 0; i < borrowersArray[borrowerInd].Items.length; i++) {
 
-                    for (var x = 0; x < itemsArray.length; x++) {
-                        if (itemsArray[x].Description == borrowersArray[c].Items[i].ItemName ) {
-                            itemsArray[x].Quantity += parseInt(borrowersArray[c].Items[i].Quantity);
+                /** ===================================================== Change Borrower Record =======================================================**/
+                var itemInd = itemExist(borrowersArray[borrowerInd].Items[i].ItemName );
+                itemsArray[itemInd].Quantity = parseInt(itemsArray[itemInd].Quantity) + parseInt(borrowersArray[borrowerInd].Items[i].Quantity);
+                borrowersArray[borrowerInd].Items[i].ReturnDate = retDate;
 
-                            borrowersArray[c].Items[i].ReturnDate = retDate;
+                 if(borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned === "" || borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned === null){
+                    borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned = borrowersArray[borrowerInd].Items[i].Quantity;
+                }
+                else{
+                    borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[borrowerInd].Items[i].Quantity);
+                }
 
-                            //Check if their is already an existing item returned
-                            if(borrowersArray[c].Items[i].GoodConditionItemsReturned === "" || borrowersArray[c].Items[i].GoodConditionItemsReturned === null){
-                                borrowersArray[c].Items[i].GoodConditionItemsReturned = borrowersArray[c].Items[i].Quantity;
-                            }
-                            else{
-                                borrowersArray[c].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[c].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
-                            }
-                            
-                            if(borrowersArray[c].Items[i].QuantityReturned === "" || borrowersArray[c].Items[i].QuantityReturned === null){
-                                borrowersArray[c].Items[i].QuantityReturned = borrowersArray[c].Items[i].Quantity;
-                            }
-                            else{
-                                borrowersArray[c].Items[i].QuantityReturned = parseInt(borrowersArray[c].Items[i].QuantityReturned)+parseInt(borrowersArray[c].Items[i].Quantity);
-                            }
-                            
-                            borrowersArray[c].Items[i].Quantity = 0;
-                            i++;
-                            x = -1;
+                //Check if their is already an existing item returned
+                if(borrowersArray[borrowerInd].Items[i].QuantityReturned === "" || borrowersArray[borrowerInd].Items[i].QuantityReturned === null){
+                    borrowersArray[borrowerInd].Items[i].QuantityReturned = borrowersArray[borrowerInd].Items[i].Quantity;
+                }
+                else{
+                    borrowersArray[borrowerInd].Items[i].QuantityReturned = parseInt(borrowersArray[borrowerInd].Items[i].QuantityReturned)+parseInt(borrowersArray[borrowerInd].Items[i].Quantity);
+                }
 
-                            if (borrowersArray[c].Items.length == (i)) {
-                                if(isNaN(returnerExist(document.getElementById('idnum').textContent))) {
-                                    returnersArray.push(borrowersArray[c]);
-                                }
-                                else{
-                                    
-                                    var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
-                                    returnersArray[returnerLocation] = borrowersArray[c];
-                                }
-                                
-                                borrowersArray.splice(c,1);
-                                break;
-                            }
+                borrowersArray[borrowerInd].Items[i].Quantity = 0;
+                /** ===================================================== Until Here ===================================================================**/
+
+
+
+                /** ===================================================== Change Returner Record =======================================================**/
+                if(returnerExist(document.getElementById('idnum').textContent) > -1){
+
+                    var returnerLocation = returnerExist(document.getElementById('idnum').textContent);
+
+                    if(returnersArray[returnerLocation].Items[0]){
+
+                        if(!isNaN(returnerItemExist(returnerLocation, borrowersArray[borrowerInd].Items[i].ItemName))){
+                            var retItemInd = returnerItemExist(returnerLocation, borrowersArray[borrowerInd].Items[i].ItemName );
+
+                            returnersArray[returnerLocation].Items[retItemInd].GoodConditionItemsReturned = borrowersArray[borrowerInd].Items[i].GoodConditionItemsReturned;
+
+
+                            returnersArray[returnerLocation].Items[retItemInd].QuantityReturned = borrowersArray[borrowerInd].Items[i].QuantityReturned;
+
+                            returnersArray[returnerLocation].Items[retItemInd].Duedate = borrowersArray[borrowerInd].Items[i].Duedate;
+                            returnersArray[returnerLocation].Items[retItemInd].ReturnDate = borrowersArray[borrowerInd].Items[i].ReturnDate;
+                            returnersArray[returnerLocation].Items[retItemInd].Quantity = 0;
+                            localStorage.returnLog = JSON.stringify(returnersArray);
                         }
+                        else {
+                            returnersArray[returnerLocation].Items.push(borrowersArray[borrowerInd].Items[i]);
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                        }
+
+                        
                     }
-                }   
-            } 
-        }  
-    }
+                    else{
+                        var loopEnd = parseInt(i)+1;
+                        if(borrowersArray[borrowerInd].Items.length == loopEnd) {
+                            returnersArray[returnerLocation].push(borrowersArray[borrowerInd]);
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                        }                  
+                    }
+                }
+                else{
+                    var loopEnd = parseInt(i)+1;
+                        if(borrowersArray[borrowerInd].Items.length == loopEnd) {
+                            returnersArray.push(borrowersArray[borrowerInd]);
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+                        }
+                }
+                /** ===================================================== Until Here ===================================================================**/
+                            
+            }
+
+            borrowersArray.splice(borrowerInd,1);
 
     alert("Successfully return all the Items borrowed!");
-    localStorage.returnLog = JSON.stringify(returnersArray);
     localStorage.loanRecord = JSON.stringify(borrowersArray);
     localStorage.itemsRecord = JSON.stringify(itemsArray);  
     window.location.href = "loan.html";
@@ -1960,8 +1989,9 @@ function restoreAllDefectiveItems() {
     returnersArray = JSON.parse(localStorage.returnLog);
 
     var returnerIndex = returnerExist(document.getElementById('idnum').textContent);
+    var returnId = document.getElementById('idnum').textContent;
 
-    if(borrowerExist(document.getElementById('idnum').textContent)){
+    if(borrowerExist(returnId) > -1){
         borrowerIndex = borrowerExist(document.getElementById('idnum').textContent);
     }
 
@@ -1983,26 +2013,29 @@ function restoreAllDefectiveItems() {
                 }
 
                 returnersArray[returnerIndex].Items[i].DefectiveItemsReturned = "";
-            }
+            
 
-            if(borrowerIndex != undefined){
-                var itemIndex = itemExist(returnersArray[returnerIndex].Items[i].ItemName);
+                if(borrowerIndex != undefined){
 
-                    if(borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned != "" || borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned != null){
+                    if(borrowerItemExist(borrowerIndex, returnersArray[returnerIndex].Items[i].ItemName) > -1){
+                        var itemBorrowerIndex = borrowerItemExist(borrowerIndex, returnersArray[returnerIndex].Items[i].ItemName);
 
-                        borrowersArray[borrowerIndex].Items[i].ReturnDate = retDate;
+                        if(borrowersArray[borrowerIndex].Items[itemBorrowerIndex].DefectiveItemsReturned != "" || borrowersArray[borrowerIndex].Items[itemBorrowerIndex].DefectiveItemsReturned != null){
 
-                        //Check if their is already an existing item returned
-                        if(borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned === "" || borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned === null){
-                           borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned = borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned;
+                            borrowersArray[borrowerIndex].Items[itemBorrowerIndex].ReturnDate = retDate;
+
+                            //Check if their is already an existing item returned
+                            if(borrowersArray[borrowerIndex].Items[itemBorrowerIndex].GoodConditionItemsReturned === "" || borrowersArray[borrowerIndex].Items[itemBorrowerIndex].GoodConditionItemsReturned === null){
+                               borrowersArray[borrowerIndex].Items[itemBorrowerIndex].GoodConditionItemsReturned = borrowersArray[borrowerIndex].Items[itemBorrowerIndex].DefectiveItemsReturned;
+                            }
+                            else{
+                                borrowersArray[borrowerIndex].Items[itemBorrowerIndex].GoodConditionItemsReturned = parseInt(borrowersArray[borrowerIndex].Items[itemBorrowerIndex].GoodConditionItemsReturned)+parseInt(borrowersArray[borrowerIndex].Items[itemBorrowerIndex].DefectiveItemsReturned);
+                            }
+
+                            borrowersArray[borrowerIndex].Items[itemBorrowerIndex].DefectiveItemsReturned = "";
                         }
-                        else{
-                            borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned);
-                        }
-
-                        borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned = "";
                     }
-
+                }
             }
 
     }
