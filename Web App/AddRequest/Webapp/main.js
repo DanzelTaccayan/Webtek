@@ -807,7 +807,7 @@ function returnerExist(idnum) {
             }
         }
     } else {
-        return false;
+        return -1;
     }
 
 }
@@ -857,7 +857,7 @@ function addBorrowerChecker() {
             } else {
                 for (var i = 0; i < tempArray.length; i++) {
                     if (item === tempArray[i].Description) {
-                        if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0) {
+                        if (parseInt(tempArray[i].Quantity) < parseInt(quantityBorrow) || parseInt(quantityBorrow) <= 0) {
                             errors++;
                             alert("The Quantity that you have entered on the item: " + tempArray[i].Description + " which is " + quantityBorrow + " is greater than the current item inventory");
                             c = itemIndex + 1;
@@ -1090,6 +1090,12 @@ function viewDetails() {
             document.getElementById("duedateLabel").style.display = "";
             document.getElementById("duedate").style.display = "";
 
+
+            if(returnerDefectiveChecker(index)) {
+                document.getElementById("restoreAll_button").style.display = "";
+            }
+
+
             //Get Elements and the local storage
             var retbtn = document.getElementById("return_button");
             var returnersArray = JSON.parse(localStorage.returnLog);
@@ -1197,7 +1203,12 @@ function viewDetails() {
                 outerContainer.appendChild(innerContainer);
 
                 if (returnersArray[index].Items[c].DefectiveItemsReturned === "") {
+                    pGoodConditionContainer.appendChild(pGoodConditionLabel);
+                    pGoodConditionContainer.appendChild(pGoodCondition);
+
+
                     pTotalContainer.appendChild(pTotalLabel);
+                    innerContainer.appendChild(pGoodConditionContainer);
                     pTotalContainer.appendChild(pTotal);
                     innerContainer.appendChild(pTotalContainer);
                 } else {
@@ -1798,7 +1809,7 @@ function addNewItemsToBorrowerChecker() {
         } else {
             for (var i = 0; i < tempArray.length; i++) {
                 if (item === tempArray[i].Description) {
-                    if (tempArray[i].Quantity < quantityBorrow || quantityBorrow <= 0) {
+                    if (parseInt(tempArray[i].Quantity) < parseInt(quantityBorrow) || parseInt(quantityBorrow) <= 0) {
                         errors++;
                         alert("The Quantity that you have entered on the item: " + tempArray[i].Description + " which is " + quantityBorrow + " is greater than the current item inventory");
                         c = itemIndex + 1;
@@ -1855,6 +1866,7 @@ function addNewItemsToBorrower() {
                     borrowersItemArray[z].Quantity = parseInt(borrowersItemArray[z].Quantity) + parseInt(quantityBorrow);
                     borrowersItemArray[z].Duedate = date;
                 } else {
+
                     var itemObj = {
                         'ItemName': item,
                         'Quantity': quantityBorrow,
@@ -1864,9 +1876,29 @@ function addNewItemsToBorrower() {
                         'GoodConditionItemsReturned': '',
                         'DefectiveItemsReturned': ''
                     };
+
+                    if(returnerExist(id) > -1) {
+                        returnersArray = JSON.parse(localStorage.returnLog);
+                        var returnerInd = returnerExist(id);
+
+                        if(returnerItemExist(returnerExist(id),item) > -1){
+                            var returnerItemInd = returnerItemExist(returnerExist(id),item);
+
+                            returnersArray[returnerInd].Items[returnerItemInd].Quantity = itemObj.Quantity;
+
+                            itemObj.QuantityReturned = returnersArray[returnerInd].Items[returnerItemInd].QuantityReturned;
+                            itemObj.ReturnDate = returnersArray[returnerInd].Items[returnerItemInd].ReturnDate;
+                            itemObj.GoodConditionItemsReturned = returnersArray[returnerInd].Items[returnerItemInd].GoodConditionItemsReturned;
+                            itemObj.DefectiveItemsReturned = returnersArray[returnerInd].Items[returnerItemInd].DefectiveItemsReturned;
+
+                            localStorage.returnLog = JSON.stringify(returnersArray);
+
+                        }
+
+                    }
+
                     borrowersItemArray.push(itemObj);
                 }
-
 
                 break;
             }
@@ -1879,4 +1911,89 @@ function addNewItemsToBorrower() {
     viewQueue(index);
     window.location.href = "viewdetails.html";
     itemIndex = 1;
+}
+
+
+function restoreAllDefectiveItems() {  
+
+    var retDate = DateToday();
+
+    borrowersArray= JSON.parse(localStorage.loanRecord);
+    itemsArray = JSON.parse(localStorage.itemsRecord);
+    var borrowerIndex;
+    var errorCheck = true;
+
+    returnersArray = JSON.parse(localStorage.returnLog);
+
+    var returnerIndex = returnerExist(document.getElementById('idnum').textContent);
+
+    if(borrowerExist(document.getElementById('idnum').textContent)){
+        borrowerIndex = borrowerExist(document.getElementById('idnum').textContent);
+    }
+
+
+    for(var i = 0; i < returnersArray[returnerIndex].Items.length; i++) {
+         var itemIndex = itemExist(returnersArray[returnerIndex].Items[i].ItemName);
+
+            if(returnersArray[returnerIndex].Items[i].DefectiveItemsReturned != "" && returnersArray[returnerIndex].Items[i].DefectiveItemsReturned != null){
+                errorCheck = false;
+                itemsArray[itemIndex].Quantity =  parseInt(itemsArray[itemIndex].Quantity) + parseInt(returnersArray[returnerIndex].Items[i].DefectiveItemsReturned);
+                returnersArray[returnerIndex].Items[i].ReturnDate = retDate;
+
+                //Check if their is already an existing item returned
+                if(returnersArray[returnerIndex].Items[i].GoodConditionItemsReturned === "" || returnersArray[returnerIndex].Items[i].GoodConditionItemsReturned === null){
+                   returnersArray[returnerIndex].Items[i].GoodConditionItemsReturned = returnersArray[returnerIndex].Items[i].DefectiveItemsReturned;
+                }
+                else{
+                    returnersArray[returnerIndex].Items[i].GoodConditionItemsReturned = parseInt(returnersArray[returnerIndex].Items[i].GoodConditionItemsReturned)+parseInt(returnersArray[returnerIndex].Items[i].DefectiveItemsReturned);
+                }
+
+                returnersArray[returnerIndex].Items[i].DefectiveItemsReturned = "";
+            }
+
+            if(borrowerIndex != undefined){
+                var itemIndex = itemExist(returnersArray[returnerIndex].Items[i].ItemName);
+
+                    if(borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned != "" || borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned != null){
+
+                        borrowersArray[borrowerIndex].Items[i].ReturnDate = retDate;
+
+                        //Check if their is already an existing item returned
+                        if(borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned === "" || borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned === null){
+                           borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned = borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned;
+                        }
+                        else{
+                            borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned = parseInt(borrowersArray[borrowerIndex].Items[i].GoodConditionItemsReturned)+parseInt(borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned);
+                        }
+
+                        borrowersArray[borrowerIndex].Items[i].DefectiveItemsReturned = "";
+                    }
+
+            }
+
+    }
+
+    if(!errorCheck){
+        alert("Successfully Retored/Repaired all the Defected Items Borrowed!");
+        localStorage.returnLog = JSON.stringify(returnersArray);
+        localStorage.loanRecord = JSON.stringify(borrowersArray);
+        localStorage.itemsRecord = JSON.stringify(itemsArray);
+        viewQueueReturner(returnerIndex);
+        window.location.href = "viewdetails.html";
+    }
+
+
+}
+
+
+function returnerDefectiveChecker(returnerIndex){
+    var errorCheck = false;
+    returnersArray = JSON.parse(localStorage.returnLog);
+
+    for(var i = 0; i < returnersArray[returnerIndex].Items.length; i++) {
+            if(returnersArray[returnerIndex].Items[i].DefectiveItemsReturned != "" && returnersArray[returnerIndex].Items[i].DefectiveItemsReturned != null){
+                errorCheck = true;
+            }
+    }
+    return errorCheck;
 }
