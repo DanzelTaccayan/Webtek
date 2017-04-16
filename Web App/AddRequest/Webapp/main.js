@@ -65,7 +65,7 @@ function generateReport() {
     sDate.innerHTML = 'As of now: ' + now + '<br>';
     pLabelitems.innerHTML = 'Items Available ';
     pLabelborrowed.innerHTML = 'Items Borrowed ';
-    plabelDefect.innerHTML = 'Number of Defective Items ';
+    plabelDefect.innerHTML = 'With Defective Items ';
     pDidNotReturn.innerHTML = 'Who did not return yet their items: ';
     pReturn.innerHTML = 'Those who returned items today: ';
 
@@ -92,7 +92,7 @@ function generateReport() {
     overAll.appendChild(pLabelborrowed);
     var itemsBorrowed = document.createElement("div");
     for (var i = 0; i < itemsArray.length; i++) {
-                
+        
     }
 
     overAll.appendChild(plabelDefect);
@@ -158,6 +158,40 @@ function generateReport() {
             continue;
         }
     }
+
+    overAll.appendChild(plabelDefect);
+    //pang mga defective item 
+    for (var i = 0; i < returnArray.length; i++) { 
+        if (returnArray[i].Idnum) { 
+            for (var c = 0; c < returnArray[i].Items.length; c++) {
+                if (returnArray[i].Items[c].DefectiveItemsReturned > 0) {
+                    var defect = document.createElement("div");
+                    var pContainer = document.createElement("p");
+                    var sId = document.createElement("span");
+                    var sName = document.createElement("span");
+                    var sContact = document.createElement("span");
+                    var sSchool = document.createElement("span");
+                    var sView = document.createElement("span");
+
+                    sId.innerHTML = 'ID number: ' + returnArray[i].Idnum + '<br>';
+                    sName.innerHTML = 'Name: ' + returnArray[i].Name + '<br>';
+                    sContact.innerHTML = 'Contact number: ' +  returnArray[i].ContactNum +'<br>';
+                    sSchool.innerHTML = 'School/Department: ' + returnArray[i].School + '<br>';
+                    sView.innerHTML = '<a href ="viewdetails.html"><button onclick="viewQueueReturner(' + i + ')"> view details </button></a>'
+                    
+                    pContainer.appendChild(sId);
+                    pContainer.appendChild(sName);
+                    pContainer.appendChild(sContact);
+                    pContainer.appendChild(sSchool);
+                    pContainer.appendChild(sView);
+                    defect.appendChild(pContainer);
+                    overAll.appendChild(defect);
+                    break;
+                }
+            }
+        }
+    }
+
     container.appendChild(overAll);
     
 }
